@@ -77,6 +77,9 @@ class UsersController < ApplicationController
   def work_log
   end
   
+  def overtime
+  end
+  
   private
   
     def user_params

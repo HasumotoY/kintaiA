@@ -79,7 +79,7 @@
 
       <% @attendances.each do |day| %>
         <tr>
-          <td><%= link_to "残業申請","#",class: "btn btn-primary btn-attendance" %></td>
+          <td><%= link_to "残業申請",attendances_overtime_user_path(date: @first_day),class: "btn btn-primary btn-attendance" %></td>
           <td><%= l(day.worked_on, format: :short) %></td>
   
           <% days_color =
@@ -148,3 +148,4 @@
     </tfooter>
   </table>
 </div>
+<div id="overtime" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>

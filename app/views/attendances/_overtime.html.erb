@@ -1,0 +1,41 @@
+<% provide(:class_text, 'overtime') %>
+<% provide(:button_text, '変更を送信する') %>
+<%= form_with(model: @user,local:true,method: :patch) do |f| %>
+
+<div class="modal-dialog modal-lg modal-dialog-center">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h1 class="modal-title">【残業申請】</h1>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <table class="table table-condenced table-bordered table-striped" id="table-overtime">
+          <thead>
+            <tr>
+              <td>日付</td>
+              <td>曜日</td>
+              <td>終了予定時刻</td>
+              <td>翌日</td>
+              <td>残業処置内容</td>
+              <td>支持者確認㊞</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><%= @attendances.worked_on %></td>
+              <td><%= $days_of_the_week[@attendances.worked_on.wday] %></td>
+              <td><%= f.time_field :worked_on%></td>
+              <td><%= f.check_box %></td>
+              <td><%= f.text_field %></td>
+              <td><%= f.select_field %></td>
+            </tr>
+          </tbody>
+        </table>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
