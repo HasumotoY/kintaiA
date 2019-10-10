@@ -23,6 +23,10 @@ ja:
               finished_at: 退勤時間
               note: 備考
               user: ユーザーID
+              end_estimated_time: 終了予定時刻
+              next_day: 翌日
+              outline: 残業処理内容
+              supporter: 指示者
             base:
               base_number: 拠点番号
               name: 拠点名
