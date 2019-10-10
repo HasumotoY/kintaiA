@@ -19,7 +19,8 @@ Rails.application.routes.draw do
       get 'attendances/edit_one_month'
       patch 'attendances/update_one_month'
       get 'work_log'
-      get 'attendances/overtime'
+      get 'attendances/edit_overtime'
+      patch 'attendances/update_overtime'
     end
     resources :attendances, only: :update
     collection { post :import }

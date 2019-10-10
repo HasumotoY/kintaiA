@@ -223,9 +223,22 @@ p{
     
 }
 
+/* overtime */
+#table-overtime{
+    td{
+        vertical-align: middle;
+        text-align: center;
+    }
+}
+.btn-overtime{
+    text-align: center;
+    margin-top: 10px;
+}
+
 /* base-info */
 .label-base-new{
     margin-top: 5px;
+    width: 30%;
 }
 
 .btn-base-new{
