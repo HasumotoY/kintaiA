@@ -2,6 +2,7 @@
 <% provide(:button_text, '変更を送信する') %>
 <%= form_with(model: @user,local:true,method: :patch) do |f| %>
 
+
 <div class="modal-dialog modal-lg modal-dialog-center">
   <div class="modal-content">
     <div class="modal-header">
@@ -25,12 +26,12 @@
           </thead>
           <tbody>
             <tr>
-              <td><%= @attendances.worked_on %></td>
-              <td><%= $days_of_the_week[@attendances.worked_on.wday] %></td>
-              <td><%= f.time_field :worked_on%></td>
-              <td><%= f.check_box %></td>
-              <td><%= f.text_field %></td>
-              <td><%= f.select_field %></td>
+              <td><%=  %></td>
+              <td><%=  %></td>
+              <td><%= f.time_field  :end_estimated_time %></td>
+              <td><%= f.check_box :next_day %></td>
+              <td><%= f.text_field :outline, class: "form-control" %></td>
+              <td></td>
             </tr>
           </tbody>
         </table>
