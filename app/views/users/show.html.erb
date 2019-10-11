@@ -80,7 +80,7 @@
       <% @attendances.each do |day| %>
         <tr>
           <td>
-            <button type="button" id="edit-overtime" class="btn btn-primary btn-attendances" data-toggle="modal" data-target="#myModal">
+            <button type="button" id="edit-overtime" class="btn btn-primary btn-attendances" data-toggle="modal" data-target="#<%= day.id %>">
               残業申請
             </button>
           </td>
@@ -154,58 +154,61 @@
   </table>
 </div>
 
-  <%= form_with(model: @attendances,local:true,url: attendances_update_overtime_user_path(@user,@attendances), method: :patch) do |f| %>
-      <div id="myModal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">【残業申請】</h4>
-            </div>
-            <div class="modal-body">
-              <table class="table table-condenced table-bordered table-striped" id="table-overtime">
-                <thead>
-                  <tr>
-                    <td>日付</td>
-                    <td>曜日</td>
-                    <td><%= f.label :end_estimated_time,class: "label-overtime" %></td>
-                    <td><%= f.label :next_day,class: "label-overtime" %></td>
-                    <td><%= f.label :outline,class: "label-overtime" %></td>
-                    <td><%= f.label :supporter,class: "label-overtime" %>確認㊞</td>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td><%= l(@attendances.worked_on, format: :short ) %></td>
-                          
-                      <% days_color =
-                        case $days_of_the_week[@attendances.worked_on.wday]
-                        when '土'
-                        'text-info'
-                        when '日'
-                        'text-danger'
-                        end %>
-                              
-                      <td class="<%= days_color %>">
-                        <%= $days_of_the_week[@attendances.worked_on.wday] %>
-                      </td>
-                  
-                      <td><%= f.time_field  :end_estimated_time,class: "form-control" %></td>
-                      <td><%= f.check_box :next_day %></td>
-                      <td><%= f.text_field :outline, class: "form-control" %></td>
-                      <td></td>
-                    </tr>
-                  </tbody>
-                </table>
+    <% @attendances.each do |day| %>
+      <%= form_with(model: @user, url: attendances_update_overtime_user_path(date: day), local: true, method: :patch) do |f| %>
+        <%= f.fields_for "attendances[]", day do |attendance| %>
+          <div id="<%= day.id %>" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">【残業申請】</h4>
+                </div>
+                <div class="modal-body">
+                  <table class="table table-condenced table-bordered table-striped" id="table-overtime">
+                    <thead>
+                      <tr>
+                        <th>日付</th>
+                        <th>曜日</th>
+                        <th><%= attendance.label :end_estimated_time,class: "label-overtime" %></th>
+                        <th><%= attendance.label :next_day,class: "label-overtime" %></th>
+                        <th><%= attendance.label :outline,class: "label-overtime" %></th>
+                        <th><%= attendance.label :supporter,class: "label-overtime" %>確認㊞</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><%= l(day.worked_on, format: :short)%></td>
+                            
+                        <% days_color =
+                          case $days_of_the_week[day.worked_on.wday]
+                          when '土'
+                            'text-info'
+                          when '日'
+                            'text-danger'
+                          end %>  
+                                  
+                          <td class="<%= days_color %>">
+                            <%= $days_of_the_week[day.worked_on.wday] %>
+                          </td>
+                      
+                          <td><%= attendance.time_field  :end_estimated_time,class: "form-control" %></td>
+                          <td><%= attendance.check_box :next_day %></td>
+                          <td><%= attendance.text_field :outline, class: "form-control" %></td>
+                          <td></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="modal-footer center">
+                    <%= f.submit "変更を送信する",class:"btn btn-primary btn-overtime" %>
+                    <button type="button" class="btn btn-default btn-overtime" data-dismiss="modal">
+                      キャンセル
+                    </button>
+                  </div>
+                </div>
               </div>
-              <div class="modal-footer center">
-                <%= f.submit "変更を送信する",class:"btn btn-primary btn-overtime" %>
-                <button type="button" class="btn btn-default btn-overtime" data-dismiss="modal">
-                  キャンセル
-                </button>
-              </div>
             </div>
-          </div>
-        </div>
+          <% end %>
+        <% end %>
       <% end %>
-    
