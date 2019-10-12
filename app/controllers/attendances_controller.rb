@@ -50,19 +50,21 @@ class AttendancesController < ApplicationController
     redirect_to attendances_edit_one_month_user_url(date: params[:date])
   end
   
-  def edit_overtime
+  def edit_overtimeend
   end
   
   def update_overtime
+    overtime_params.each do |id,item|
     @attendance = Attendance.find(params[:id])
-    @attendance.update_attributes(overtime_params)
-    if @user.save
-     flash[:success] = "残業申請完了"
-    else 
-      flash[:danger] = "残業申請失敗"
+      if  @attendance.update_attributes(item)
+        flash[:success] = "残業申請完了"
+      else
+        flash[:danger] = "残業申請失敗"
+      end
+    redirect_to @user
     end
-    redirect_to users_url
   end
+  
   
   private
     def attendances_params
