@@ -19,7 +19,7 @@ class BasesController < ApplicationController
   end
   
   def index
-    @bases = Base.all.order(sort_column + ' ' + sort_direction)
+    @bases = Base.all
 
   end
   

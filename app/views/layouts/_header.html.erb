@@ -41,7 +41,7 @@
               <% unless current_user.admin %>
                 <li><%= link_to "ユーザー情報", current_user %></li>
               <% else %>
-                <li><%= link_to "ユーザー編集", edit_user_path(current_user) %></li>
+                <li><%= link_to "管理者情報編集", edit_user_path(current_user) %></li>
               <% end %>
               <li class="divider"></li>
               <li><%= link_to "ログアウト", logout_path, method: :delete %></li>
