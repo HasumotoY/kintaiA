@@ -38,7 +38,7 @@
     <%= link_to "勤怠を編集",attendances_edit_one_month_user_path(date: @first_day),class:"btn btn-primary" %>
     <%= link_to "CVS出力","#",class: "btn btn-primary" %>
     <br>
-    <%= link_to "勤怠修正ログ(承認済)",work_log_user_path(@user),class: "btn btn-primary" %>
+    <%= link_to "勤怠修正ログ(承認済)",attendances_work_log_user_path(@user),class: "btn btn-primary" %>
   <table class="table table-condenced table-bordered table-hover table-striped" id="table-attendances">
     <thead>
       <tr>
