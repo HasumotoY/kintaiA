@@ -124,10 +124,10 @@
             <% end %>
           </td>
           <td colspan="2"><%= day.note %></td>
-          <td><%= day.end_estimated_time %></td>
+          <td><%= l(day.end_estimated_time, format: :hour) if day.end_estimated_time.present? %></td>
+          <td><%= l(day.end_estimated_time, format: :min) if day.end_estimated_time.present? %></td>
+          <td></td>
           <td><%= day.outline %></td>
-          <td></td>
-          <td></td>
           <td></td>
         </tr>
       <% end %>
@@ -155,9 +155,9 @@
 </div>
 
     <% @attendances.each do |day| %>
-      <%= form_with(model: @user, url: attendances_update_overtime_user_path(date: day), local: true, method: :patch) do |f| %>
+      <%= form_with(model: @user, url: attendances_update_overtime_user_path(date: day.worked_on), local: true, method: :patch) do |f| %>
         <%= f.fields_for "attendances[]", day do |attendance| %>
-          <div id="<%= day.id %>" class="modal fade" role="dialog">
+          <div id="<%= day.id %>" class="modal fade" role="dialog modal-lg modal-dialog-center">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
