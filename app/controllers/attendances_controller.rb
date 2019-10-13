@@ -1,7 +1,7 @@
 class AttendancesController < ApplicationController
   before_action :set_user,only: [:edit_one_month,:update_one_month,:edit_overtime,:update_overtime]
   before_action :logged_in_user, only: [:update,:edit_one_month,:edit_overtime]
-  before_action :set_one_month,only: [:edit_one_month,:edit_ovetime,:update_overtime]
+  before_action :set_one_month,only: [:edit_one_month,:edit_overtime,:update_overtime]
   before_action :admin_or_correct_user, only: [:update,:edit_one_month]
   
   UPDATE_ERROR_MSG = "登録に失敗しました。やり直してください。"
@@ -50,21 +50,21 @@ class AttendancesController < ApplicationController
     redirect_to attendances_edit_one_month_user_url(date: params[:date])
   end
   
-  def edit_overtimeend
+  def edit_overtime
+    @users = User.all
   end
   
   def update_overtime
     overtime_params.each do |id,item|
-    @attendance = Attendance.find(params[:id])
-      if  @attendance.update_attributes(item)
+    attendance = Attendance.find(params[:id])
+      if  attendance.update_attributes(item)
         flash[:success] = "残業申請完了"
       else
         flash[:danger] = "残業申請失敗"
       end
-    redirect_to @user
+    redirect_to current_user
     end
   end
-  
   
   def work_log
   end
@@ -79,7 +79,7 @@ class AttendancesController < ApplicationController
     end
     
     def overtime_params
-      params.require(:user).permit(attendances: [:end_estimated_time,:next_day,:outline,:supporter])[:attendances]
+      params.require.permit(attendances: [:end_estimated_time,:next_day,:outline,:supporter])[:attendances]
     end
     
     def attendances_invalid?

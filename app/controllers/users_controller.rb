@@ -4,7 +4,7 @@ class UsersController < ApplicationController
   before_action :logged_in_user, only: [:show,:edit,:update,:destroy, :edit_basic_info, :update_basic_info]
   before_action :admin_user, only: [:index,:edit,:update,:destroy]
   before_action :admin_or_correct_user, only: [:edit,:update]
-  before_action :set_one_month, only: [:show]
+  before_action :set_one_month, only: :show
   
   
   before_action :admin_or_correct_user, only: :show
@@ -28,10 +28,11 @@ class UsersController < ApplicationController
   
   def show
     @worked_sum = @attendances.where.not(started_at: nil).count
+    @users = User.all
   end
   
   def index
-    @users = User.paginate(page: params[:page]).search(params[:search])
+    @users = User.paginate(page: params[:page]).search(params[:search]).includes(:attendances)
   end
   
   def search
@@ -73,6 +74,18 @@ class UsersController < ApplicationController
       users.attendances.any?{|day|}
     end
   end
+  
+  def update_overtime
+    overtime_params.each do |id,item|
+    attendance = Attendance.find(params[:id])
+      if  attendance.update_attributes(item)
+        flash[:success] = "残業申請完了"
+      else
+        flash[:danger] = "残業申請失敗"
+      end
+    redirect_to current_user
+    end
+  end  
   
   private
   
