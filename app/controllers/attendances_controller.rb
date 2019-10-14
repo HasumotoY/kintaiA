@@ -1,8 +1,8 @@
 class AttendancesController < ApplicationController
-  before_action :set_user,only: [:edit_one_month,:update_one_month,:edit_overtime,:update_overtime]
-  before_action :logged_in_user, only: [:update,:edit_one_month,:edit_overtime]
-  before_action :set_one_month,only: [:edit_one_month,:edit_overtime,:update_overtime]
-  before_action :admin_or_correct_user, only: [:update,:edit_one_month]
+  before_action :set_user,only: [:edit_one_month,:update_one_month,:dit_overtime,:update_overtime]
+  before_action :logged_in_user, only: [:update,:edit_one_month,:dit_overtime,:update_overtime]
+  before_action :set_one_month,only: [:edit_one_month,:update_overtime]
+  before_action :admin_or_correct_user, only: [:update,:edit_one_month,:update_overtime]
   
   UPDATE_ERROR_MSG = "登録に失敗しました。やり直してください。"
   
@@ -29,6 +29,9 @@ class AttendancesController < ApplicationController
   def  edit_one_month
   end
   
+  def edit_overtime
+  end
+  
   def update_one_month
       if attendances_invalid?
         ActiveRecord::Base.transaction do
@@ -50,13 +53,10 @@ class AttendancesController < ApplicationController
     redirect_to attendances_edit_one_month_user_url(date: params[:date])
   end
   
-  def edit_overtime
-    @users = User.all
-  end
-  
   def update_overtime
     overtime_params.each do |id,item|
-    attendance = Attendance.find(params[:id])
+    attendance = Attendance.find(params[:attendance_id])
+    @user = User.find(params[:user_id])
       if  attendance.update_attributes(item)
         flash[:success] = "残業申請完了"
       else

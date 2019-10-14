@@ -80,9 +80,7 @@
       <% @attendances.each do |day| %>
         <tr>
           <td>
-            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="<%= :user_id %>">
-              残業申請
-              </button>
+            <%= link_to "残業申請",user_attendance_edit_overtime_path(user_id:@user.id, attendance_id: day.id),remote: true,class: "btn btn-primary" %>
           </td>
           
           <td><%= l(day.worked_on, format: :short) %></td>
@@ -151,69 +149,4 @@
     </tfooter>
   </table>
 </div>
-
-<div id="<%= :user_id %>" class="modal fade" role="dialog">
-  <div class="modal-dialog">
- 
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">【残業申請</h4>
-      </div>
-      <div class="modal-body">
-        <table class="table table-condenced table-bordered table-striped" id="table-overtime">
-        <thead>
-          <tr>
-            <td>日付</td>
-            <td>曜日</td>
-            <td>終了予定時刻</td>
-            <td>翌日</td>
-            <td>業務処理内容</td>
-            <td>支持者確認㊞</td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            
-            <% @users.each do |user| %>    
-              <% attendances = Attendance.where(user_id: user.id) %>
-                <% attendances.each do |day| %>
-                <%= form_with(model: user, url: update_overtime_user_attendance_path(user, day), local: true, method: :patch) do |f| %>
-                  <td><%= l(day.worked_on, format: :short) %></td>
-                  <td>
-                    <% if day.worked_on.wday == 6 %>
-                      <font color="blue">土</font>
-                    <% elsif day.worked_on.wday == 0 %>
-                      <font color="red">日</font>
-                    <% else %>
-                      <%= $days_of_the_week[day.worked_on.wday] %>
-                    <% end %>
-                    
-                  </td>  
-              
-                  <%= f.fields_for "attendances[]", day do |attendance| %>  
-                    <td><%= attendance.time_field  :end_estimated_time,class: "form-control" %></td>
-                    <td><%= attendance.check_box :next_day %></td>
-                    <td><%= attendance.text_field :outline, class: "form-control" %></td>
-                    <td><%= attendance.collection_select :supporter,User.where(superior: true), :id, :name, {include_blank: true}, prompt: true, class: "form-control" %></td>
-              </tr>
-            <% end %>
-            <% end %>
-            <% end %>
-              </tbody>
-            </table>
-      </div>
-      <div class="modal-footer">
-        <%= form_with(model: user, url: update_overtime_user_attendance_path(user, @attendances), local: true, method: :patch) do |f| %>
-         <%= f.submit "変更を送信する",class:"btn btn-primary btn-overtime" %>
-        <button type="button" class="btn btn-default" data-dismiss="modal">
-          キャンセル
-        </button>
-        <% end %>
-      </div>
-    </div>
-   <% end %>
-  </div>
-</div>
-
+<div id="edit-overtime" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
