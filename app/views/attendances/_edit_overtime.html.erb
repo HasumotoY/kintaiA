@@ -1,6 +1,3 @@
-<% @user = User.find(params[:user_id]) %>
-<% @attendances = Attendance.find(params[:attendance_id]) %>
-
 <div class="modal-dialog modal-lg modal-dialog-center">
   <div class="modal-content">
     <div class="modal-header">
@@ -22,7 +19,7 @@
           </tr>
         </thead>
         <tbody>
-          <%= form_with(model: @user, url: user_attendance_update_overtime_path(user_id: @user.id, attendance_id: :attendance_id), local: true, method: :patch) do |f| %>
+          <%= form_with(model: @attendances, url: user_attendance_update_overtime_path(user_id: :user_id, attendance_id: :attendance_id), local: true, method: :patch) do |f| %>
           <tr>
             <td><%= l(@attendances.worked_on, format: :short) %></td>
             <td>

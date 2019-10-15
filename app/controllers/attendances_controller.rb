@@ -29,9 +29,6 @@ class AttendancesController < ApplicationController
   def  edit_one_month
   end
   
-  def edit_overtime
-  end
-  
   def update_one_month
       if attendances_invalid?
         ActiveRecord::Base.transaction do
@@ -53,23 +50,30 @@ class AttendancesController < ApplicationController
     redirect_to attendances_edit_one_month_user_url(date: params[:date])
   end
   
-  def update_overtime
-    overtime_params.each do |id,item|
-    attendance = Attendance.find(params[:attendance_id])
-    @user = User.find(params[:user_id])
-      if  attendance.update_attributes(item)
-        flash[:success] = "残業申請完了"
-      else
-        flash[:danger] = "残業申請失敗"
-      end
-    redirect_to current_user
-    end
-  end
-  
   def work_log
   end
   
   def search
+  end
+  
+  def edit_overtime
+    @user = User.find(params[:user_id])
+    @attendances = Attendance.find(params[:attendance_id])
+  end
+  
+  def update_overtime
+    ActiveRecord::Base transaction do
+      overtime_params.each do |id,item|
+        attendance = Attendance.find(id)
+          attendance.update_attributes!(item)
+      end
+      flash[:success] = "残業申請完了"
+      redirect_to current_user
+    end
+  
+  rescue ActiveRecord::RecordInvalid
+      flash[:danger] = "残業申請失敗"
+      redirect_to current_user  
   end
   
   
@@ -79,7 +83,7 @@ class AttendancesController < ApplicationController
     end
     
     def overtime_params
-      params.require.permit(attendances: [:end_estimated_time,:next_day,:outline,:supporter])[:attendances]
+      params.require(:user).permit(attendances: [:end_estimated_time,:next_day,:outline,:supporter])[:attendances]
     end
     
     def attendances_invalid?
