@@ -4,10 +4,11 @@
       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
-        <h1 class="modal-title">【残業申請】</h1>
+      <h1 class="modal-title">【残業申請】</h1>
     </div>
     <div class="modal-body">
-      <table class="table table-condenced table-bordered table-striped" id="table-overtime">
+       <%= form_with(model: @attendance, url: update_overtime_user_attendance_path(date: @first_day), local: true, method: :patch) do |f| %>
+       <table class="table table-condenced table-bordered table-striped" id="table-overtime">
         <thead>
           <tr>
             <td>日付</td>
@@ -19,33 +20,33 @@
           </tr>
         </thead>
         <tbody>
-          <%= form_with(model: @attendances, url: user_attendance_update_overtime_path(user_id: :user_id, attendance_id: :attendance_id), local: true, method: :patch) do |f| %>
-          <tr>
-            <td><%= l(@attendances.worked_on, format: :short) %></td>
-            <td>
-              <% if @attendances.worked_on.wday == 6 %>
-                <font color="blue">土</font>
-              <% elsif @attendances.worked_on.wday == 0 %>
-                <font color="red">日</font>
-              <% else %>
-                <%= $days_of_the_week[@attendances.worked_on.wday] %>
-              <% end %>
-            </td>  
-            <td><%= f.time_field  :end_estimated_time,class: "form-control" %></td>
-            <td><%= f.check_box :next_day %></td>
-            <td><%= f.text_field :outline, class: "form-control" %></td>
-            <td><%= f.collection_select :supporter,User.where(superior: true), :id, :name, {include_blank: true}, prompt: true, class: "form-control" %></td>
-          </tr>
+            <tr>
+              <td><%= l(@attendance.worked_on, format: :short) %></td>
+              <td>
+                <% if @attendance.worked_on.wday == 6 %>
+                  <font color="blue">土</font>
+                <% elsif @attendance.worked_on.wday == 0 %>
+                  <font color="red">日</font>
+                <% else %>
+                  <%= $days_of_the_week[@attendance.worked_on.wday] %>
+                <% end %>
+              </td>  
+              
+              <td><%= f.time_field  :end_estimated_time,class: "form-control" %></td>
+              <td><%= f.check_box :next_day %></td>
+              <td><%= f.text_field :outline, class: "form-control" %></td>
+              <td><%= f.collection_select :supporter,User.where(superior: true), :id, :name, {include_blank: true}, prompt: true, class: "form-control" %></td>
+            </tr>
         </tbody>
-      </table>
-    </div>
-    <div class="modal-footer center">
-      <%= f.submit "変更を送信する",class:"btn btn-primary btn-overtime" %>
-        <button type="button" class="btn btn-default btn-overtime" data-dismiss="modal">
-          キャンセル
-        </button>
+        </table>
+        <div class="center">
+          <%= f.submit "変更を送信する",class:"btn btn-primary btn-overtime" %>    
+          <button type="button" class="btn btn-default btn-overtime" data-dismiss="modal">
+            キャンセル
+          </button>
+        </div>
       <% end %>
     </div>
   </div>
 </div>
-    
+  

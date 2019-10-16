@@ -1,8 +1,8 @@
 class AttendancesController < ApplicationController
-  before_action :set_user,only: [:edit_one_month,:update_one_month,:dit_overtime,:update_overtime]
-  before_action :logged_in_user, only: [:update,:edit_one_month,:dit_overtime,:update_overtime]
-  before_action :set_one_month,only: [:edit_one_month,:update_overtime]
-  before_action :admin_or_correct_user, only: [:update,:edit_one_month,:update_overtime]
+  before_action :set_user,only: [:edit_one_month,:update_one_month]
+  before_action :logged_in_user, only: [:update,:edit_one_month]
+  before_action :set_one_month,only: [:edit_one_month,:update_one_month]
+  before_action :admin_or_correct_user, only: [:update,:edit_one_month]
   
   UPDATE_ERROR_MSG = "登録に失敗しました。やり直してください。"
   
@@ -58,32 +58,28 @@ class AttendancesController < ApplicationController
   
   def edit_overtime
     @user = User.find(params[:user_id])
-    @attendances = Attendance.find(params[:attendance_id])
+    @attendance = @user.attendances.find(params[:id]) 
   end
   
   def update_overtime
-    ActiveRecord::Base transaction do
-      overtime_params.each do |id,item|
-        attendance = Attendance.find(id)
-          attendance.update_attributes!(item)
+    @user = User.find(params[:user_id])
+    @attendance = @user.attendances.find(params[:id])
+      if @attendance.update_attributes(overtime_params)
+        flash[:success] = "残業申請完了"
+        redirect_to @user
+      else
+        flash[:danger] = "残業申請失敗"
+        render @user
       end
-      flash[:success] = "残業申請完了"
-      redirect_to current_user
-    end
-  
-  rescue ActiveRecord::RecordInvalid
-      flash[:danger] = "残業申請失敗"
-      redirect_to current_user  
   end
-  
-  
+        
   private
     def attendances_params
       params.require(:user).permit(attendances: [:started_at,:finished_at,:note,:worked_on])[:attendances]
     end
     
     def overtime_params
-      params.require(:user).permit(attendances: [:end_estimated_time,:next_day,:outline,:supporter])[:attendances]
+      params.require(:attendance).permit(:end_estimated_time,:next_day,:outline,:supporter)
     end
     
     def attendances_invalid?
