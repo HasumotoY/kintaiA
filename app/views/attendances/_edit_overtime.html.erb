@@ -35,7 +35,10 @@
               <td><%= f.time_field  :end_estimated_time,class: "form-control" %></td>
               <td><%= f.check_box :next_day %></td>
               <td><%= f.text_field :outline, class: "form-control" %></td>
-              <td><%= f.collection_select :supporter,User.where(superior: true), :id, :name, {include_blank: true}, prompt: true, class: "form-control" %></td>
+              
+                <td><%= f.collection_select :supporter,User.where(superior: true), :id, :name, {include_blank: true}, prompt: true, class: "form-control"  %></td>
+              
+              
             </tr>
         </tbody>
         </table>

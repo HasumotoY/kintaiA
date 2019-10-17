@@ -11,10 +11,10 @@
         <td>曜日</td>
         <td>出社</td>
         <td>退社</td>
+        <td>翌日</td>
         <td>在社時間合計</td>
         <td>備考</td>
-        <td>残業指示</td>
-        <td>指示者</td>
+        <td>指示者確認㊞</td>
       </tr> 
     </thead>
       <% @attendances.each do |day| %>
@@ -40,7 +40,7 @@
                 <td><%= attendance.time_field :started_at, class: "form-control" %></td>
                 <td><%= attendance.time_field :finished_at, class: "form-control" %></td>
               <% end %>
-              
+              <td><%= f.check_box :next_day,class: "check-box" %></td>
               <td>
                 <% if day.started_at.present? && day.finished_at.present? %>
                   <%= working_times(day.started_at,day.finished_at) %>
@@ -48,8 +48,7 @@
               </td>
               
               <td><%= attendance.text_field :note ,class: "form-control" %></td>
-              <td></td>
-              <td></td>
+              <td><%= f.collection_select :supporter, User.where(superior: true), :id,:name,{include_blank: true}, class: "form-control" %></td>
             </tr>
           </tbody>
         <% end %>

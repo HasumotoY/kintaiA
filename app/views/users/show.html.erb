@@ -28,11 +28,16 @@
     </tbody>
   </table>
   <% if current_user.superior? %>
+
+    <p>【所属長承認申請のお知らせ】</p>
+    <p>【勤怠変更申請のお知らせ】</p>
+    <p>【残業申請のお知らせ】</p>
     
       <%= link_to "【所属長承認申請のお知らせ】","#",class: "notice", remote: "true" %>
       <br><%= link_to "【勤怠変更申請のお知らせ】","#",class: "notice", remote: "true"  %>
       <br><%= link_to "【残業申請のお知らせ】","#",class: "notice", remote: "true"  %>
       <br>
+    
   <% end %>
   
     <%= link_to "勤怠を編集",attendances_edit_one_month_user_path(date: @first_day),class:"btn btn-primary" %>
@@ -122,7 +127,11 @@
           <td colspan="2"><%= day.note %></td>
           <td><%= l(day.end_estimated_time, format: :hour) if day.end_estimated_time.present? %></td>
           <td><%= l(day.end_estimated_time, format: :min) if day.end_estimated_time.present? %></td>
-          <td></td>
+          <td>
+            <% if day.end_estimated_time.present? %>
+              <%= over_times(day.end_estimated_time,@user.designated_work_end_time)%>
+            <% end %>
+          </td>
           <td><%= day.outline %></td>
           <td></td>
         </tr>
@@ -138,7 +147,7 @@
         <td colspan="3">総合勤務時間</td>  
         <td colspan="3"><%= format_basic_info(@user.basic_work_time).to_f*@worked_sum %></td>
         
-        <%= form_with(model: @user,local: true) do |f| %>
+        <%= form_with(model: @user, url: attendances_update_one_month_user_path(date: @first_day), local: true, method: :patch) do |f| %>
         <td rowspan="2">
           所属長承認 未
           <br><%= f.collection_select :supporter,User.where(superior: true), :id, :name, {include_blank: true},prompt: true, class: "form-control" %>
