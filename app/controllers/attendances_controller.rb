@@ -72,6 +72,15 @@ class AttendancesController < ApplicationController
         render @user
       end
   end
+  
+  def notice_approval
+  end
+  
+  def notice_edit_one_month
+  end
+  
+  def notice_overtime
+  end
         
   private
     def attendances_params

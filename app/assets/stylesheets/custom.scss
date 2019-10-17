@@ -258,6 +258,18 @@ p{
     width: 30%;
 }
 
+/* notice-modal */
+#modal-teble{
+  th{
+        vertical-align: middle;
+        text-align: center;
+    }
+    td{
+        vertical-align: middle;
+        text-align: center;
+    }   
+}
+
 /* error_explanation */
 #error_explanation{
     color: red;

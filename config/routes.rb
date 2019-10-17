@@ -28,6 +28,9 @@ Rails.application.routes.draw do
       member do
         get 'edit_overtime'
         patch 'update_overtime'
+        get 'notice_approval'
+        get 'notice_edit_one_month'
+        get 'notice_overtime'
     end
     end  
       collection { post :import }
