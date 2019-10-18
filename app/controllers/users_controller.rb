@@ -27,6 +27,7 @@ class UsersController < ApplicationController
   end
   
   def show
+    @users = User.all
     @worked_sum = @attendances.where.not(started_at: nil).count
   end
   
@@ -64,7 +65,11 @@ class UsersController < ApplicationController
   end
   
   def import
-    User.import(params[:file])
+    if User.import(params[:file])
+      flash[:success] = "ユーザー情報を追加しました。"
+    else
+      flash[:danger] = "情報の更新に失敗しました。<br>" + @user.errors.full_messages.join('<br>')
+    end
     redirect_to users_url
   end
   
