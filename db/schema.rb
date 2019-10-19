@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191010004939) do
+ActiveRecord::Schema.define(version: 20191019055501) do
 
   create_table "attendances", force: :cascade do |t|
     t.date "worked_on"
@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 20191010004939) do
     t.boolean "next_day", default: false
     t.string "outline"
     t.string "supporter"
+    t.string "approval"
   end
 
   create_table "bases", force: :cascade do |t|
