@@ -21,8 +21,16 @@
             <td>変更</td>
           </tr>
           <tr>
-            <td></td>
-            <td></td>
+            <td><%= l(@attendance.worked_on,format: :short) %></td>
+            <td>
+               <% if @attendance.worked_on.wday == 6 %>
+                  <font color="blue">土</font>
+                <% elsif @attendance.worked_on.wday == 0 %>
+                  <font color="red">日</font>
+                <% else %>
+                  <%= $days_of_the_week[@attendance.worked_on.wday] %>
+                <% end %>
+            </td>
             <td></td>
             <td></td>
             <td></td>

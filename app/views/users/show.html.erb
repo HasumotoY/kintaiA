@@ -39,7 +39,7 @@
         <% attendances = Attendance.where(user_id: user.id) %>
         <% attendances.each do |at| %>
         <% if at.supporter.to_i == current_user.id %>
-          <%= link_to "【残業申請のお知らせ】",notice_overtime_user_attendance_path(user_id: @user.id ,date: @first_day),class: "notice", remote: "true",  style:  "color:red"  %>
+          <%= link_to "【残業申請のお知らせ】",notice_overtime_user_attendance_path(user_id: user.id ,id: at.id),class: "notice", remote: "true",  style:  "color:red"  %>
         <% end %>
         <% end %>
         <% end %>
