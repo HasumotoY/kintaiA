@@ -5,9 +5,13 @@
     <tbody>
       <tr>
         <td>
-          <%= link_to "←",user_path(date: @first_day.prev_month), class: "btn btn-primary" %>
+          <% if current_user?(@user) %>
+            <%= link_to "←",user_path(date: @first_day.prev_month), class: "btn btn-primary" %>
+          <% end %>
           <%= l(@first_day, format: :middle) %>時間管理表
-          <%= link_to "→",user_path(date: @first_day.next_month), class: "btn btn-primary" %>
+          <% if current_user?(@user) %>
+            <%= link_to "→",user_path(date: @first_day.next_month), class: "btn btn-primary" %>
+          <% end %>
         </td>
         <td>
           勤務開始時刻  <%= format_basic_info(@user.designated_work_start_time) %>
@@ -27,29 +31,35 @@
       </tr>
     </tbody>
   </table>
-  
-  <% if current_user.superior? %>
-  <% @users.each do |user| %>
-  <% attendances = Attendance.where(user_id: user.id) %>
-    <% attendances.each do |at| %>
-      <% if at.supporter.to_i == current_user.id %>
-            <%#<p><%= link_to "【所属長承認申請のお知らせ】",notice_approval_user_attendance_path(user_id: :user_id,id: :id),class: "notice", remote: "true" %></p>
-            <%#<p><%= link_to "【勤怠変更申請のお知らせ】",notice_edit_one_month_user_attendance_path(user_id: :user_id,id: :id),class: "notice", remote: "true"  %></p>
-            <p><%= link_to "【残業申請のお知らせ】",notice_overtime_user_attendance_path(user_id: :user_id,id: :id),class: "notice", remote: "true"  %></p>
-            <% end %>
-        
-          <% unless at.supporter.to_i == current_user.id %>        
-            <%#<p>【所属長承認申請のお知らせ】</p>
-            <p>【勤怠変更申請のお知らせ】</p>%>
-            <p>【残業申請のお知らせ】</p>
-          <% end %>
+  <% if current_user?(@user) %>
+    <% if current_user.superior? %>
+    
+      <p>
+        <% @users.each do |user| %> 
+        <% attendances = Attendance.where(user_id: user.id) %>
+        <% attendances.each do |at| %>
+        <% if at.supporter.to_i == current_user.id %>
+          <%= link_to "【残業申請のお知らせ】",notice_overtime_user_attendance_path(user_id: @user.id ,date: @first_day),class: "notice", remote: "true",  style:  "color:red"  %>
         <% end %>
-    <% end %>
+        <% end %>
+        <% end %>
+      </p>
+   <%#<p><%= link_to "【所属長承認申請のお知らせ】",notice_approval_user_attendance_path(user_id: :user_id,id: :id),class: "notice", remote: "true", style: "color:red" %></p>
+   <%#<p><%= link_to "【勤怠変更申請のお知らせ】",notice_edit_one_month_user_attendance_path(user_id: :user_id,id: :id),class: "notice", remote: "true", style: "color:red" %></p>
+     <% elsif @at.supporter.to_i != current_user.id  %> 
+   <%#<p>【所属長承認申請のお知らせ】</p>
+      <p>【勤怠変更申請のお知らせ】</p>%>
+      <p>【残業申請のお知らせ】</p>
+    
   <% end %>
+    
+    
     <%= link_to "勤怠を編集",attendances_edit_one_month_user_path(date: @first_day),class:"btn btn-primary" %>
     <%= link_to "CVS出力","#",class: "btn btn-primary" %>
     <br>
     <%= link_to "勤怠修正ログ(承認済)",attendances_work_log_user_path(@user),class: "btn btn-primary" %>
+    
+  <% end %>  
   <table class="table table-condenced table-bordered table-hover table-striped" id="table-attendances">
     <thead>
       <tr>
@@ -90,9 +100,13 @@
 
       <% @attendances.each do |day| %>
         <tr>
+          
           <td>
-            <%= link_to "残業申請",edit_overtime_user_attendance_path(user_id: @user.id, id: day.id), remote: true, class: "btn btn-primary" %>
+            <% if current_user?(@user) %>
+              <%= link_to "残業申請",edit_overtime_user_attendance_path(user_id: @user.id, id: day.id), remote: true, class: "btn btn-primary" %>
+            <% end %>
           </td>
+          
           
           <td><%= l(day.worked_on, format: :short) %></td>
             
@@ -110,8 +124,10 @@
           <td><%= l(day.started_at.floor_to(15.minutes), format: :min) if day.started_at.present? %></td>
           
           <td>
+            <% if current_user?(@user)%>
             <% if (Date.current == day.worked_on) && day.started_at.nil? %>
               <%= link_to "出社",user_attendance_path(@user, day),method: :patch,class: "btn btn-primary btn-attendance" %>
+            <% end %>
             <% end %>
           </td>
           
@@ -119,8 +135,10 @@
           <td><%= l(day.finished_at.floor_to(15.minutes), format: :min) if day.finished_at.present? %></td>
           
           <td>
+            <% if current_user?(@user) %>
             <% if (Date.current == day.worked_on) && day.finished_at.nil? && day.started_at.present? %>
               <%= link_to "退社",user_attendance_path(@user, day),method: :patch,class: "btn btn-primary btn-attendance" %>
+            <% end %>
             <% end %>
           </td>
           
@@ -139,7 +157,15 @@
             <% end %>
           </td>
           <td><%= day.outline %></td>
-          <td><%= day.supporter %></td>
+          
+          <td>
+            <% @users.each do |user| %>
+              <% if day.supporter.to_i == user.id %>
+                <%= user.name %>
+              <% end %>
+            <% end %>
+          </td>
+          
         </tr>
       <% end %>
     </tbody>
@@ -155,9 +181,11 @@
         
         <%= form_with(model: @user, url: attendances_update_one_month_user_path(date: @first_day), local: true, method: :patch) do |f| %>
         <td rowspan="2">
-          所属長承認 未
-          <br><%= f.collection_select :supporter,User.where(superior: true), :id, :name, {include_blank: true},prompt: true, class: "form-control" %>
-          <br><%= f.submit "申請",class: "btn btn-primary btn-attendance" %>
+          <% if current_user?(@user) %>
+            所属長承認 未
+            <br><%= f.collection_select :supporter,User.where(superior: true), :id, :name, {include_blank: true},prompt: true, class: "form-control" %>
+            <br><%= f.submit "申請",class: "btn btn-primary btn-block btn-attendance" %>
+          <% end %>  
         </td>
         <% end %>
       </tr>

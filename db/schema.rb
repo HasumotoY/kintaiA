@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(version: 20191010004939) do
     t.datetime "updated_at", null: false
     t.integer "user_id"
     t.datetime "end_estimated_time"
-    t.boolean "next_day"
+    t.boolean "next_day", default: false
     t.string "outline"
     t.string "supporter"
   end
@@ -40,9 +40,9 @@ ActiveRecord::Schema.define(version: 20191010004939) do
     t.string "email"
     t.string "affiliation"
     t.string "uid"
-    t.datetime "basic_work_time", default: "2019-10-08 23:00:00"
-    t.datetime "designated_work_start_time", default: "2019-10-09 00:00:00"
-    t.datetime "designated_work_end_time", default: "2019-10-09 09:00:00"
+    t.datetime "basic_work_time", default: "2019-10-18 23:00:00"
+    t.datetime "designated_work_start_time", default: "2019-10-19 00:00:00"
+    t.datetime "designated_work_end_time", default: "2019-10-19 09:00:00"
     t.boolean "superior", default: false
     t.boolean "admin", default: false
     t.string "password_digest"

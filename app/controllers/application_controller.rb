@@ -64,4 +64,12 @@ class ApplicationController < ActionController::Base
       redirect_to(root_url)
     end
   end
+  
+  def superior_or_correct_user
+    @user = User.find(params[:id]) if @user.blank?
+      unless current_user?(@user) || current_user.superior?
+        flash[:danger]="閲覧権限がありません。"
+        redirect_to(root_url)
+      end
+  end
 end

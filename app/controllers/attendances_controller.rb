@@ -2,7 +2,7 @@ class AttendancesController < ApplicationController
   before_action :set_user,only: [:edit_one_month,:update_one_month]
   before_action :logged_in_user, only: [:update,:edit_one_month]
   before_action :set_one_month,only: [:edit_one_month,:update_one_month]
-  before_action :admin_or_correct_user, only: [:update,:edit_one_month]
+  before_action :admin_or_correct_user, only: [:update,:edit_one_month,:update_one_month]
   
   UPDATE_ERROR_MSG = "登録に失敗しました。やり直してください。"
   
@@ -74,12 +74,18 @@ class AttendancesController < ApplicationController
   end
   
   def notice_approval
+    @user = User.find(params[:user_id])
+    @attendance = @user.attendances.find(params[:id])
   end
   
   def notice_edit_one_month
+    @user = User.find(params[:user_id])
+    @attendance = @user.attendances.find(params[:id])
   end
   
   def notice_overtime
+    @user = User.find(params[:user_id])
+    @attendance = @user.attendances.find(params[:id])
   end
         
   private
@@ -89,6 +95,9 @@ class AttendancesController < ApplicationController
     
     def overtime_params
       params.require(:attendance).permit(:end_estimated_time,:next_day,:outline,:supporter)
+    end
+    
+    def set_modal
     end
     
     def attendances_invalid?

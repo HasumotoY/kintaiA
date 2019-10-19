@@ -5,9 +5,7 @@ class UsersController < ApplicationController
   before_action :admin_user, only: [:index,:edit,:update,:destroy]
   before_action :admin_or_correct_user, only: [:edit,:update]
   before_action :set_one_month, only: :show
-  
-  
-  before_action :admin_or_correct_user, only: :show
+  before_action :superior_or_correct_user, only: :show
   
   EDIT_ERROR_MESSAGE = "入力内容に問題があります。"
   
@@ -28,6 +26,12 @@ class UsersController < ApplicationController
   
   def show
     @users = User.all
+      @users.each do |user|
+        attendance = Attendance.where(user_id: user.id)
+        attendance.each do |at|
+          @at = at
+        end
+      end
     @worked_sum = @attendances.where.not(started_at: nil).count
   end
   
