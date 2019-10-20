@@ -30,21 +30,21 @@ class ApplicationController < ActionController::Base
     
   def admin_user
     unless current_user.admin?
-      flash[:danger] = "権限がありません。"
+      flash[:danger] = "管理者権限がありません。"
       redirect_to root_url
     end
   end
   
   def superior_user
     unless current_user.superior?
-      flash[:danger] = "権限がありません。"
+      flash[:danger] = "上長権限がありません。"
       redirect_to root_url
     end
   end
   
   def correct_user
     unless current_user?(@user)
-      flash[:danger] = "権限がありません。"
+      flash[:danger] = "他ユーザーの情報は閲覧・編集できません。"
       redirect_to(root_url)
     end
   end

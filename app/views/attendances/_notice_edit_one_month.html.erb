@@ -4,7 +4,7 @@
       <button type="button" class="close" data-dismiss="modal" aria-hidden="Close">
         <span aria-hidden="true">&times;</span>
       </button>
-      <h1 class="modal-title">【からの勤怠変更申請】</h1>
+      <h1 class="modal-title">【<%= @user.name %>からの勤怠変更申請】</h1>
     </div>
     <div class=modal-body>
       <%= form_with(model: @user, local:true) do |f| %>
@@ -39,7 +39,16 @@
           </tr>
         </thead>
         <tbody>
-          <td><%= l( @attendance.worked_on, format: :month) %></td>
+          <td><%= l( @attendance.worked_on, format: :short) %></td>
+          <td>
+            <% if @attendance.worked_on.wday == 6 %>
+                <font color="blue">土</font>
+              <% elsif @attendance.worked_on.wday == 0 %>
+                <font color="red">日</font>
+              <% else %>
+                <%= $days_of_the_week[@attendance.worked_on.wday] %>
+              <% end %>
+          </td>
           <td></td>
           <td></td>
           <td></td>
@@ -51,8 +60,7 @@
           <td></td>
           <td></td>
           <td></td>
-          <td></td>
-          <td><%= link_to "確認",attendances_edit_one_month_user_path(:user_id,@first_day),local: true,class: "btn btn-primariy" %></td>
+          <td><%= link_to "確認",user_path(@user), class: "btn btn-primary" %></td>
         </tbody>
       </table>
     </div>
