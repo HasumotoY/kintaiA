@@ -33,27 +33,24 @@
   </table>
   <% if current_user?(@user) %>
     <% if current_user.superior? %>
-    
-      <p>
-        <% @users.each do |user| %> 
-        <% attendances = Attendance.where(user_id: user.id) %>
-        <% attendances.each do |at| %>
-        <% if at.supporter.to_i == current_user.id %>
-      <p><%= link_to "【勤怠変更申請のお知らせ】",notice_edit_one_month_user_attendance_path(user_id: user.id,id: at.id),class: "notice", remote: "true", style: "color:red" %></p>    
-          
-        <% end %>
-        <% end %>
-        <% end %>
-      </p>
-   <%#<%= link_to "【残業申請のお知らせ】",notice_overtime_user_attendance_path(user_id: user.id ,id: at.id),class: "notice", remote: "true",  style:  "color:red"  %>
-   <%#<p><%= link_to "【所属長承認申請のお知らせ】",notice_approval_user_attendance_path(user_id: user.id,id: at.id),class: "notice", remote: "true", style: "color:red" %></p>
-     <% elsif @at.supporter.to_i != current_user.id  %> 
-   <%#<p>【所属長承認申請のお知らせ】</p>
-      <p>【勤怠変更申請のお知らせ】</p>%>
-      <p>【残業申請のお知らせ】</p>
-    
-  <% end %>
-    
+      <%= "【残業申請のお知らせ】",notice_overtime_user_attendance_path(user_id: user.id ,id: at.id),class: "notice", remote: "true",  style:  "color:red"  %> 
+      <% @users.each do |user| %>
+        <% attendance = Attendance.where(user_id: user.id) %>
+          <% attendance.each do |at| %>
+            <% at.supporter.to_i == current_user.id ?  
+             : 
+               【残業申請のお知らせ】%>
+              <%#
+             <p><%= link_to "【勤怠変更申請のお知らせ】",notice_edit_one_month_user_attendance_path(user_id: user.id,id: at.id),class: "notice", remote: "true", style: "color:red" %></p>
+              <%#<%= link_to "【所属長承認申請のお知らせ】",notice_approval_user_attendance_path(user_id: user.id,id: at.id),class: "notice", remote: "true", style: "color:red" %> 
+            <% else%> 
+             <%#<p>【所属長承認申請のお知らせ】</p>%>
+                <%#<p>【勤怠変更申請のお知らせ】</p>%>
+            　<%#<p></p>%>
+            <% end %>    
+          <% end %>
+      <% end %>
+    <% end %>
     
     <%= link_to "勤怠を編集",attendances_edit_one_month_user_path(date: @first_day),class:"btn btn-primary" %>
     <%= link_to "CVS出力","#",class: "btn btn-primary" %>
