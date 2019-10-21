@@ -4,7 +4,7 @@
       <button type="button" class="close" data-dismiss="modal" aria-hidden="Close">
         <span aria-hidden="true">&times;</span>
       </button>
-      <h1 class="modal-title">【残業申請】</h1>
+      <h1 class="modal-title">【<%= @user.name %>からの残業申請】</h1>
     </div>
     <div class=modal-body>
       <%= form_with(model: @user, local: true) do |f| %>
@@ -31,10 +31,16 @@
                   <%= $days_of_the_week[@attendance.worked_on.wday] %>
                 <% end %>
             </td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td><%= l(@attendance.end_estimated_time,format: :time) %></td>
+            <td><%= l(@user.designated_work_end_time,format: :time) %></td>
+            <td>
+               <% if @attendance.next_day == false %> 
+                <%= over_times(@attendance.end_estimated_time, @user.designated_work_end_time) %>
+              <% else %>
+                <%= next_day_over_times(@attendance.end_estimated_time, @user.designated_work_end_time) %>
+              <% end %>
+            </td>
+            <td><%= @attendance.outline %></td>
             <td></td>
             <td><%= f.submit "確認" ,class:"btn btn-primary" %></td>
           </tr>
