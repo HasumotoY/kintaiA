@@ -1,8 +1,10 @@
 class AttendancesController < ApplicationController
-  before_action :set_user,only: [:edit_one_month,:update_one_month]
+include AttendancesHelper
+  
+  before_action :set_user,only: [:edit_one_month]
   before_action :logged_in_user, only: [:update,:edit_one_month]
-  before_action :set_one_month,only: [:edit_one_month,:update_one_month]
-  before_action :admin_or_correct_user, only: [:update,:edit_one_month,:update_one_month]
+  before_action :set_one_month,only: [:edit_one_month]
+  before_action :admin_or_correct_user, only: [:update,:edit_one_month]
   
   UPDATE_ERROR_MSG = "登録に失敗しました。やり直してください。"
   
@@ -30,26 +32,17 @@ class AttendancesController < ApplicationController
   end
   
   def update_one_month
-      if attendances_invalid?
-        ActiveRecord::Base.transaction do
-          attendances_params.each do |id,item|
-            attendance = Attendance.find(id)
-            attendance.update_attributes!(item)
-          end
-        end  
-        flash[:success] = "勤怠情報を更新しました。"
-        redirect_to user_url(date: params[:date])
-      else
-        flash[:danger]="無効な時刻入力がありました。やり直してください。"
+    @user = User.find(params[:user_id])
+    @attendance = Attendance.find(params[:id])
+      if attendances_invalid? || (@attendance.worked_on == Date.current) && @attendance.update_attributes(attendances_params) 
+       flash[:success] = "勤怠変更申請しました。"
+       redirect_to @user
+      else   
+        flash[:danger] = "勤怠変更申請ができませんでした"
         redirect_to attendances_edit_one_month_user_url(date: params[:date])
       end
-  
-  
-  rescue ActiveRecord::RecordInvalid
-    flash[:danger] = UPDATE_ERROR_MSG
-    redirect_to attendances_edit_one_month_user_url(date: params[:date])
   end
-  
+        
   def work_log
   end
   
@@ -100,26 +93,5 @@ class AttendancesController < ApplicationController
     
     def overtime_params
       params.require(:attendance).permit(:end_estimated_time,:next_day,:outline,:supporter)
-    end
-    
-    def set_modal
-    end
-    
-    def attendances_invalid?
-      attendances = true
-      attendances_params.each do |id,item|
-        unless Date.current == item[:worked_on]
-          if item[:started_at].blank? && item[:finished_at].blank?
-            next
-          elsif item[:started_at] > item[:finished_at]
-            attendances = false
-            break
-          elsif item[:started_at].blank? || item[:finished_at].blank?
-            attendances = false
-            break
-          end
-        end
-        return attendances
-      end
     end
 end

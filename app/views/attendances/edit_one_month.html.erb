@@ -1,6 +1,6 @@
 <% provide(:title,@user.name) %>
 <% provide(:class_text,"edit-attendaces") %>
-<%= form_with(model: @user, url: attendances_update_one_month_user_path(date: @first_day), local: true, method: :patch) do |f| %>
+<%= form_with(model: @attendances, url: attendances_update_one_month_user_path(@attendances), local: true, method: :patch) do |f| %>
 <%= render 'shared/error_messages' %>
 
 <div class="col-md-10 col-md-offset-1">
@@ -18,7 +18,7 @@
       </tr> 
     </thead>
       <% @attendances.each do |day| %>
-        <%= f.fields_for "attendances[]", day do |attendance| %>
+        
           <tbody>
             <tr>
               <td><%= l(day.worked_on, format: :short) %></td>
@@ -34,11 +34,11 @@
               </td>
               
               <% if Date.current <= day.worked_on %>
-                <td><%= attendance.time_field :started_at, readonly: true, class: "form-control" %></td>
-                <td><%= attendance.time_field :finished_at,readonly: true, class: "form-control" %></td>
+                <td><%= f.time_field :started_at, readonly: true, class: "form-control" %></td>
+                <td><%= f.time_field :finished_at,readonly: true, class: "form-control" %></td>
               <% else %>
-                <td><%= attendance.time_field :started_at, class: "form-control" %></td>
-                <td><%= attendance.time_field :finished_at, class: "form-control" %></td>
+                <td><%= f.time_field :started_at, class: "form-control" %></td>
+                <td><%= f.time_field :finished_at, class: "form-control" %></td>
               <% end %>
               <td><%= f.check_box :next_day,class: "check-box" %></td>
               <td>
@@ -47,11 +47,11 @@
                 <% end %>
               </td>
               
-              <td><%= attendance.text_field :note ,class: "form-control" %></td>
+              <td><%= f.text_field :note ,class: "form-control" %></td>
               <td><%= f.collection_select :supporter, User.where(superior: true), :id,:name,{include_blank: true}, class: "form-control" %></td>
             </tr>
           </tbody>
-        <% end %>
+        
       <% end %>  
     </div>  
   </table>

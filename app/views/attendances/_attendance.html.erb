@@ -1,0 +1,7 @@
+  <% if attendance.supporter.to_i == @user.id %>
+      <p><%= link_to "【残業申請のお知らせ】",notice_overtime_user_attendance_path(user_id: @user.id, id: attendance.id),class: "notice", remote: "true", style: "color:red" %></p>
+  <% else %>
+      <p>【残業申請のお知らせ】</p>
+  <% end %>
+
+  

@@ -72,15 +72,4 @@ class ApplicationController < ActionController::Base
         redirect_to(root_url)
       end
   end
-  
-  def modal_each
-    @users = User.all
-      @users.each do |user|
-        attendance = Attendance.where(user_id: user.id)
-          attendance.each do |at|
-            @at = at
-          end
-      end
-      
-  end
 end

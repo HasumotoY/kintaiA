@@ -5,6 +5,22 @@ require 'rounding'
     format("%.2f",(((finish.floor_to(15.minutes)-start.floor_to(15.minutes)) / 60)) / 60.0)
   end
   
+  def attendances_invalid?
+    attendances = true
+    attendances_params.each do |id,item|
+        if item[:started_at].blank? && item[:finished_at].blank?
+          next
+        elsif item[:started_at] > item[:finished_at]
+          attendances = false
+          break
+        elsif item[:started_at].blank? || item[:finished_at].blank?
+          attendances = false
+          break
+        end
+      end
+        return attendances
+  end
+  
   def over_times(estimated,designated)
     format("%.2f",(((estimated.floor_to(15.minutes)-designated.floor_to(15.minutes)) / 60)) / 60.0 )
   end
