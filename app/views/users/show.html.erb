@@ -31,9 +31,19 @@
       </tr>
     </tbody>
   </table>
+  
   <% if current_user?(@user) %>
     <% if current_user.superior? %>
-      <%= render @attendances%>      
+      <% @users.each do |user| %> <!-- @users = User.all -->
+        <% attendance = Attendance.where(user_id: user.id) %>
+          <% attendance.each do |at| %>
+          <% if at.supporter.to_i == @user.id %> <!-- サポーターは指示者確認のcolumn -->
+              <p><%= link_to "【残業申請のお知らせ】",notice_overtime_user_attendance_path(user_id: user.id, id: at.id),class: "notice", remote: "true", style: "color:red" %></p>
+            <% else %>
+              <p>【残業申請のお知らせ】</p>
+            <% end %>
+          <% end %>
+      <% end %>
     <% end %>
     
     
