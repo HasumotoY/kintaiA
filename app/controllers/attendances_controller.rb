@@ -57,7 +57,7 @@ include AttendancesHelper
   def update_overtime
     @user = User.find(params[:user_id])
     @attendance = @user.attendances.find(params[:id])
-      if @attendance.update_attributes(overtime_params) 
+      if @attendance.update_attributes(overtime_params)
         @users = User.all
           @users.each do |user|
             if user.id == @attendance.supporter.to_i

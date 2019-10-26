@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  include AttendancesHelper
+  
   before_action :set_user, only: [:show,:edit,:update, :destroy, :edit_basic_info, :update_basic_info]
   before_action :logged_in?, only: [:index,:show,:edit,:update]
   before_action :logged_in_user, only: [:show,:edit,:update,:destroy, :edit_basic_info, :update_basic_info]
@@ -8,6 +10,7 @@ class UsersController < ApplicationController
   before_action :superior_or_correct_user, only: :show
   
   EDIT_ERROR_MESSAGE = "入力内容に問題があります。"
+  
   
   def new
     @user = User.new
@@ -33,7 +36,7 @@ class UsersController < ApplicationController
   end
   
   def index
-    @users = User.paginate(page: params[:page]).search(params[:search]).includes(:attendances)
+    @users = User.all
   end
   
   def search
@@ -75,9 +78,6 @@ class UsersController < ApplicationController
   end
   
   def working_users
-    User.all.each do |users|
-      users.attendances.any?{|day|}
-    end
   end
   
   def update_overtime

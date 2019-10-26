@@ -19,7 +19,7 @@ class BasesController < ApplicationController
   end
   
   def index
-    @bases = Base.all
+    @bases = Base.recent
 
   end
   
