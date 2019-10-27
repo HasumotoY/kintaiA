@@ -32,7 +32,7 @@
                 <% end %>
               </td>  
               
-              <td><%= f.time_field  :end_estimated_time,class: "form-control" %></td>
+              <td><%= f.time_field  :end_estimated_time,required: true,class: "form-control" %></td>
               <td><%= f.check_box :next_day %></td>
               <td><%= f.text_field :outline, class: "form-control" %></td>
               

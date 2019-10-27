@@ -31,9 +31,18 @@ require 'rounding'
     format("%.2f",24 + (((estimated.floor_to(15.minutes)-designated.floor_to(15.minutes)) / 60)) / 60.0)
   end
   
-  def users_have_supporter
-     User.all.each do |user|
-        user.attendances.any?{|day|(day.supporter.to_i == @user.id)}
+  def attendances_check
+    User.all.each do |user|
+      attendance = Attendance.where(user_id: user.id)
+      attendance.each do |at|
+        @at = []
+        if at.supporter.to_i == @user.id && at.supporter.present?
+          next
+        else
+          @at = []
+        end
+        return @at = [user,at]
       end
-   end
+    end
+  end
 end
