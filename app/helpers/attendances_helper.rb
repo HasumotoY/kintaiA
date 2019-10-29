@@ -37,15 +37,7 @@ require 'rounding'
       attendance.each do |at|
         @at = [user,at]
         binding.pry
-        if attendance.supporter.to_i == @user.id && attendance.supporter.present?
-          @at=[user,at]
-          next
-        else
-          @at = [user,at]
-        end
-        return @at = [user,at]
       end
-      
     end
   end
 end
