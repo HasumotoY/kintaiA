@@ -8,9 +8,9 @@ require 'rounding'
   def attendances_invalid?
     attendances = true
     attendances_params.each do |id,item|
-      if item[:worked_on] == Date.today
+      if item[:started_at].blank? && item[:finished_at].blank?
         next
-      elsif item[:started_at].blank? && item[:finished_at].blank?
+      elsif item[:worked_on] == Date.today
         next
       elsif item[:started_at] > item[:finished_at]
         attendances = false
@@ -32,17 +32,19 @@ require 'rounding'
   end
   
   def attendances_check
-    User.all.each do |user|
+    @users.each do |user|
       attendance = Attendance.where(user_id: user.id)
       attendance.each do |at|
-        if at.supporter.present? && at.supporter.to_i == @user.id
-          @at = [user,at]
+        @at = [user,at]
+        if at.supporter.to_i == @user.id && at.supporter.present?
+          @at=[user,at]
           next
         else
           @at = [user,at]
-          break
+          
         end
       end
-    end  
+    end
+    
   end
 end

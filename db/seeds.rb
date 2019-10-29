@@ -12,18 +12,11 @@ User.create!(name: "上長B", email: "superior2@email.com",
             password: "password", password_confirmation: "password",
             employee_number: 3, uid: "0003",
             superior: true)
-            
-58.times do |n|
-  name = Faker::Name.name
-  email= "sample#{n+1}@email.com"
-  password= "password"
-  employee_number = 4+n
-  uid = "000#{4+n}"
   
-  User.create!(name: name,email: email, password: password,
-              password_confirmation: password, employee_number: employee_number,
-              uid: uid)
-end
+User.create!(name: Faker::Name.name,email: "sample@email.com", password: "password",
+              password_confirmation: "password", employee_number: 4,
+              uid: 0004)
+
 
 10.times do |n|
   base_number = n+1
