@@ -32,19 +32,20 @@ require 'rounding'
   end
   
   def attendances_check
-    @users.each do |user|
+    User.all.each do |user|
       attendance = Attendance.where(user_id: user.id)
       attendance.each do |at|
         @at = [user,at]
-        if at.supporter.to_i == @user.id && at.supporter.present?
+        binding.pry
+        if attendance.supporter.to_i == @user.id && attendance.supporter.present?
           @at=[user,at]
           next
         else
           @at = [user,at]
-          
         end
+        return @at = [user,at]
       end
+      
     end
-    
   end
 end
