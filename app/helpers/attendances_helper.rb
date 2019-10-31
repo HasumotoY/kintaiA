@@ -31,14 +31,16 @@ require 'rounding'
     format("%.2f",24 + (((estimated.floor_to(15.minutes)-designated.floor_to(15.minutes)) / 60)) / 60.0)
   end
   
-  def attendances_check()
+  def attendances_check
     User.all.each do |user|
       attendance = Attendance.where(user_id: user.id, worked_on: @first_day..@last_day)
       attendance.each do |at|
-        @at = [user,at]
-        return @at
+        @attendance = [user,at]
+        if @attendance[1][:supporter].present?
+          @at = [user,at]
+        end
       end
     end
-    binding.pry
+    
   end
 end
