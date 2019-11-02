@@ -34,14 +34,10 @@
   
   <% if current_user?(@user) %>
     <%if current_user.superior? %>
-      <% if attendances_check %>
-      <% if @at[1][:supporter] && @at[1][:supporter].to_i == @user.id %>
-          <span><%= link_to "【残業申請のお知らせ】",notice_overtime_user_attendance_path(user_id: @at[0][:id], id: @at[1][:id]),class: "notice", remote: "true", style: "color:red" %></span>
-          <span><%= @at[1][:supporter].length %>件の申請があります</span>
-      <% else %>
+      <% if attendances_check.to_i == @user.id %>
+          <span><%= link_to "【残業申請のお知らせ】",notice_overtime_user_attendance_path(user_id: user_id, id: attendance_id),class: "notice", remote: "true", style: "color:red" %></span>
+        <% else %>
           <p>【残業申請のお知らせ】</p>
-      <% end %>
-      <%# <% binding.pry %>-->
       <% end %>
     <% end %>
 <div>

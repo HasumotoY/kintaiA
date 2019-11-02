@@ -30,17 +30,24 @@ require 'rounding'
   def next_day_over_times(estimated,designated)
     format("%.2f",24 + (((estimated.floor_to(15.minutes)-designated.floor_to(15.minutes)) / 60)) / 60.0)
   end
-  
+
   def attendances_check
     User.all.each do |user|
-      attendance = Attendance.where(user_id: user.id, worked_on: @first_day..@last_day)
-      attendance.each do |at|
-        @attendance = [user,at]
-        if @attendance[1][:supporter].present?
-          @at = [user,at]
+      attendances = Attendance.where(user_id: user.id, worked_on: @first_day..@last_day)
+      attendances.each do |at|
+        attendance = [user,at]
+        if attendance[1][:supporter].present?
+          return attendance[1][:supporter]
         end
       end
     end
-    
+  end
+  
+  def user_id
+    return @users[0][:id]
+  end
+  
+  def attendance_id
+    return Attendance.where(user_id: @users[0][:id], id: @attendance[1][:id])
   end
 end
