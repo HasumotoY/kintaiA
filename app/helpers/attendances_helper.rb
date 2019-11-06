@@ -24,11 +24,11 @@ require 'rounding'
   end
   
   def over_times(estimated,designated)
-    format("%.2f",(((estimated.floor_to(15.minutes)-designated.floor_to(15.minutes)) / 60)) / 60.0 )
+    format("%.2f",(((estimated.floor_to(15.minutes)-designated) / 60)) / 60.0 )
   end
   
   def next_day_over_times(estimated,designated)
-    format("%.2f",24 + (((estimated.floor_to(15.minutes)-designated.floor_to(15.minutes)) / 60)) / 60.0)
+    format("%.2f",24 + (((estimated.floor_to(15.minutes)-designated) / 60)) / 60.0)
   end
 
   def attendances_each

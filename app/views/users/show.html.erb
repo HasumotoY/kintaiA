@@ -38,13 +38,14 @@
       <% @at.each do |at| %>
       <% if @at[1][:supporter].to_i == @user.id %>
           <span><%= link_to "【残業申請のお知らせ】",notice_overtime_user_attendance_path(user_id: @at[0][:id], id: @at[1][:id]),class: "notice", remote: "true", style: "color:red" %></span>
-          <span><%= @at.length %>件の申請があります</span>
+          <span class="notice-count"><%= @at.length %>件の申請があります</span>
         <% break %>
         <% else %>
           <p>【残業申請のお知らせ】</p>
       <% end %>
       <% end %>
     <% end %>
+    <%= @user.designated_work_end_time %>
 <div>
     <%= link_to "勤怠を編集",attendances_edit_one_month_user_path(date: @first_day),class:"btn btn-primary" %>
     <%= link_to "CVS出力","#",class: "btn btn-primary" %>
@@ -147,9 +148,9 @@
           <td>
             <% if day.end_estimated_time.present?%>
               <% if day.next_day == false %> 
-                <%= over_times(day.end_estimated_time, @user.designated_work_end_time) %>
+                <%= over_times(day.end_estimated_time, Time.current.change(yday: day.id ,hour: 18,min: 0, sec: 0).floor_to(15.minutes)) %>
               <% else %>
-                <%= next_day_over_times(day.end_estimated_time, @user.designated_work_end_time) %>
+                <%= next_day_over_times(day.end_estimated_time, Time.current.change(date: day,hour: 18,min: 0, sec: 0).floor_to(15.minutes)) %>
             <% end %>
             <% end %>
           </td>
