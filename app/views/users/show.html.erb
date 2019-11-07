@@ -35,6 +35,8 @@
   <% if current_user?(@user) %>
     <%if current_user.superior? %>
       <%  attendances_each %>
+        <p>【所属長承認申請のお知らせ】</p>
+        <p>【勤怠変更申請のお知らせ】</p>
       <% @at.each do |at| %>
       <% if @at[1][:supporter].to_i == @user.id %>
           <span><%= link_to "【残業申請のお知らせ】",notice_overtime_user_attendance_path(user_id: @at[0][:id], id: @at[1][:id]),class: "notice", remote: "true", style: "color:red" %></span>
@@ -148,9 +150,9 @@
           <td>
             <% if day.end_estimated_time.present?%>
               <% if day.next_day == false %> 
-                <%= over_times(day.end_estimated_time, Time.current.change(yday: day.id ,hour: 18,min: 0, sec: 0).floor_to(15.minutes)) %>
+                <%= over_times(day.end_estimated_time, ) %>
               <% else %>
-                <%= next_day_over_times(day.end_estimated_time, Time.current.change(date: day,hour: 18,min: 0, sec: 0).floor_to(15.minutes)) %>
+                <%= next_day_over_times(day.end_estimated_time, Time.current.change(year: 2019,month: day,day: day, hour:18, min:0, sec:0)) %>
             <% end %>
             <% end %>
           </td>
