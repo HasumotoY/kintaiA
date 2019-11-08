@@ -71,6 +71,25 @@ include AttendancesHelper
       end
   end
   
+  def edit_approval
+  end
+  
+  def update_approval
+    @user = User.find(params[:user_id])
+    @attendance = @user.attendances.find(params[:id])
+    if @attendance.update_attribute(:approval)
+      User.all.each do |user|
+        if user.id == @attendance.approval.to_i
+          flash[:success]  = "#{user.name}に申請しました"
+          @attendance.notice_approval = "申請中"
+        else
+          flash[:danger] = "申請できませんでした。"
+        end
+      end
+    end
+    redirect_to current_user
+  end
+  
   def notice_approval
     @user = User.find(params[:user_id])
     @attendance = @user.attendances.find(params[:id])

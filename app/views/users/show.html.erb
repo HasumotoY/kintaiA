@@ -47,7 +47,6 @@
       <% end %>
       <% end %>
     <% end %>
-    <%= @user.designated_work_end_time %>
 <div>
     <%= link_to "勤怠を編集",attendances_edit_one_month_user_path(date: @first_day),class:"btn btn-primary" %>
     <%= link_to "CVS出力","#",class: "btn btn-primary" %>
@@ -150,9 +149,9 @@
           <td>
             <% if day.end_estimated_time.present?%>
               <% if day.next_day == false %> 
-                <%= over_times(day.end_estimated_time, ) %>
+                <%= over_times(day.end_estimated_time, @user.designated_work_end_time) %>
               <% else %>
-                <%= next_day_over_times(day.end_estimated_time, Time.current.change(year: 2019,month: day,day: day, hour:18, min:0, sec:0)) %>
+                <%= next_day_over_times(day.end_estimated_time, @user.designated_work_end_time) %>
             <% end %>
             <% end %>
           </td>
@@ -179,11 +178,11 @@
         <td colspan="3">総合勤務時間</td>  
         <td colspan="3"><%= format_basic_info(@user.basic_work_time).to_f*@worked_sum %></td>
         
-        <%= form_with(model: @user, url: attendances_update_one_month_user_path(date: @first_day), local: true, method: :patch) do |f| %>
+        <%= form_with(model: @user, url: update_approval_user_attendance_path(user_id: @user,date: @first_day), local: true, method: :patch) do |f| %>
         <td rowspan="2">
           <% if current_user?(@user) %>
-            所属長承認 未
-            <br><%= f.collection_select :approval,User.where(superior: true), :id, :name, {include_blank: true},prompt: true, class: "form-control" %>
+            所属長承認 
+            <br><%= f.collection_select :approval ,User.where(superior: true), :id, :name, {include_blank: true},prompt: true, class: "form-control" %>
             <br><%= f.submit "申請",class: "btn btn-primary btn-block btn-attendance" %>
           <% end %>  
         </td>

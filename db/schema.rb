@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191106135501) do
+ActiveRecord::Schema.define(version: 20191108074639) do
 
   create_table "attendances", force: :cascade do |t|
     t.date "worked_on"
@@ -31,6 +31,8 @@ ActiveRecord::Schema.define(version: 20191106135501) do
     t.string "one_month_notice"
     t.integer "over_approval"
     t.integer "one_month_approval"
+    t.string "notice_approval"
+    t.integer "notice"
   end
 
   create_table "bases", force: :cascade do |t|
