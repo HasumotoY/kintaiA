@@ -111,6 +111,6 @@ include AttendancesHelper
     end
     
     def overtime_params
-      params.require(:attendance).permit(:end_estimated_time,:next_day,:outline,:supporter)
+      params.require(:attendance).permit(:end_estimated_time,:next_day,:outline,:supporter,:overtime_approval)
     end
 end

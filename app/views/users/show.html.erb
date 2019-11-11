@@ -160,7 +160,7 @@
           <td>
             <% @users.each do |user| %>
             <% if day.supporter.to_i == user.id %>
-              <%= user.name %>
+              <%= user.name %>に申請中  
               <% end %>
             <% end %>
           </td>
