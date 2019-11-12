@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191108074639) do
+ActiveRecord::Schema.define(version: 20191112120908) do
 
   create_table "attendances", force: :cascade do |t|
     t.date "worked_on"
@@ -25,14 +25,13 @@ ActiveRecord::Schema.define(version: 20191108074639) do
     t.string "outline"
     t.string "supporter"
     t.string "approval"
-    t.boolean "overtime_approval"
-    t.boolean "edit_approval"
     t.string "over_notice"
     t.string "one_month_notice"
     t.integer "over_approval"
     t.integer "one_month_approval"
     t.string "notice_approval"
     t.integer "notice"
+    t.string "overtime_approval"
   end
 
   create_table "bases", force: :cascade do |t|
@@ -49,9 +48,9 @@ ActiveRecord::Schema.define(version: 20191108074639) do
     t.string "email"
     t.string "affiliation"
     t.string "uid"
-    t.datetime "basic_work_time", default: "2019-10-28 23:00:00"
-    t.datetime "designated_work_start_time", default: "2019-10-29 00:00:00"
-    t.datetime "designated_work_end_time", default: "2019-10-29 09:00:00"
+    t.datetime "basic_work_time", default: "2019-11-11 23:00:00"
+    t.datetime "designated_work_start_time", default: "2019-11-12 00:00:00"
+    t.datetime "designated_work_end_time", default: "2019-11-12 09:00:00"
     t.boolean "superior", default: false
     t.boolean "admin", default: false
     t.string "password_digest"
@@ -59,7 +58,7 @@ ActiveRecord::Schema.define(version: 20191108074639) do
     t.datetime "updated_at", null: false
     t.string "remember_digest"
     t.integer "employee_number"
-    t.time "designated_end_work_time"
+    t.time "designated_end_work_time", default: "2000-01-01 09:00:00"
   end
 
 end

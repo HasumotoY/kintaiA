@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
   include SessionsHelper
   
   $days_of_the_week = %w{日 月 火 水 木 金 土}
+  $overtime_approval = %w{なし 申請中 承認 否認}
   
   def set_one_month
     @first_day = params[:date].nil? ? 

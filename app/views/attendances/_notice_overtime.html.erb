@@ -42,7 +42,7 @@
             </td>
             <td><%= @attendance.outline %></td>
             <td></td>
-            <td><%= link_to "確認",user_path(@user) ,class:"btn btn-primary" %></td>
+            <td><%= f.collection_select :overtime_approval, "なし","申請中","承認","否認", {include_blank: true}, prompt: true, class: "form-control"%></td>
           </tr>
         </thead>
       </table>

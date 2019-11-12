@@ -81,7 +81,6 @@ include AttendancesHelper
       User.all.each do |user|
         if user.id == @attendance.approval.to_i
           flash[:success]  = "#{user.name}に申請しました"
-          @attendance.notice_approval = "申請中"
         else
           flash[:danger] = "申請できませんでした。"
         end
