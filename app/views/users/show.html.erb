@@ -37,15 +37,16 @@
       <%  attendances_each %>
         <p>【所属長承認申請のお知らせ】</p>
         <p>【勤怠変更申請のお知らせ】</p>
-      <% @at.each do |at| %>
-      <% if @at[1][:supporter].to_i == @user.id %>
+      <% Array(@at).each do |at| %>
+        <% if @at[1][:supporter].to_i == @user.id %>
           <span><%= link_to "【残業申請のお知らせ】",notice_overtime_user_attendance_path(user_id: @at[0][:id], id: @at[1][:id]),class: "notice", remote: "true", style: "color:red" %></span>
           <span class="notice-count"><%= @at.length %>件の申請があります</span>
         <% break %>
-        <% else %>
+      <% else %>
           <p>【残業申請のお知らせ】</p>
       <% end %>
       <% end %>
+    <% end %>
     <% end %>
 <div>
     <%= link_to "勤怠を編集",attendances_edit_one_month_user_path(date: @first_day),class:"btn btn-primary" %>
