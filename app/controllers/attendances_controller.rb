@@ -71,27 +71,12 @@ include AttendancesHelper
       end
   end
   
-  def edit_approval
-  end
-  
-  def update_approval
-    @user = User.find(params[:user_id])
-    @attendance = @user.attendances.find(params[:id])
-    if @attendance.update_attribute(:approval)
-      User.all.each do |user|
-        if user.id == @attendance.approval.to_i
-          flash[:success]  = "#{user.name}に申請しました"
-        else
-          flash[:danger] = "申請できませんでした。"
-        end
-      end
-    end
-    redirect_to current_user
-  end
-  
   def notice_approval
     @user = User.find(params[:user_id])
     @attendance = @user.attendances.find(params[:id])
+  end
+  
+  def update_notice_approval
   end
   
   def notice_edit_one_month
@@ -99,9 +84,27 @@ include AttendancesHelper
     @attendance = @user.attendances.find(params[:id])
   end
   
+  def update_notice_edit_one_month
+  end
+  
   def notice_overtime
     @user = User.find(params[:user_id])
     @attendance = @user.attendances.find(params[:id])
+  end
+  
+  def update_notice_overtime
+    @user = User.find(params[:user_id])
+    @attendance = @user.attendances.find(params[:id])
+    if @attendance.update_attribute(:overtime_approval,:change)
+      User.all.each do |user|
+        if user.id == @attendance.approval.to_i
+          flash[:success]  = "承認"
+        else
+          flash[:danger] = "否認"
+        end
+      end
+    end
+    redirect_to current_user
   end
         
   private
@@ -111,5 +114,9 @@ include AttendancesHelper
     
     def overtime_params
       params.require(:attendance).permit(:end_estimated_time,:next_day,:outline,:supporter,:overtime_approval)
+    end
+    
+    def overtime_notice_params
+      params.require(:user).permit(attendances: [:overtime_approval,:change])[:attendances]
     end
 end

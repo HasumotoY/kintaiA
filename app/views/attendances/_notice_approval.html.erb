@@ -4,7 +4,7 @@
       <button type="button" class="close" data-dismiss="modal" aria-hidden="Close">
         <span aria-hidden="true">&times;</span>
       </button>
-      <h1 class="modal-title">【 からの一か月分の勤怠申請】</h1>
+      <h1 class="modal-title">【 <% @at.name %>からの一か月分の勤怠申請】</h1>
     </div>
     <div class=modal-body>
       <%= form_with(model: @user,local: true) do |f| %>

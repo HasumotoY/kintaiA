@@ -33,6 +33,9 @@ Rails.application.routes.draw do
         get 'notice_approval'
         get 'notice_edit_one_month'
         get 'notice_overtime'
+        patch 'update_notice_approval'
+        patch 'update_notice_edit_one_month'
+        patch 'update_notice_overtime'
     end
     end  
       collection { post :import }

@@ -37,6 +37,7 @@ require 'rounding'
       attendances.each do |at|
         if at.supporter.present? && at.supporter.to_i == @user.id
           @at = [user,at]
+        
         end
       end
     end

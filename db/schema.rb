@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191112120908) do
+ActiveRecord::Schema.define(version: 20191115020313) do
 
   create_table "attendances", force: :cascade do |t|
     t.date "worked_on"
@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(version: 20191112120908) do
     t.string "notice_approval"
     t.integer "notice"
     t.string "overtime_approval"
+    t.boolean "change"
   end
 
   create_table "bases", force: :cascade do |t|

@@ -7,7 +7,7 @@
       <h1 class="modal-title">【<%= @user.name %>からの残業申請】</h1>
     </div>
     <div class=modal-body>
-      <%= form_with(model: @user, local: true) do |f| %>
+      <%= form_with(model: @user,url: update_notice_overtime_user_attendance_path, method: :patch, local: true) do |f| %>
       <table class="table table-condenced table-bordered table-striped" id="modal-teble">
         <thead>
           <tr>
@@ -19,6 +19,7 @@
             <td>業務処理内容</td>
             <td>支持者確認㊞</td>
             <td>変更</td>
+            <td>勤怠を確認</td>
           </tr>
           <tr>
             <td><%= l(@attendance.worked_on,format: :short) %></td>
@@ -41,8 +42,10 @@
               <% end %>
             </td>
             <td><%= @attendance.outline %></td>
-            <td></td>
             <td><%= f.select :overtime_approval, ["なし","申請中","承認","否認"], {include_blank: true}, prompt: true, class: "form-control"%></td>
+            <td><%= f.check_box :change %></td>
+            <td><%= link_to "確認", user_path(@user), class: "btn btn-primary" %></td>
+            </td>
           </tr>
         </thead>
       </table>
