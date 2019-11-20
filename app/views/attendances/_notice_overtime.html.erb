@@ -7,7 +7,7 @@
       <h1 class="modal-title">【<%= @user.name %>からの残業申請】</h1>
     </div>
     <div class=modal-body>
-      <%= form_with(model: @user,url: update_notice_overtime_user_attendance_path, method: :patch, local: true) do |f| %>
+      <%= form_with(model: @attendance, url: update_notice_overtime_user_attendance_path(date: @first_day), local: true, method: :patch) do |f| %>
       <table class="table table-condenced table-bordered table-striped" id="modal-teble">
         <thead>
           <tr>
@@ -49,12 +49,11 @@
           </tr>
         </thead>
       </table>
-    </div>
-    <div class="modal-footer">
+    
       <div class="center">
         <%= f.submit "変更を送信する",class:"btn btn-primary"  %>
       </div>
-    </div>
     <% end %>
+    </div>
   </div>
 </div>

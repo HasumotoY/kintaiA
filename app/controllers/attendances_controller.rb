@@ -58,8 +58,7 @@ include AttendancesHelper
     @user = User.find(params[:user_id])
     @attendance = @user.attendances.find(params[:id])
       if @attendance.update_attributes(overtime_params)
-        @users = User.all
-          @users.each do |user|
+        User.all.each do |user|
             if user.id == @attendance.supporter.to_i
               flash[:success] = "#{user.name}に残業申請しました。"
               redirect_to @user
@@ -95,16 +94,17 @@ include AttendancesHelper
   def update_notice_overtime
     @user = User.find(params[:user_id])
     @attendance = @user.attendances.find(params[:id])
-    if @attendance.update_attribute(:overtime_approval,:change)
-      User.all.each do |user|
-        if user.id == @attendance.approval.to_i
-          flash[:success]  = "承認"
-        else
-          flash[:danger] = "否認"
-        end
+      if @attendance.update_attributes(overtime_notice_params)
+        User.all.each do |user|
+            if user.id == @attendance.supporter.to_i
+              flash[:success] = "承認"
+              redirect_to @user
+            end
+          end
+      else
+        flash[:danger] = "否認"
+        render @user
       end
-    end
-    redirect_to current_user
   end
         
   private
@@ -117,6 +117,6 @@ include AttendancesHelper
     end
     
     def overtime_notice_params
-      params.require(:user).permit(attendances: [:overtime_approval,:change])[:attendances]
+      params.require(:attendance).permit(:overtime_approval,:change)
     end
 end

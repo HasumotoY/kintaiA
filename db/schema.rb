@@ -49,9 +49,9 @@ ActiveRecord::Schema.define(version: 20191115020313) do
     t.string "email"
     t.string "affiliation"
     t.string "uid"
-    t.datetime "basic_work_time", default: "2019-11-12 23:00:00"
-    t.datetime "designated_work_start_time", default: "2019-11-13 00:00:00"
-    t.datetime "designated_work_end_time", default: "2019-11-13 09:00:00"
+    t.datetime "basic_work_time", default: "2019-11-19 23:00:00"
+    t.datetime "designated_work_start_time", default: "2019-11-20 00:00:00"
+    t.datetime "designated_work_end_time", default: "2019-11-20 09:00:00"
     t.boolean "superior", default: false
     t.boolean "admin", default: false
     t.string "password_digest"

@@ -34,21 +34,18 @@
   
   <% if current_user?(@user) %>
     <%if current_user.superior? %>
-      <%  attendances_each %>
+      <% attendances_each %>
         <p>【所属長承認申請のお知らせ】</p>
         <p>【勤怠変更申請のお知らせ】</p>
-        <% if @at[1][:supporter].to_i == @user.id %>
-        
-            <span><%= link_to "【残業申請のお知らせ】",notice_overtime_user_attendance_path(user_id: @at[0][:id], id: @at[1][:id]),class: "notice", remote: "true", style: "color:red" %></span>
-            <span class="notice-count"><%= @at.size %>件の申請があります</span>
-          
-        <% else %>
-        
+        <% if @at.empty? %>
           <p>【残業申請のお知らせ】</p>
-          
-      <% end %>
+        <% else %>
+          <% if (@at[1][:supporter].to_i == @user.id) %>
+            <span><%= link_to "【残業申請のお知らせ】",notice_overtime_user_attendance_path(user_id: @at[0][:id], id: @at[1][:id]),class: "notice", remote: "true", style: "color:red" %></span>
+            <span class="notice-count"><%= @at.each.count %>件の申請があります</span>
+          <% end %>
+        <% end %>
     <% end %>
-  
   
 <div>
     <%= link_to "勤怠を編集",attendances_edit_one_month_user_path(date: @first_day),class:"btn btn-primary" %>
@@ -162,8 +159,11 @@
           
           <td>
             <% @users.each do |user| %>
-            <% if day.supporter.to_i == user.id %>
-              <%= user.name %>に申請中  
+              <% if day.supporter.to_i == user.id && day.overtime_approval.nil?%>
+                <%= user.name %>に申請中  
+              <% elsif day.overtime_approval.present? %>
+                <%= day.overtime_approval %>
+                <% break %>
               <% end %>
             <% end %>
           </td>
