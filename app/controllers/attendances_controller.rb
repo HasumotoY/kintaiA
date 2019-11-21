@@ -95,15 +95,15 @@ include AttendancesHelper
     @user = User.find(params[:user_id])
     @attendance = @user.attendances.find(params[:id])
       if @attendance.update_attributes(overtime_notice_params)
-        User.all.each do |user|
-            if user.id == @attendance.supporter.to_i
+        # User.all.each do |user|
+            # if user.id == @attendance.supporter.to_i
               flash[:success] = "承認"
               redirect_to @user
-            end
-          end
+            # end
+          # end
       else
         flash[:danger] = "否認"
-        render @user
+        redirect_to @user
       end
   end
         
@@ -117,6 +117,6 @@ include AttendancesHelper
     end
     
     def overtime_notice_params
-      params.require(:attendance).permit(:overtime_approval,:change)
+      params.require(:attendance).permit(:overtime_approval,:change, supporter: nil)
     end
 end

@@ -159,10 +159,10 @@
           
           <td>
             <% @users.each do |user| %>
-              <% if day.supporter.to_i == user.id && day.overtime_approval.nil?%>
+              <% if day.supporter.to_i == user.id && day.overtime_approval.nil? %>
                 <%= user.name %>に申請中  
               <% elsif day.overtime_approval.present? %>
-                <%= day.overtime_approval %>
+                残業申請 <%= day.overtime_approval %>
                 <% break %>
               <% end %>
             <% end %>

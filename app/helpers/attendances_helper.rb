@@ -35,7 +35,7 @@ require 'rounding'
     User.all.each do |user|
       attendances = Attendance.where(user_id: user.id)
       attendances.each do |at|
-        if at.supporter.present? && (at.supporter.to_i == @user.id)
+        if at.supporter.to_i == @user.id
           @at = [user,at]
         end
       end
