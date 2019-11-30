@@ -33,8 +33,8 @@ require 'rounding'
 
   def attendances_each
     User.all.each do |user|
-      attendances = Attendance.where(user_id: user.id)
-      attendances.each do |at|
+      attendance = Attendance.where(user_id: user.id)
+      attendance.each do |at|
         if at.supporter.to_i == @user.id
           @at = [user,at]
         end

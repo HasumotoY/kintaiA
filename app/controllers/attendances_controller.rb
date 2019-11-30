@@ -94,11 +94,12 @@ include AttendancesHelper
   def update_notice_overtime
     @user = User.find(params[:user_id])
     @attendance = @user.attendances.find(params[:id])
-      if @attendance.update_attributes(overtime_notice_params)
-        flash[:success] = "承認"
+    @attendance.update_attributes(overtime_notice_params)
+      if @attendance.change == true || @attendance.overtime_approval != "申請中"
+        flash[:success] = "申請処理が完了しました"
         redirect_to @user
       else
-        flash[:danger] = "否認"
+        flash[:danger] = "申請処理が失敗しました"
         redirect_to @user
       end
   end
