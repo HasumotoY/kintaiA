@@ -12,13 +12,12 @@
         <td>出社</td>
         <td>退社</td>
         <td>翌日</td>
-        <td>在社時間合計</td>
+        <td>在社時間</td>
         <td>備考</td>
         <td>指示者確認㊞</td>
       </tr> 
     </thead>
       <% @attendances.each do |day| %>
-        
           <tbody>
             <tr>
               <td><%= l(day.worked_on, format: :short) %></td>
@@ -40,7 +39,7 @@
                 <td><%= f.time_field :started_at, class: "form-control" %></td>
                 <td><%= f.time_field :finished_at, class: "form-control" %></td>
               <% end %>
-              <td><%= f.check_box :next_day,class: "check-box" %></td>
+              <td><%= f.check_box :tomorrow,class: "check-box" %></td>
               <td>
                 <% if day.started_at.present? && day.finished_at.present? %>
                   <%= working_times(day.started_at,day.finished_at) %>
@@ -48,7 +47,7 @@
               </td>
               
               <td><%= f.text_field :note ,class: "form-control" %></td>
-              <td><%= f.collection_select :supporter, User.where(superior: true), :id,:name,{include_blank: true}, class: "form-control" %></td>
+              <td><%= f.collection_select :instructor, User.where(superior: true), :id,:name,{include_blank: true}, class: "form-control" %></td>
             </tr>
           </tbody>
         
@@ -57,7 +56,7 @@
   </table>
   
   <div class="center">
+    <%= link_to "キャンセル",user_path(date: @first_day), class: "btn btn-primary btn-edit-attendances" %>
     <%= f.submit "編集を保存する", class: "btn btn-primary btn-edit-attendances" %>
-    <%= link_to "キャンセル",user_path(date: @first_day), class: "btn btn-default btn-edit-attendances" %>
   </div>
 <% end %>

@@ -1,7 +1,7 @@
 class AttendancesController < ApplicationController
 include AttendancesHelper
   
-  before_action :set_user,only: [:edit_one_month]
+  before_action :set_user,only: [:edit_one_month,:update_one_month,:update_notice_overtime]
   before_action :logged_in_user, only: [:update,:edit_one_month]
   before_action :set_one_month,only: [:edit_one_month]
   before_action :admin_or_correct_user, only: [:update,:edit_one_month]
@@ -11,7 +11,6 @@ include AttendancesHelper
   def update
     @user = User.find(params[:user_id])
     @attendance = Attendance.find(params[:id])
-    
     if @attendance.started_at.nil?
         if @attendance.update_attributes(started_at: Time.current.change(sec: 0))
           flash[:info] = "おはようございます。"
@@ -32,15 +31,17 @@ include AttendancesHelper
   end
   
   def update_one_month
-    @user = User.find(params[:user_id])
-    @attendance = Attendance.find(params[:id])
-      if attendances_invalid? || (@attendance.worked_on == Date.current) && @attendance.update_attributes(attendances_params) 
-       flash[:success] = "勤怠変更申請しました。"
-       redirect_to @user
-      else   
-        flash[:danger] = "勤怠変更申請ができませんでした"
-        redirect_to attendances_edit_one_month_user_url(date: params[:date])
+    ActiveRecord::Base.transaction do
+      attendances_params.each do |id,item|
+        attendance = Attendacne.find(id)
+        attendance.update_attributes!(item)
       end
+    end
+    flash[:success] = "勤怠を更新しました。"
+    redirect_to user_url(date: params[:date])
+  rescue ActiveRecord::RecordInvalid
+    flash[:danger] = "無効なデータがあったため、更新をキャンセルしました。"
+    redirect_to attendances_edit_one_month_user_url(date: params[:date])
   end
         
   def work_log
@@ -106,7 +107,7 @@ include AttendancesHelper
         
   private
     def attendances_params
-      params.require(:user).permit(attendances: [:started_at,:finished_at,:note,:worked_on])[:attendances]
+      params.require(:attendances).permit(:started_at,:finished_at,:note,:worked_on,:instructor,:tomorrow)
     end
     
     def overtime_params
@@ -114,6 +115,6 @@ include AttendancesHelper
     end
     
     def overtime_notice_params
-      params.require(:attendance).permit(:overtime_approval,:change, supporter: nil)
+      params.require(:attendances).permit(:overtime_approval,:change, supporter: nil)
     end
 end
