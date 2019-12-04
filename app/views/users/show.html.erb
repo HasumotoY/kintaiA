@@ -36,14 +36,17 @@
     <%if current_user.superior? %>
       <% attendances_each %>
         <p>【所属長承認申請のお知らせ】</p>
-        <p>【勤怠変更申請のお知らせ】</p>
+        
           <% if @at.empty? || @at[1][:change] == true %>
+            <p>【勤怠変更申請のお知らせ】</p>
             <p>【残業申請のお知らせ】</p>
           <% elsif @at[1][:supporter].to_i == @user.id && @at[1][:change] == false %>
-            <span><%= link_to "【残業申請のお知らせ】",notice_overtime_user_attendance_path(user_id: @at[0][:id], id: @at[1][:id]),class: "notice", remote: "true", style: "color:red" %></span>
+            <span><%= link_to "【勤怠変更請のお知らせ】",notice_edit_one_month_user_attendance_path(user_id: @at[0][:id], id: @at[1][:id]),class: "notice", remote: "true", style: "color:red" %></span>
             <% User.all.each do |users| %>
               <% ats = Attendance.where(user_id: users.id) %>
               <% ats.each do |attend| %>
+                <span class="notice-count"><%= attend.supporter.length %>件の申請があります</span>
+            <span><%= link_to "【残業申請のお知らせ】",notice_overtime_user_attendance_path(user_id: @at[0][:id], id: @at[1][:id]),class: "notice", remote: "true", style: "color:red" %></span>
                 <span class="notice-count"><%= attend.supporter.length %>件の申請があります</span>
                 <% break %>        
             <% end %>

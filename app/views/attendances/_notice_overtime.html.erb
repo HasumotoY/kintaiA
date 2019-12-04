@@ -21,6 +21,8 @@
             <td>変更</td>
             <td>勤怠を確認</td>
           </tr>
+          </thead>
+          <tbody>
           <tr>
             <td><%= l(@attendance.worked_on,format: :short) %></td>
             <td>
@@ -47,13 +49,13 @@
             <td><%= link_to "確認", user_path(@user), class: "btn btn-primary" %></td>
             </td>
           </tr>
-        </thead>
+        
       </table>
-    
+    </div>
       <div class="center">
         <%= f.submit "変更を送信する",class:"btn btn-primary"  %>
       </div>
+    
     <% end %>
-    </div>
   </div>
 </div>
