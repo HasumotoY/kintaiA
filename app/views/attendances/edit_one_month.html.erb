@@ -1,6 +1,6 @@
 <% provide(:title,@user.name) %>
 <% provide(:class_text,"edit-attendaces") %>
-<%= form_with(model: @attendances, url: attendances_update_one_month_user_path(@attendances), local: true, method: :patch) do |f| %>
+<%= form_with(model: @attendances, url: attendances_update_one_month_user_path(date: @first_day), local: true, method: :patch) do |f| %>
 <%= render 'shared/error_messages' %>
 
 <div class="col-md-10 col-md-offset-1">
@@ -31,23 +31,28 @@
                   <%= $days_of_the_week[day.worked_on.wday] %>
                 <% end %>
               </td>
-              
               <% if Date.current <= day.worked_on %>
                 <td><%= f.time_field :started_at, readonly: true, class: "form-control" %></td>
                 <td><%= f.time_field :finished_at,readonly: true, class: "form-control" %></td>
+                <td><%= f.check_box :tomorrow,class: "check-box",readonly: true %></td>
               <% else %>
                 <td><%= f.time_field :started_at, class: "form-control" %></td>
                 <td><%= f.time_field :finished_at, class: "form-control" %></td>
+                <td><%= f.check_box :tomorrow,class: "check-box" %></td>
               <% end %>
-              <td><%= f.check_box :tomorrow,class: "check-box" %></td>
+              
               <td>
                 <% if day.started_at.present? && day.finished_at.present? %>
                   <%= working_times(day.started_at,day.finished_at) %>
                 <% end %>
               </td>
-              
-              <td><%= f.text_field :note ,class: "form-control" %></td>
-              <td><%= f.collection_select :instructor, User.where(superior: true), :id,:name,{include_blank: true}, class: "form-control" %></td>
+              <% if Date.current <= day.worked_on %>
+                <td><%= f.text_field :note ,class: "form-control",readonly: true %></td>
+                <td><%= f.collection_select :instructor, User.where(superior: true), :id,:name,{include_blank: true}, class: "form-control",readonly: true %></td>
+              <% else %>
+                  <td><%= f.text_field :note ,class: "form-control" %></td>
+                <td><%= f.collection_select :instructor, User.where(superior: true), :id,:name,{include_blank: true}, class: "form-control" %></td>
+              <% end %>
             </tr>
           </tbody>
         
