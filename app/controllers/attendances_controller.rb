@@ -1,7 +1,7 @@
 class AttendancesController < ApplicationController
 include AttendancesHelper
   
-  before_action :set_user,only: [:edit_one_month,:update_one_month,:update_notice_overtime]
+  before_action :set_user,only: [:edit_one_month]
   before_action :logged_in_user, only: [:update,:edit_one_month]
   before_action :set_one_month,only: [:edit_one_month]
   before_action :admin_or_correct_user, only: [:update,:edit_one_month]
@@ -33,7 +33,7 @@ include AttendancesHelper
   def update_one_month
     ActiveRecord::Base.transaction do
       attendances_params.each do |id,item|
-        attendance = Attendacne.find(id)
+        attendance = Attendance.find(id)
         attendance.update_attributes!(item)
       end
     end
@@ -107,14 +107,14 @@ include AttendancesHelper
         
   private
     def attendances_params
-      params.require(:attendances).permit(:started_at,:finished_at,:note,:worked_on,:instructor,:tomorrow)
+      params.require(:attendances).permit(:started_at,:finished_at,:note,:instructor,:tomorrow)
     end
     
     def overtime_params
-      params.require(:attendance).permit(:end_estimated_time,:next_day,:outline,:supporter,:overtime_approval)
+      params.require(:attendances).permit(:end_estimated_time,:next_day,:outline,:supporter,:overtime_approval)
     end
     
     def overtime_notice_params
-      params.require(:attendances).permit(:overtime_approval,:change, supporter: nil)
+      params.require(:attendances).permit(attendances: [:overtime_approval,:change, supporter: nil])[:attendances]
     end
 end
