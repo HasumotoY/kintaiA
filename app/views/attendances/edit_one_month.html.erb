@@ -1,6 +1,6 @@
 <% provide(:title,@user.name) %>
 <% provide(:class_text,"edit-attendaces") %>
-<%= form_with(model: @attendances, url: attendances_update_one_month_user_path(date: @first_day), local: true, method: :patch) do |f| %>
+<%= form_with(model: @user, url: attendances_update_one_month_user_path(date: @first_day), local: true, method: :patch) do |f| %>
 <%= render 'shared/error_messages' %>
 
 <div class="col-md-10 col-md-offset-1">
@@ -18,6 +18,7 @@
       </tr> 
     </thead>
       <% @attendances.each do |day| %>
+        <%=f.fields_for "attendances[]", day do |attendance| %>
           <tbody>
             <tr>
               <td><%= l(day.worked_on, format: :short) %></td>
@@ -32,13 +33,13 @@
                 <% end %>
               </td>
               <% if Date.current <= day.worked_on %>
-                <td><%= f.time_field :started_at, readonly: true, class: "form-control" %></td>
-                <td><%= f.time_field :finished_at,readonly: true, class: "form-control" %></td>
-                <td><%= f.check_box :tomorrow,class: "check-box",readonly: true %></td>
+                <td><%= attendance.time_field :started_at, readonly: true, class: "form-control" %></td>
+                <td><%= attendance.time_field :finished_at,readonly: true, class: "form-control" %></td>
+                <td><%= attendance.check_box :tomorrow,class: "check-box",readonly: true %></td>
               <% else %>
-                <td><%= f.time_field :started_at, class: "form-control" %></td>
-                <td><%= f.time_field :finished_at, class: "form-control" %></td>
-                <td><%= f.check_box :tomorrow,class: "check-box" %></td>
+                <td><%= attendance.time_field :started_at, class: "form-control" %></td>
+                <td><%= attendance.time_field :finished_at, class: "form-control" %></td>
+                <td><%= attendance.check_box :tomorrow,class: "check-box" %></td>
               <% end %>
               
               <td>
@@ -47,11 +48,12 @@
                 <% end %>
               </td>
               <% if Date.current <= day.worked_on %>
-                <td><%= f.text_field :note ,class: "form-control",readonly: true %></td>
-                <td><%= f.collection_select :instructor, User.where(superior: true), :id,:name,{include_blank: true}, class: "form-control",readonly: true %></td>
+                <td><%= attendance.text_field :note ,class: "form-control",readonly: true %></td>
+                <td><%= attendance.collection_select :instructor, User.where(superior: true), :id,:name,{include_blank: true}, class: "form-control",readonly: true %></td>
               <% else %>
-                  <td><%= f.text_field :note ,class: "form-control" %></td>
-                <td><%= f.collection_select :instructor, User.where(superior: true), :id,:name,{include_blank: true}, class: "form-control" %></td>
+                  <td><%= attendance.text_field :note ,class: "form-control" %></td>
+                <td><%= attendance.collection_select :instructor, User.where(superior: true), :id,:name,{include_blank: true}, class: "form-control" %></td>
+              <% end %>
               <% end %>
             </tr>
           </tbody>

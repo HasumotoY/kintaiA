@@ -97,6 +97,7 @@ include AttendancesHelper
     @attendance = @user.attendances.find(params[:id])
     @attendance.update_attributes(overtime_notice_params)
       if @attendance.change == true || @attendance.overtime_approval != "申請中"
+        @attendance.supporter = nil
         flash[:success] = "申請処理が完了しました"
         redirect_to @user
       else
@@ -107,14 +108,14 @@ include AttendancesHelper
         
   private
     def attendances_params
-      params.require(:attendances).permit(:started_at,:finished_at,:note,:instructor,:tomorrow)
+      params.require(:user).permit(attendances: [:started_at,:finished_at,:note,:instructor,:tomorrow])[:attettendances]
     end
     
     def overtime_params
-      params.require(:attendances).permit(:end_estimated_time,:next_day,:outline,:supporter,:overtime_approval)
+      params.require(:attendance).permit(:end_estimated_time,:next_day,:outline,:supporter,:overtime_approval)
     end
     
     def overtime_notice_params
-      params.require(:attendances).permit(attendances: [:overtime_approval,:change, supporter: nil])[:attendances]
+      params.require(:attendance).permit(:overtime_approval,:change)
     end
 end

@@ -40,4 +40,11 @@ Rails.application.routes.draw do
     end  
       collection { post :import }
   end
+  
+  if defined? Rails::Console
+   if defined? Hirb
+    Hirb.enable
+   end
+  end
+  
 end
