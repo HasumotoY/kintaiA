@@ -22,7 +22,7 @@ require 'rounding'
     end
         return attendances
   end
-  
+  #designatedをTimeで取得し直す。
   def over_times(estimated,designated)
     format("%.2f",(((estimated.floor_to(15.minutes)-designated) / 60)) / 60.0 )
   end
