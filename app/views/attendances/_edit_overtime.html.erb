@@ -33,10 +33,10 @@
               </td>  
               
               <td><%= f.time_field  :end_estimated_time,required: true,class: "form-control" %></td>
-              <td><%= f.check_box :next_day %></td>
+              <td><%= f.check_box :overtime_tomorrow %></td>
               <td><%= f.text_field :outline, class: "form-control" %></td>
               
-                <td><%= f.collection_select :supporter,User.where(superior: true), :id, :name, {include_blank: true}, prompt: true,required: true, class: "form-control"  %></td>
+                <td><%= f.collection_select :overtime_instructor,User.where(superior: true), :id, :name, {include_blank: true}, prompt: true,required: true, class: "form-control"  %></td>
               
               
             </tr>

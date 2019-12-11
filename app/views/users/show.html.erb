@@ -35,26 +35,47 @@
   <% if current_user?(@user) %>
     <%if current_user.superior? %>
       <% attendances_each %>
-        <p>【所属長承認申請のお知らせ】</p>
+      <% User.all.each do |users| %>
+            <% attendance = Attendance.where(user_id: users.id) %>
+            <% attendance.each do |at| %>
+              <% if at.one_month_instructor.nil? || at.one_month_instructor.to_i != @user.id %>
+                <p>【所属長承認申請のお知らせ】</p>
+                
+              <% elsif at.one_month_instructor.to_i == @user.id && at.one_month_change == false %>
+                <p><%= link_to "【所属長承認申請のお知らせ】",notice_one_month_user_attendance_path(user_id: users.id, id: at.id),class: "notice", remote: "true", style: "color:red" %>
+                <span class="notice-count"><%= at.one_month_instructor.length %>件の申請があります</span></p>
+              <% end %>
+              
+              <% break %>        
+            <% end %>
+          <% end %>
         
-          <% if @at.empty? %>
-            <p>【勤怠変更申請のお知らせ】</p>
-          <% elsif @at[1][:instructor].to_i == @user.id %>
-            <p><%= link_to "【勤怠変更請のお知らせ】",notice_edit_one_month_user_attendance_path(user_id: @at[0][:id], id: @at[1][:id]),class: "notice", remote: "true", style: "color:red" %>
-            <span class="notice-count"><%= @at[1][:instructor].length %>件の申請があります</span></p>
+          <% User.all.each do |users| %>
+            <% attendance = Attendance.where(user_id: users.id) %>
+            <% attendance.each do |at| %>
+              <% if at.instructor.nil? || at.instructor.to_i != @user.id %>
+                <p>【勤怠変更申請のお知らせ】</p>
+                
+              <% elsif at.instructor.to_i == @user.id && at.change == false %>
+                <p><%= link_to "【勤怠変申請のお知らせ】",notice_user_attendance_path(user_id: users.id, id: at.id),class: "notice", remote: "true", style: "color:red" %>
+                <span class="notice-count"><%= at.instructor.length %>件の申請があります</span></p>
+              <% end %>
+              
+              <% break %>        
+            <% end %>
           <% end %>
           
-          <% if @at.empty? || @at[1][:change] == true %>
-            <p>【残業申請のお知らせ】</p>
-          <% elsif @at[1][:supporter].to_i == @user.id && @at[1][:change] == false %>
-            <p><%= link_to "【残業申請のお知らせ】",notice_overtime_user_attendance_path(user_id: @at[0][:id], id: @at[1][:id]),class: "notice", remote: "true", style: "color:red" %>
-             <% User.all.each do |users| %>
-                <% ats = Attendance.where(user_id: users.id) %>
-                <% ats.each do |attend| %>
-                  <span class="notice-count"><%= attend.supporter.length %>件の申請があります</span></p>
-                  <% break %>        
-                <% end %>
+          <% User.all.each do |users| %>
+            <% attendance = Attendance.where(user_id: users.id) %>
+            <% attendance.each do |at| %>
+              <% if at.overtime_instructor.nil? || at.overtime_instructor.to_i != @user.id%>
+                <p>【残業申請のお知らせ】</p>
+              <% elsif at.overtime_instructor.to_i == @user.id && at.overtime_change == false %>
+                <p><%= link_to "【残業申請のお知らせ】",notice_overtime_user_attendance_path(user_id: users.id, id: at.id),class: "notice", remote: "true", style: "color:red" %>
+                <span class="notice-count"><%= at.overtime_instructor.length %>件の申請があります</span></p>
               <% end %>
+              <% break %>        
+            <% end %>
           <% end %>
   <% end %>
   
@@ -160,19 +181,19 @@
           <td><%= l(day.end_estimated_time, format: :min) if day.end_estimated_time.present? %></td>
           <td>
             <% if day.end_estimated_time.present?%>
-              <% if day.next_day == false %> 
+              <% if day.overtime_tomorrow == false %> 
                 <%= over_times(day.end_estimated_time, @user.designated_work_end_time) %>
               <% else %>
                 <%= next_day_over_times(day.end_estimated_time, @user.designated_work_end_time) %>
             <% end %>
             <% end %>
+            
           </td>
           <td><%= day.outline %></td>
           
           <td>
-            
             <% @users.each do |user| %>
-              <% if day.supporter.to_i == user.id && day.overtime_approval.nil? %>
+              <% if day.instructor.to_i == user.id && day.overtime_approval.nil? %>
                 <p><%= user.name %>に申請中 </p>
               <% elsif day.overtime_approval.present? %>
                 <p>残業申請 <%= day.overtime_approval %></p>
@@ -205,7 +226,7 @@
         <td rowspan="2">
           <% if current_user?(@user) %>
             所属長承認 
-            <br><%= f.collection_select :approval ,User.where(superior: true), :id, :name, {include_blank: true},prompt: true, class: "form-control" %>
+            <br><%= f.collection_select :one_month_instructor ,User.where(superior: true), :id, :name, {include_blank: true},prompt: true, class: "form-control" %>
             <br><%= f.submit "申請",class: "btn btn-primary btn-block btn-attendance" %>
           <% end %>  
         </td>
