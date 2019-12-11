@@ -38,14 +38,14 @@
             <td><%= l(@user.designated_work_end_time,format: :time) %></td>
             <td>
                <% if @attendance.next_day == false %> 
-                <%= over_times(@attendance.end_estimated_time, @user.designated_work_end_time) %>
+                <%= over_times(@user.end_estimated_time, @user.designated_end_work_time) %>
               <% else %>
-                <%= next_day_over_times(@attendance.end_estimated_time, @user.designated_work_end_time) %>
+                <%= next_day_over_times(@attendance.end_estimated_time, @attendance.designated_end_work_time) %>
               <% end %>
             </td>
             <td><%= @attendance.outline %></td>
             <td><%= f.select :overtime_approval, ["なし","申請中","承認","否認"], {include_blank: true}, prompt: true, class: "form-control"%></td>
-            <td><%= f.check_box :change %></td>
+            <td><%= f.check_box :overtime_change %></td>
             <td><%= link_to "確認", user_path(@user), class: "btn btn-primary" %></td>
             </td>
           </tr>

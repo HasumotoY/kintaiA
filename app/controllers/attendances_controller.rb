@@ -55,13 +55,29 @@ include AttendancesHelper
     @attendance = @user.attendances.find(params[:id]) 
   end
   
+  def update_one_month_approval
+    @user = User.find(params[:user_id])
+    @attendance = @user.attendances.find(params[:id])
+      if @attendance.overtime_approval.nil?
+          @attendance.update_attributes(one_month_params)
+          User.all.each do |user|
+          if @attendance.overtime_instructor.to_i == user.id
+            flash[:success] = "#{user.name}に申請しました。"
+          end
+        end
+      else
+        flash[:danger] = "申請ができませんでした"
+      end
+    redirect_to @user
+  end
+  
   def update_overtime
     @user = User.find(params[:user_id])
     @attendance = @user.attendances.find(params[:id])
       if @attendance.overtime_approval.nil?
           @attendance.update_attributes(overtime_params)
           User.all.each do |user|
-          if @attendance.supporter.to_i == user.id
+          if @attendance.overtime_instructor.to_i == user.id
             flash[:success] = "#{user.name}に残業を申請しました。"
           end
         end
@@ -85,6 +101,17 @@ include AttendancesHelper
   end
   
   def update_notice_edit_one_month
+    @user = User.find(params[:user_id])
+    @attendance = @user.attendances.find(params[:id])
+    @attendance.update_attributes(one_month_notice_params)
+      if @attendance.overtime_change == true || @attendance.overtime_approval != "申請中"
+        @attendance.overtime_instructor = nil
+        flash[:success] = "申請処理が完了しました"
+        redirect_to @user
+      else
+        flash[:danger] = "申請処理が失敗しました"
+        redirect_to @user
+      end
   end
   
   def notice_overtime
@@ -96,8 +123,8 @@ include AttendancesHelper
     @user = User.find(params[:user_id])
     @attendance = @user.attendances.find(params[:id])
     @attendance.update_attributes(overtime_notice_params)
-      if @attendance.change == true || @attendance.overtime_approval != "申請中"
-        @attendance.supporter = nil
+      if @attendance.overtime_change == true || @attendance.overtime_approval != "申請中"
+        @attendance.overtime_instructor = nil
         flash[:success] = "申請処理が完了しました"
         redirect_to @user
       else
@@ -111,8 +138,16 @@ include AttendancesHelper
       params.require(:user).permit(attendances: [:started_at,:finished_at,:note,:instructor,:tomorrow])[:attettendances]
     end
     
+    def one_month_params
+      params.require(:attendance).permit(:one_month_instructor,:overtime_approval)
+    end
+    
     def overtime_params
-      params.require(:attendance).permit(:end_estimated_time,:next_day,:outline,:supporter,:overtime_approval)
+      params.require(:attendance).permit(:end_estimated_time,:overtime_tomorrow,:outline,:overtime_instructor,:overtime_approval)
+    end
+    
+    def one_month_notice_params
+      params.require(:attendance).permit(:overtime_approval,:change)
     end
     
     def overtime_notice_params

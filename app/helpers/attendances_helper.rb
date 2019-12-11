@@ -22,7 +22,7 @@ require 'rounding'
     end
         return attendances
   end
-  #designatedをTimeで取得し直す。
+  
   def over_times(estimated,designated)
     format("%.2f",(((estimated.floor_to(15.minutes)-designated) / 60)) / 60.0 )
   end
@@ -35,7 +35,7 @@ require 'rounding'
     User.all.each do |user|
       attendance = Attendance.where(user_id: user.id)
       attendance.each do |at|
-        if at.supporter.to_i == @user.id
+        if at.overtime_instructor.to_i == @user.id
           @at = [user,at]
         end
       end

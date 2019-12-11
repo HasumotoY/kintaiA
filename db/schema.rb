@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191208131809) do
+ActiveRecord::Schema.define(version: 20191210022301) do
 
   create_table "attendances", force: :cascade do |t|
     t.date "worked_on"
@@ -20,22 +20,24 @@ ActiveRecord::Schema.define(version: 20191208131809) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id"
-    t.datetime "end_estimated_time"
-    t.boolean "next_day", default: false
-    t.string "outline"
-    t.string "supporter"
     t.string "approval"
     t.string "over_notice"
     t.string "one_month_notice"
     t.integer "over_approval"
     t.integer "one_month_approval"
     t.string "notice_approval"
-    t.integer "notice"
     t.string "overtime_approval"
     t.boolean "change", default: false
     t.string "instructor"
-    t.boolean "tomorrow"
+    t.boolean "tomorrow", default: false
+    t.string "one_month_instructor"
     t.boolean "one_month_change", default: false
+    t.string "overtime_instructor"
+    t.boolean "overtime_change", default: false
+    t.boolean "overtime_tomorrow", default: false
+    t.datetime "end_estimated_time"
+    t.string "outline"
+    t.datetime "designated_end_work_time"
   end
 
   create_table "bases", force: :cascade do |t|
@@ -52,9 +54,9 @@ ActiveRecord::Schema.define(version: 20191208131809) do
     t.string "email"
     t.string "affiliation"
     t.string "uid"
-    t.datetime "basic_work_time", default: "2019-11-29 23:00:00"
-    t.datetime "designated_work_start_time", default: "2019-11-30 00:00:00"
-    t.datetime "designated_work_end_time", default: "2019-11-30 09:00:00"
+    t.datetime "basic_work_time", default: "2019-12-09 23:00:00"
+    t.datetime "designated_work_start_time", default: "2019-12-10 00:00:00"
+    t.datetime "designated_work_end_time", default: "2019-12-10 09:00:00"
     t.boolean "superior", default: false
     t.boolean "admin", default: false
     t.string "password_digest"
@@ -62,7 +64,7 @@ ActiveRecord::Schema.define(version: 20191208131809) do
     t.datetime "updated_at", null: false
     t.string "remember_digest"
     t.integer "employee_number"
-    t.time "designated_end_work_time", default: "2000-01-01 09:00:00"
+    t.time "designated_end_work_time"
   end
 
 end
