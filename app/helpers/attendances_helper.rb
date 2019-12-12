@@ -39,7 +39,6 @@ require 'rounding'
           @at = [user,at]
         end
       end
-      binding.pry
     end
   end
   

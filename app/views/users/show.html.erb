@@ -35,6 +35,7 @@
   <% if current_user?(@user) %>
     <%if current_user.superior? %>
       <% attendances_each %>
+      <%# 所属長ここから %>
       <% User.all.each do |users| %>
             <% attendance = Attendance.where(user_id: users.id) %>
             <% attendance.each do |at| %>
@@ -49,7 +50,7 @@
               <% break %>        
             <% end %>
           <% end %>
-        
+        <%# 所属長ここまで　
           <% User.all.each do |users| %>
             <% attendance = Attendance.where(user_id: users.id) %>
             <% attendance.each do |at| %>
@@ -225,8 +226,8 @@
         <%= form_with(model: @user, url: update_approval_user_attendance_path(user_id: @user,date: @first_day), local: true, method: :patch) do |f| %>
         <td rowspan="2">
           <% if current_user?(@user) %>
-            所属長承認 
-            <br><%= f.collection_select :one_month_instructor ,User.where(superior: true), :id, :name, {include_blank: true},prompt: true, class: "form-control" %>
+            所属長 
+            <br><%= f.collection_select :instructor2 ,User.where(superior: true), :id, :name, {include_blank: true},prompt: true, class: "form-control" %>
             <br><%= f.submit "申請",class: "btn btn-primary btn-block btn-attendance" %>
           <% end %>  
         </td>

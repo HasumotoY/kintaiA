@@ -16,9 +16,10 @@ Rails.application.routes.draw do
     member do
       get 'edit_basic_info'
       patch 'update_basic_info'
+      get 'notice_approval'
+      patch 'update_notice_approval'
       get 'attendances/edit_one_month'
       patch 'attendances/update_one_month'
-      
       get 'attendances/work_log'
       get 'attendances/search_work_log', to:'attendance#search'
       
@@ -30,10 +31,8 @@ Rails.application.routes.draw do
         patch 'update_approval'
         get 'edit_overtime'
         patch 'update_overtime'
-        get 'notice_approval'
         get 'notice_one_month'
         get 'notice_overtime'
-        patch 'update_notice_approval'
         patch 'update_notice_one_month'
         patch 'update_notice_overtime'
     end

@@ -44,31 +44,9 @@ include AttendancesHelper
     redirect_to attendances_edit_one_month_user_url(date: params[:date])
   end
         
-  def work_log
-  end
-  
-  def search
-  end
-  
   def edit_overtime
     @user = User.find(params[:user_id])
     @attendance = @user.attendances.find(params[:id]) 
-  end
-  
-  def update_one_month_approval
-    @user = User.find(params[:user_id])
-    @attendance = @user.attendances.find(params[:id])
-      if @attendance.overtime_approval.nil?
-          @attendance.update_attributes(one_month_params)
-          User.all.each do |user|
-          if @attendance.overtime_instructor.to_i == user.id
-            flash[:success] = "#{user.name}に申請しました。"
-          end
-        end
-      else
-        flash[:danger] = "申請ができませんでした"
-      end
-    redirect_to @user
   end
   
   def update_overtime
@@ -87,31 +65,20 @@ include AttendancesHelper
     redirect_to @user
   end
   
-  def notice_approval
+  def update_one_month_approval
     @user = User.find(params[:user_id])
     @attendance = @user.attendances.find(params[:id])
-  end
-  
-  def update_notice_approval
-  end
-  
-  def notice_edit_one_month
-    @user = User.find(params[:user_id])
-    @attendance = @user.attendances.find(params[:id])
-  end
-  
-  def update_notice_edit_one_month
-    @user = User.find(params[:user_id])
-    @attendance = @user.attendances.find(params[:id])
-    @attendance.update_attributes(one_month_notice_params)
-      if @attendance.overtime_change == true || @attendance.overtime_approval != "申請中"
-        @attendance.overtime_instructor = nil
-        flash[:success] = "申請処理が完了しました"
-        redirect_to @user
+      if @attendance.overtime_approval.nil?
+          @attendance.update_attributes(one_month_params)
+          User.all.each do |user|
+          if @attendance.overtime_instructor.to_i == user.id
+            flash[:success] = "#{user.name}に申請しました。"
+          end
+        end
       else
-        flash[:danger] = "申請処理が失敗しました"
-        redirect_to @user
+        flash[:danger] = "申請ができませんでした"
       end
+    redirect_to @user
   end
   
   def notice_overtime
@@ -150,7 +117,15 @@ include AttendancesHelper
       params.require(:attendance).permit(:overtime_approval,:change)
     end
     
-    def overtime_notice_params
-      params.require(:attendance).permit(:overtime_approval,:change)
+<<<<<<<<< saved version
+
+=========
+    def notice_one_month_params
+      params.require(:attendance).permit(:one_month_approval,:one_month_change)
+    end
+    
+    def notice_overtime_params
+      params.require(:attendance).permit(:overtime_approval,:overtime_change)
+>>>>>>>>> local version
     end
 end

@@ -69,6 +69,25 @@ class UsersController < ApplicationController
     redirect_to users_path
   end
   
+  def notice_approval
+    @user = User.find(params[:user_id])
+    @attendance = @user.attendances.find(params[:id])
+  end
+  
+  def update_approval
+        @user = User.find(params[:user_id])
+    @attendance = @user.attendances.find(params[:id])
+    @attendance.update_attributes(approval_params)
+      if @attendance.change == true || @attendance.overtime_approval != "申請中"
+        @attendance.instructor = nil
+        flash[:success] = "申請"
+        redirect_to @user
+      else
+        flash[:danger] = "申請処理が失敗しました"
+        redirect_to @user
+      end
+  end
+  
   def import
     if User.import(params[:file])
       flash[:success] = "ユーザー情報を追加しました。"
