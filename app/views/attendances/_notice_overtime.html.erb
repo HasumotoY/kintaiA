@@ -37,8 +37,8 @@
             <td><%= l(@attendance.end_estimated_time,format: :time) %></td>
             <td><%= l(@user.designated_work_end_time,format: :time) %></td>
             <td>
-               <% if @attendance.next_day == false %> 
-                <%= over_times(@user.end_estimated_time, @user.designated_end_work_time) %>
+               <% if @attendance.overtime_tomorrow == false %> 
+                <%= over_times(@attendance.end_estimated_time, @attendance.designated_end_work_time) %>
               <% else %>
                 <%= next_day_over_times(@attendance.end_estimated_time, @attendance.designated_end_work_time) %>
               <% end %>

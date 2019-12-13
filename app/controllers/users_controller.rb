@@ -28,11 +28,16 @@ class UsersController < ApplicationController
   end
   
   def show
-    @users = User.all.each do |user|
-      @attendance = user.attendances.each do |at|
-        @at = at
-      end
+    @users = User.all
+    @users.each do |user|
+    attendance = Attendance.where(user_id: user.id)
+    @attendance = attendance.each do |at|
+      @at = [user,at]    
     end
+    end
+    @approval_numbers = Attendance.where(instructor: @user.id).count
+    @one_month_numbers = Attendance.where(one_month_instructor: @user.id ).count
+    @overtime_numbers = Attendance.where(overtime_instructor: @user.id).count
     @worked_sum = @attendances.where.not(started_at: nil).count
   end
   
@@ -67,25 +72,6 @@ class UsersController < ApplicationController
     @user.destroy
     flash[:success]  ="#{@user.name}さんの情報を削除しました。"
     redirect_to users_path
-  end
-  
-  def notice_approval
-    @user = User.find(params[:user_id])
-    @attendance = @user.attendances.find(params[:id])
-  end
-  
-  def update_approval
-        @user = User.find(params[:user_id])
-    @attendance = @user.attendances.find(params[:id])
-    @attendance.update_attributes(approval_params)
-      if @attendance.change == true || @attendance.overtime_approval != "申請中"
-        @attendance.instructor = nil
-        flash[:success] = "申請"
-        redirect_to @user
-      else
-        flash[:danger] = "申請処理が失敗しました"
-        redirect_to @user
-      end
   end
   
   def import

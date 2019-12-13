@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191212045040) do
+ActiveRecord::Schema.define(version: 20191210022301) do
 
   create_table "attendances", force: :cascade do |t|
     t.date "worked_on"
@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(version: 20191212045040) do
     t.boolean "overtime_tomorrow", default: false
     t.datetime "end_estimated_time"
     t.string "outline"
-    t.datetime "designated_end_work_time", default: "2019-12-12 09:00:00"
+    t.datetime "designated_end_work_time", default: "2019-12-13 09:00:00"
   end
 
   create_table "bases", force: :cascade do |t|
@@ -54,9 +54,9 @@ ActiveRecord::Schema.define(version: 20191212045040) do
     t.string "email"
     t.string "affiliation"
     t.string "uid"
-    t.datetime "basic_work_time", default: "2019-12-11 23:00:00"
-    t.datetime "designated_work_start_time", default: "2019-12-12 00:00:00"
-    t.datetime "designated_work_end_time", default: "2019-12-12 09:00:00"
+    t.datetime "basic_work_time", default: "2019-12-12 23:00:00"
+    t.datetime "designated_work_start_time", default: "2019-12-13 00:00:00"
+    t.datetime "designated_work_end_time", default: "2019-12-13 09:00:00"
     t.boolean "superior", default: false
     t.boolean "admin", default: false
     t.string "password_digest"
@@ -64,9 +64,6 @@ ActiveRecord::Schema.define(version: 20191212045040) do
     t.datetime "updated_at", null: false
     t.string "remember_digest"
     t.integer "employee_number"
-    t.string "approval2"
-    t.boolean "change2"
-    t.string "instructor2"
   end
 
 end
