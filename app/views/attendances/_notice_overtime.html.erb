@@ -34,8 +34,10 @@
                   <%= $days_of_the_week[@attendance.worked_on.wday] %>
                 <% end %>
             </td>
+            
             <td><%= l(@attendance.end_estimated_time,format: :time) %></td>
-            <td><%= l(@user.designated_work_end_time,format: :time) %></td>
+            <td><%= l(@attendance.designated_end_work_time,format: :time) %></td>
+            
             <td>
                <% if @attendance.overtime_tomorrow == false %> 
                 <%= over_times(@attendance.end_estimated_time, @attendance.designated_end_work_time) %>

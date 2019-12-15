@@ -34,20 +34,19 @@
   
   <% if current_user?(@user) %>
     <%if current_user.superior? %>
-      <% User.all.each do |user| %>
-        <% attendance = Attendance.where(user_id: user.id) %>
-        <% attendance.each do |at| %>
-          <% if at.overtime_instructor.to_i == @user.id && at.overtime_change == false %>
-            <p><%= link_to "【残業申請のお知らせ】",notice_overtime_user_attendance_path(user_id: user.id, id: at.id),class: "notice", remote: "true", style: "color:red" %>
+      <% attendances_each %>
+      <% binding.pry %>
+        <% @attendance.each do |attendance| %>
+          <% if@overtime_numbers > 0 && @attendance.overtime_change == false %>
+            <p><%= link_to "【残業申請のお知らせ】",notice_overtime_user_attendance_path(user_id: attendance.user_id, id: attendance.id),class: "notice", remote: "true", style: "color:red" %>
             <span class="notice-count"><%= @overtime_numbers %>件の申請があります</span></p>
-            <% break %>
+          
           <% else %>
             <p>【残業申請のお知らせ】</p>
+          
           <% end %>
         <% end %>
-      <% end %>
     <% end %>
-    
     <!--<%# if @attendances[1][:instructor].nil? || @attendances[0][:instructor].to_i != @user.id %>
       <p>【所属長承認申請のお知らせ】</p>
     <%# elsif @attendances[0][:instructor].to_i == @user.id && @attendances[0][:change] == false %>
@@ -164,9 +163,9 @@
           <td>
             <% if day.end_estimated_time.present?%>
               <% if day.overtime_tomorrow == false %> 
-                <%= over_times(day.end_estimated_time, @user.designated_work_end_time) %>
+                <%= over_times(day.end_estimated_time.time, @user.designated_work_end_time.time) %>
               <% else %>
-                <%= next_day_over_times(day.end_estimated_time, @user.designated_work_end_time.time) %>
+                <%= next_day_over_times(day.end_estimated_time.time, @user.designated_work_end_time.time) %>
             <% end %>
             <% end %>
             

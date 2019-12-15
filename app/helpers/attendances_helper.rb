@@ -33,12 +33,8 @@ require 'rounding'
 
   def attendances_each
     User.all.each do |user|
-      attendance = Attendance.where(user_id: user.id)
-      attendance.each do |at|
-        if at.overtime_instructor.to_i == @user.id
-          @at = [user,at]
-        end
-      end
+      @attendance = user.attendances.where(worked_on: @first_day..@last_day).order(:worked_on)
+      
     end
   end
   
