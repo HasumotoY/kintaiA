@@ -31,22 +31,24 @@
       </tr>
     </tbody>
   </table>
-  
   <% if current_user?(@user) %>
     <%if current_user.superior? %>
-      <% attendances_each %>
-      <% binding.pry %>
-        <% @attendance.each do |attendance| %>
-          <% if@overtime_numbers > 0 && @attendance.overtime_change == false %>
-            <p><%= link_to "【残業申請のお知らせ】",notice_overtime_user_attendance_path(user_id: attendance.user_id, id: attendance.id),class: "notice", remote: "true", style: "color:red" %>
-            <span class="notice-count"><%= @overtime_numbers %>件の申請があります</span></p>
-          
-          <% else %>
-            <p>【残業申請のお知らせ】</p>
-          
-          <% end %>
+      <% attendance =  Attendance.where(overtime_instructor: @user, overtime_change: false) %>
+      <% if attendance.empty? %>
+        <p>【残業申請のお知らせ】</p>
+      <% end %>
+      <% attendance.each do |at| %>
+        <% if at.overtime_instructor.to_i == @user.id && at.overtime_change == false %>
+          <p><%= link_to "【残業申請のお知らせ】",notice_overtime_user_attendance_path(user_id: at.user_id, id: at.id),class: "notice", remote: "true", style: "color:red" %>
+          <span class="notice-count"><%= @overtime_numbers %>件の申請があります</span></p>
+          <% break %>
+        <% else %>
         <% end %>
+      <% end %>
     <% end %>
+    
+    
+    
     <!--<%# if @attendances[1][:instructor].nil? || @attendances[0][:instructor].to_i != @user.id %>
       <p>【所属長承認申請のお知らせ】</p>
     <%# elsif @attendances[0][:instructor].to_i == @user.id && @attendances[0][:change] == false %>

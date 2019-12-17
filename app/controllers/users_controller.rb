@@ -30,12 +30,11 @@ class UsersController < ApplicationController
   def show
     @users = User.all
     @users.each do |user|
-    # @attendance = user.attendances.where(worked_on: @first_day..@last_day).order(:worked_on)
+    @attendance = user.attendances.joins(worked_on: @first_day..@last_day).order(:worked_on)
     end
-    
     @approval_numbers = Attendance.where(instructor: @user.id, approval: nil).count
     @one_month_numbers = Attendance.where(one_month_instructor: @user.id,one_month_approval: nil ).count
-    @overtime_numbers = Attendance.where(overtime_instructor: @user.id, overtime_approval: nil).count
+    @overtime_numbers = Attendance.where(overtime_instructor: @user, overtime_approval: nil).count
     @worked_sum = @attendances.where.not(started_at: nil).count
   end
   
