@@ -31,27 +31,11 @@ require 'rounding'
     format("%.2f",24 + (((estimated.floor_to(15.minutes)-designated.floor_to(15.minutes)) / 60)) / 60.0)
   end
 
-  def attendances_each
-    attendance =  Attendance.where.not(overtime_instructor: nil)
-    attendance.each do |at|
-        @attendance = [at]
-    end
-  end
-  
   def change(options)
     ::Date.new(
       options.fetch(:year, year),
       options.fetch(:month, month),
       options.fetch(:day, date)
     )
-  end
-
-  
-  def user_id
-    return @users[0][:id]
-  end
-  
-  def attendance_id
-    return Attendance.where(user_id: @users[0][:id], id: @attendance[1][:id])
   end
 end

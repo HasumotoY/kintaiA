@@ -31,8 +31,10 @@ Rails.application.routes.draw do
         patch 'update_approval'
         get 'edit_overtime'
         patch 'update_overtime'
+        get 'notice_approval'
         get 'notice_one_month'
         get 'notice_overtime'
+        patch 'update_notice_approval'
         patch 'update_notice_one_month'
         patch 'update_notice_overtime'
     end

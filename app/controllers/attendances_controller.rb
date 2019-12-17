@@ -65,15 +65,28 @@ include AttendancesHelper
     redirect_to @user
   end
   
+  def update_approval
+    @user = User.find(params[:user_id])
+    @attendance = @user.attendances.find(params[:id])
+      if @attendance.approval.nil? || @attendance.approval = "申請中"
+        @attendance.update_attributes(approval_params)
+        flash[:success] = "申請"
+        redirect_to @user
+      else
+        flash[:danger] = "申請処理が失敗しました"
+        redirect_to @user
+      end
+  end
+  
   def notice_approval
     @user = User.find(params[:user_id])
     @attendance = @user.attendances.find(params[:id])
   end
   
-  def update_approval
+  def update_notice_approval
     @user = User.find(params[:user_id])
     @attendance = @user.attendances.find(params[:id])
-    @attendance.update_attributes(approval_params)
+    @attendance.update_attributes(notice_approval_params)
       if @attendance.change == true || @attendance.approval != "申請中"
         @attendance.instructor = nil
         flash[:success] = "申請"
@@ -83,6 +96,7 @@ include AttendancesHelper
         redirect_to @user
       end
   end
+  
   
   def update_one_month_approval
     @user = User.find(params[:user_id])
@@ -130,6 +144,10 @@ include AttendancesHelper
     
     def approval_params
       params.require(:attendance).permit(:instructor)
+    end
+    
+    def notice_approval_params
+      params.require(:attendance).permit(:approval,:change)
     end
     
     def overtime_params

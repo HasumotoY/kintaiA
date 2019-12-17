@@ -31,8 +31,34 @@
       </tr>
     </tbody>
   </table>
+  
   <% if current_user?(@user) %>
     <%if current_user.superior? %>
+      
+      <% attendance =  Attendance.where(instructor: @user, change: false) %>
+      <% if attendance.empty? %>
+        <p>【所属長承認申請のお知らせ】</p>
+      <% end %>
+      <% attendance.each do |at| %>
+        <% if at.instructor.to_i == @user.id && at.change == false %>
+          <p><%= link_to "【所属長承認申請のお知らせ】",notice_approval_user_attendance_path(user_id: at.user_id, id: at.id),class: "notice", remote: "true", style: "color:red" %>
+          <span class="notice-count"><%= @approval_numbers %>件の申請があります</span></p>
+          <% break %>
+        <% end %>
+      <% end %>
+      
+      <% attendance =  Attendance.where(one_month_instructor: @user, one_month_change: false) %>
+      <% if attendance.empty? %>
+        <p>【勤怠変更申請のお知らせ】</p>
+      <% end %>
+      <% attendance.each do |at| %>
+        <% if at.one_month_instructor.to_i == @user.id && at.one_month__change == false %>
+          <p><%= link_to "【勤怠変更申請のお知らせ】",notice_one_month_user_attendance_path(user_id: at.user_id, id: at.id),class: "notice", remote: "true", style: "color:red" %>
+          <span class="notice-count"><%= @one_month_numbers %>件の申請があります</span></p>
+          <% break %>
+        <% end %>
+      <% end %>
+    
       <% attendance =  Attendance.where(overtime_instructor: @user, overtime_change: false) %>
       <% if attendance.empty? %>
         <p>【残業申請のお知らせ】</p>
@@ -42,9 +68,9 @@
           <p><%= link_to "【残業申請のお知らせ】",notice_overtime_user_attendance_path(user_id: at.user_id, id: at.id),class: "notice", remote: "true", style: "color:red" %>
           <span class="notice-count"><%= @overtime_numbers %>件の申請があります</span></p>
           <% break %>
-        <% else %>
         <% end %>
       <% end %>
+      
     <% end %>
     
     
@@ -211,21 +237,22 @@
         <td colspan="3">総合勤務時間</td>  
         <td colspan="3"><%= format_basic_info(@user.basic_work_time).to_f*@worked_sum %></td>
         
-        <%= form_with(model: @attendances, url: update_approval_user_attendance_path(user_id: @user,date: @first_day), local: true, method: :patch) do |f| %>
         <td rowspan="2">
-          
+      
           <% if current_user?(@user) %>
-            <% @users.each do |user| %>
-              <% if @attendances[0][:instructor].to_i == @user.id && @attendances[0][:approval].nil? %>
-                <p><%= user.name %>に承認申請中 </p>
-              <% elsif @attendances[0][:approval].present? %>
-                <p>所属長承認</p><p><%= @attendances[0][:approval] %></p>
-              <% else %>
-                所属長承認　未
+            <% @users.each do |user| %> %>
+              <% attendance = user.attendances.where(user_id: user.id) %>
+              <% attendance.each do |at| %>
+              <%= form_with(model: @attendance, url: update_approval_user_attendance_path(user_id: @user, id: at.id), local: true, method: :patch) do |f| %>
+                <% if at.instructor.to_i == user.id && at.instructor.nil? %>
+                  <p>所属長承認</p><p><%= at.approval %></p>
+                  <% break %>
+                <% elsif at.instructor.present? %>
+                  <p>所属長承認　未</p>
+                <% end %>
               <% break %>
               <% end %>
             <% end %>
-            
             <br><%= f.collection_select :instructor ,User.where(superior: true), :id, :name, {include_blank: true},prompt: true, class: "form-control" %>
             <br><%= f.submit "申請",class: "btn btn-primary btn-block btn-attendance" %>
           <% end %>  
