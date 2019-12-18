@@ -70,7 +70,7 @@ include AttendancesHelper
     @attendance = @user.attendances.find(params[:id])
       if @attendance.approval.nil? || @attendance.approval = "申請中"
         @attendance.update_attributes(approval_params)
-        flash[:success] = "申請"
+        flash[:success] = "所属長承認申請完了"
         redirect_to @user
       else
         flash[:danger] = "申請処理が失敗しました"
