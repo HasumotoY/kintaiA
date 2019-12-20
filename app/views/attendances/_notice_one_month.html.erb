@@ -4,10 +4,10 @@
       <button type="button" class="close" data-dismiss="modal" aria-hidden="Close">
         <span aria-hidden="true">&times;</span>
       </button>
-      <h1 class="modal-title">【<%= @user.name %>からの勤怠変更申請】</h1>
+      <h1 class="modal-title">【<%= @user.name %>からの残業申請】</h1>
     </div>
     <div class=modal-body>
-      <%= form_with(model: @user, local:true) do |f| %>
+      <%= form_with(model: @attendance, url: update_notice_one_month_user_attendance_path(date: @first_day), local:true, method: :patch) do |f| %>
       <table class="table table-condenced table-bordered table-striped" id="modal-teble">
         <thead>
           <tr>
@@ -25,7 +25,6 @@
             <td colspan="2">退社</td>
             <td colspan="2">出社</td>
             <td colspan="2">退社</td>
-            
           </tr>
           <tr>
             <td>時</td>
@@ -70,11 +69,10 @@
           <td><%= link_to "確認",user_path(@user), class: "btn btn-primary" %></td>
         </tbody>
       </table>
+        <div class="center">
+          <%= f.submit "変更を送信する",class:"btn btn-primary" %>
+        </div>
+      <% end %>
     </div>
-    <div class=modal-footer>
-      <div class="center">
-        <%= f.submit "変更を送信する",class:"btn btn-primary" %>
-      </div>
-    <% end %>
   </div>
 </div>

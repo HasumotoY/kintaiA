@@ -32,7 +32,6 @@ include AttendancesHelper
   
   def update_one_month
     ActiveRecord::Base.transaction do
-      binding.pry
       attendances_params.each do |id,item|
         attendance = Attendance.find(id)
         attendance.update_attributes!(item)
@@ -70,7 +69,9 @@ include AttendancesHelper
   @user = User.find(params[:user_id])
     @attendance = @user.attendances.where(user_id: @user.id)
     @attendance.each do |attendance|
-      if attendance.approval.nil? || attendance.approval = "申請中"
+      if @approval_number > 0
+        flash[:danger] = "同じ月の申請はできません"
+      elsif attendance.approval.nil? || attendance.approval = "申請中"
         attendance.update_attributes(approval_params)
         flash[:success] = "所属長承認申請完了"
       else
@@ -99,6 +100,10 @@ include AttendancesHelper
       end
   end
   
+  def notice_one_month
+    @user = User.find(params[:user_id])
+    @attendance = @user.attendances.find(params[:id])
+  end
   
   def update_one_month_approval
     @user = User.find(params[:user_id])

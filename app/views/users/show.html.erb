@@ -36,11 +36,11 @@
     <%if current_user.superior? %>
       
       <% attendance =  Attendance.where(instructor: @user, change: false) %>
-      <% if attendance.empty? %>
+      <% if attendance.empty? || @approval_numbers = 0 %>
         <p>【所属長承認申請のお知らせ】</p>
       <% end %>
       <% attendance.each do |at| %>
-        <% if at.instructor.to_i == @user.id && at.change == false %>
+        <% if at.instructor.to_i == @user.id && at.change == false && @approval_numbers > 0%>
           <p><%= link_to "【所属長承認申請のお知らせ】",notice_approval_user_attendance_path(user_id: at.user_id, id: at.id),class: "notice", remote: "true", style: "color:red" %>
           <span class="notice-count"><%= @approval_numbers %>件の申請があります</span></p>
           <% break %>
@@ -212,7 +212,7 @@
     </tbody>
      
     <tfooter>
-      <%= form_with(model: @attendances, url: update_approval_user_attendance_path(user_id: @user.id, date: @first_day), local: true, method: :patch) do |f| %>
+      <%= form_with(model: @attendances, url: update_approval_user_attendance_path(user_id: @user.id, month: @attendances), local: true, method: :patch) do |f| %>
         <tr>
           <td colspan="3">在社時間合計</td>
           <td colspan="8">
