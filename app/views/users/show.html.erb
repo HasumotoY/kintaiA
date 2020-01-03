@@ -36,11 +36,11 @@
     <%if current_user.superior? %>
       
       <% attendance =  Attendance.where(instructor: @user, change: false) %>
-      <% if attendance.empty? %>
+      <% if attendance.empty? || @approval_numbers == 0 %>
         <p>【所属長承認申請のお知らせ】</p>
       <% end %>
       <% attendance.each do |at| %>
-        <% if at.instructor.to_i == @user.id && at.change == false %>
+        <% if at.instructor.to_i == @user.id && at.change == false && @approval_numbers > 0 %>
           <p><%= link_to "【所属長承認申請のお知らせ】",notice_approval_user_attendance_path(user_id: at.user_id, id: at.id),class: "notice", remote: "true", style: "color:red" %>
           <span class="notice-count"><%= @approval_numbers %>件の申請があります</span></p>
           <% break %>
@@ -55,6 +55,7 @@
         <% if at.one_month_instructor.to_i == @user.id && at.one_month_change == false %>
           <p><%= link_to "【勤怠変更申請のお知らせ】",notice_one_month_user_attendance_path(user_id: at.user_id, id: at.id),class: "notice", remote: "true", style: "color:red" %>
           <span class="notice-count"><%= @one_month_numbers %>件の申請があります</span></p>
+          <% binding.pry %>
           <% break %>
         <% end %>
       <% end %>
@@ -190,6 +191,7 @@
                 <p><%= user.name %>に申請中 </p>
               <% elsif day.one_month_approval.present? %>
                 <p>勤怠変更申請</p>
+                <!--one_month_approvalの修正から-->
                 <p><%= day.one_month_approval %></p>
                 <% break %>
               <% end %>
@@ -224,7 +226,7 @@
             
             <% if current_user?(@user) %>
               <% @users.each do |user| %>
-                <% attendance = user.attendances.where(user_id: user.id) %>
+                <% attendance = user.attendances.where(user_id: user.id,worked_on:@first_day..@last_day) %>
                 <% attendance.each do |at| %>
                   <% if at.instructor.to_i == user.id && at.approval.nil? %>
                     <p>所属長承認</p>
@@ -251,5 +253,5 @@
 
 <div id="edit-overtime" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 <div id="notice-approval" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-<div id= "notice-edit-one-month" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+<div id= "notice-one-month" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 <div id="notice-overtime" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>

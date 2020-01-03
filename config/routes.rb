@@ -37,7 +37,7 @@ Rails.application.routes.draw do
         patch 'update_notice_approval'
         patch 'update_notice_one_month'
         patch 'update_notice_overtime'
-    end
+      end
     end  
       collection { post :import }
   end

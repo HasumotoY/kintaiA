@@ -32,7 +32,6 @@ include AttendancesHelper
   
   def update_one_month
     ActiveRecord::Base.transaction do
-      binding.pry
       attendances_params.each do |id,item|
         attendance = Attendance.find(id)
         attendance.update_attributes!(item)
@@ -67,10 +66,10 @@ include AttendancesHelper
   end
   
   def update_approval
-  @user = User.find(params[:user_id])
+    @user = User.find(params[:user_id])
     @attendance = @user.attendances.where(user_id: @user.id)
     @attendance.each do |attendance|
-      if attendance.approval.nil? || attendance.approval = "申請中"
+      if attendance.approval.nil? || attendance.approval = "申請中" || @approval_numbers = 0
         attendance.update_attributes(approval_params)
         flash[:success] = "所属長承認申請完了"
       else
@@ -99,7 +98,6 @@ include AttendancesHelper
       end
   end
   
-  
   def update_one_month_approval
     @user = User.find(params[:user_id])
     @attendance = @user.attendances.find(params[:id])
@@ -116,6 +114,25 @@ include AttendancesHelper
     redirect_to @user
   end
   
+  def notice_one_month
+    @user = User.find(params[:user_id])
+    @attendance = @user.attendances.find(params[:id])
+  end
+  
+  def update_notice_one_month
+    @user = User.find(params[:user_id])
+    @attendance = @user.attendances.find(params[:id])
+    @attendance.update_attributes(notice_one_month_params)
+      if @attendance.one_month_change == true || @attendance.one_month_approval != "申請中"
+        @attendance.one_month_instructor = nil
+        flash[:success] = "申請処理が完了しました"
+        redirect_to @user
+      else
+        flash[:danger] = "申請処理が失敗しました"
+        redirect_to @user
+      end
+  end
+    
   def notice_overtime
     @user = User.find(params[:user_id])
     @attendance = @user.attendances.find(params[:id])
@@ -157,7 +174,7 @@ include AttendancesHelper
     end
     
     def one_month_notice_params
-      params.require(:attendance).permit(:overtime_approval,:overtime_change)
+      params.require(:attendance).permit(:one_month_approval,:one_month_change)
     end
 
     def notice_one_month_params
