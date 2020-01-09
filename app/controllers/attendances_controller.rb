@@ -31,17 +31,23 @@ include AttendancesHelper
   end
   
   def update_one_month
-    ActiveRecord::Base.transaction do
-      attendances_params.each do |id,item|
-        attendance = Attendance.find(id)
-        attendance.update_attributes!(item)
+    if attendances_invalid?
+      ActiveRecord::Base.transaction do
+        attendances_params.each do |id,item|
+          attendance = Attendance.find(id)
+          attendance.update_attributes!(item)
+        end
       end
+      flash[:success] = "勤怠を更新しました。"
+      redirect_to user_url(date: params[:date])
+      
+    else
+      flash[:danger] = "無効なデータがあったため、更新をキャンセルしました。"
+      redirect_to attendances_edit_one_month_user_url(date: params[:date])
     end
-    flash[:success] = "勤怠を更新しました。"
-    redirect_to user_url(date: params[:date])
-  rescue ActiveRecord::RecordInvalid
-    flash[:danger] = "無効なデータがあったため、更新をキャンセルしました。"
-    redirect_to attendances_edit_one_month_user_url(date: params[:date])
+    rescue ActiveRecord::RecordInvalid
+      flash[:danger] = "無効なデータがあったため、更新をキャンセルしました。"
+      redirect_to attendances_edit_one_month_user_url(date: params[:date])
   end
         
   def edit_overtime
@@ -69,9 +75,7 @@ include AttendancesHelper
     @user = User.find(params[:user_id])
     @attendance = @user.attendances.where(user_id: @user.id)
     @attendance.each do |attendance|
-      if @approval_number > 0
-        flash[:danger] = "同じ月の申請はできません"
-      elsif attendance.approval.nil? || attendance.approval = "申請中"
+      if attendance.approval.nil? || attendance.approval = "申請中" || @approval_numbers = 0
         attendance.update_attributes(approval_params)
         flash[:success] = "所属長承認申請完了"
       else
@@ -98,11 +102,6 @@ include AttendancesHelper
         flash[:danger] = "申請処理が失敗しました"
         redirect_to @user
       end
-  end
-  
-  def notice_one_month
-    @user = User.find(params[:user_id])
-    @attendance = @user.attendances.find(params[:id])
   end
   
   def update_one_month_approval
