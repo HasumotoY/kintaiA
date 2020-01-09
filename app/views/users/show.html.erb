@@ -223,7 +223,7 @@
           <td colspan="3">総合勤務時間</td>  
           <td colspan="3"><%= format_basic_info(@user.basic_work_time).to_f*@worked_sum %></td>
           <td rowspan="2">
-            
+            <!-- 所属長承認申請機能から -->
             <% if current_user?(@user) %>
               <% @users.each do |user| %>
                 <% attendance = user.attendances.where(user_id: user.id,worked_on:@first_day..@last_day) %>
@@ -232,11 +232,14 @@
                     <p>所属長承認</p>
                     <p><%= user.name %>に申請中</p>
                 <% break %>
+                <% break %>
                   <% elsif at.approval.present? && at.approval != "申請中" %>
                     <p>所属長承認　<% at.approval %></p>
                   <% break %>
+                  <% break %>
                   <% elsif at.approval.nil? %>
                     <p>所属長承認　未</p>
+                    <% break %> 
                     <% break %>
                   <% end %>
                 <% end %>

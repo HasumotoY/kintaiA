@@ -31,17 +31,23 @@ include AttendancesHelper
   end
   
   def update_one_month
-    ActiveRecord::Base.transaction do
-      attendances_params.each do |id,item|
-        attendance = Attendance.find(id)
-        attendance.update_attributes!(item)
+    if attendances_invalid?
+      ActiveRecord::Base.transaction do
+        attendances_params.each do |id,item|
+          attendance = Attendance.find(id)
+          attendance.update_attributes!(item)
+        end
       end
+      flash[:success] = "勤怠を更新しました。"
+      redirect_to user_url(date: params[:date])
+      
+    else
+      flash[:danger] = "無効なデータがあったため、更新をキャンセルしました。"
+      redirect_to attendances_edit_one_month_user_url(date: params[:date])
     end
-    flash[:success] = "勤怠を更新しました。"
-    redirect_to user_url(date: params[:date])
-  rescue ActiveRecord::RecordInvalid
-    flash[:danger] = "無効なデータがあったため、更新をキャンセルしました。"
-    redirect_to attendances_edit_one_month_user_url(date: params[:date])
+    rescue ActiveRecord::RecordInvalid
+      flash[:danger] = "無効なデータがあったため、更新をキャンセルしました。"
+      redirect_to attendances_edit_one_month_user_url(date: params[:date])
   end
         
   def edit_overtime
