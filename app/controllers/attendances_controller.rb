@@ -132,11 +132,10 @@ include AttendancesHelper
       if @attendance.one_month_change == true || @attendance.one_month_approval != "申請中"
         @attendance.one_month_instructor = nil
         flash[:success] = "申請処理が完了しました"
-        redirect_to @user
       else
         flash[:danger] = "申請処理が失敗しました"
-        redirect_to @user
       end
+      redirect_to user_url(id: @attendance.one_month_instructor)
   end
     
   def notice_overtime
@@ -151,11 +150,10 @@ include AttendancesHelper
       if @attendance.overtime_change == true || @attendance.overtime_approval != "申請中"
         @attendance.overtime_instructor = nil
         flash[:success] = "申請処理が完了しました"
-        redirect_to @user
       else
         flash[:danger] = "申請処理が失敗しました"
-        redirect_to @user
       end
+      redirect_to user_url(id: @attendance.one_month_instructor)
   end
         
   private

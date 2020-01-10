@@ -55,7 +55,6 @@
         <% if at.one_month_instructor.to_i == @user.id && at.one_month_change == false %>
           <p><%= link_to "【勤怠変更申請のお知らせ】",notice_one_month_user_attendance_path(user_id: at.user_id, id: at.id),class: "notice", remote: "true", style: "color:red" %>
           <span class="notice-count"><%= @one_month_numbers %>件の申請があります</span></p>
-          <% binding.pry %>
           <% break %>
         <% end %>
       <% end %>
@@ -185,16 +184,14 @@
           <td><%= day.outline %></td>
           
           <td>
-            <% @users.each do |user| %>
+            <% binding.pry %>
               <% if day.one_month_instructor.to_i == user.id && day.one_month_approval.nil? %>
                 <p>勤怠変更申請</p>
-                <p><%= user.name %>に申請中 </p>
+                <p><%= User.where(id: day.instructor.to_i)[0][:name] %>に申請中 </p>
               <% elsif day.one_month_approval.present? %>
                 <p>勤怠変更申請</p>
-                <!--one_month_approvalの修正から-->
+                
                 <p><%= day.one_month_approval %></p>
-                <% break %>
-              <% end %>
             <% end %>
             
             <% @users.each do |user| %>
@@ -214,7 +211,7 @@
     </tbody>
      
     <tfooter>
-      <%= form_with(model: @attendances, url: update_approval_user_attendance_path(user_id: @user.id, month: @attendances), local: true, method: :patch) do |f| %>
+      <%= form_with(model: @attendances, url: update_approval_user_attendance_path(user_id: @user.id, date: @first_day), local: true, method: :patch) do |f| %>
         <tr>
           <td colspan="3">在社時間合計</td>
           <td colspan="8">

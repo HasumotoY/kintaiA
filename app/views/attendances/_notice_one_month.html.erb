@@ -4,7 +4,7 @@
       <button type="button" class="close" data-dismiss="modal" aria-hidden="Close">
         <span aria-hidden="true">&times;</span>
       </button>
-      <h1 class="modal-title">【<%= @user.name %>からの残業申請】</h1>
+      <h1 class="modal-title">【<%= @user.name %>からの勤怠変更申請】</h1>
     </div>
     <div class=modal-body>
       <%= form_with(model: @attendance, url: update_notice_one_month_user_attendance_path(date: @first_day), local:true, method: :patch) do |f| %>
