@@ -223,30 +223,26 @@
           <td colspan="3">総合勤務時間</td>  
           <td colspan="3"><%= format_basic_info(@user.basic_work_time).to_f*@worked_sum %></td>
           <td rowspan="2">
-            <!-- 所属長承認申請機能から -->
+            
             <% if current_user?(@user) %>
-              <% @users.each do |user| %>
-                <% attendance = user.attendances.where(user_id: user.id,worked_on:@first_day..@last_day) %>
-                <% attendance.each do |at| %>
-                  <% if at.instructor.to_i == user.id && at.approval.nil? %>
+              <% @attendances.each do |at| %>
+                <% if at.instructor.nil? %>
+                  <p>所属長承認　未</p>
+                  <% break %>
+                <% elsif at.approval.present? && at.approval != "申請中" %>
+                    <p>所属長承認　<%= at.approval %></p>
+                    <% break %>
+                  <% elsif (at.instructor.present?  && at.approval.nil?) ||  at.approval == "申請中" %>
                     <p>所属長承認</p>
-                    <p><%= user.name %>に申請中</p>
-                <% break %>
-                <% break %>
-                  <% elsif at.approval.present? && at.approval != "申請中" %>
-                    <p>所属長承認　<% at.approval %></p>
-                  <% break %>
-                  <% break %>
-                  <% elsif at.approval.nil? %>
-                    <p>所属長承認　未</p>
-                    <% break %> 
+                    <p><%=User.where(id: at.instructor.to_i)[0][:name] %>に申請中</p>
                     <% break %>
                   <% end %>
                 <% end %>
-                <% end %>
-            <br><%= f.collection_select :instructor ,User.where(superior: true), :id, :name, {include_blank: true},prompt: true, class: "form-control" %>
-            <br><%= f.submit "申請",class: "btn btn-primary btn-block btn-attendance" %>
+              
+              <br><%= f.collection_select :instructor ,User.where(superior: true), :id, :name, {include_blank: true},prompt: true, class: "form-control" %>
+              <br><%= f.submit "申請",class: "btn btn-primary btn-block btn-attendance" %>
             <% end %>
+            
           </td>
         </tr>
       <% end %>
