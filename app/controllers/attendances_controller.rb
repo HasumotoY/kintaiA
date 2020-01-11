@@ -95,13 +95,11 @@ include AttendancesHelper
     @attendance = @user.attendances.find(params[:id])
     @attendance.update_attributes(notice_approval_params)
       if @attendance.change == true || @attendance.approval != "申請中"
-        @attendance.instructor = nil
         flash[:success] = "申請"
-        redirect_to @user
       else
         flash[:danger] = "申請処理が失敗しました"
-        redirect_to @user
       end
+    redirect_to user_url(id: @attendance.instructor.to_i)
   end
   
   def update_one_month_approval
@@ -130,12 +128,11 @@ include AttendancesHelper
     @attendance = @user.attendances.find(params[:id])
     @attendance.update_attributes(notice_one_month_params)
       if @attendance.one_month_change == true || @attendance.one_month_approval != "申請中"
-        @attendance.one_month_instructor = nil
         flash[:success] = "申請処理が完了しました"
       else
         flash[:danger] = "申請処理が失敗しました"
       end
-      redirect_to user_url(id: @attendance.one_month_instructor)
+      redirect_to user_url(id: @attendance.one_month_instructor.to_i)
   end
     
   def notice_overtime
@@ -148,12 +145,11 @@ include AttendancesHelper
     @attendance = @user.attendances.find(params[:id])
     @attendance.update_attributes(notice_overtime_params)
       if @attendance.overtime_change == true || @attendance.overtime_approval != "申請中"
-        @attendance.overtime_instructor = nil
         flash[:success] = "申請処理が完了しました"
       else
         flash[:danger] = "申請処理が失敗しました"
       end
-      redirect_to user_url(id: @attendance.one_month_instructor)
+      redirect_to user_url(id: @attendance.overtime_instructor.to_i)
   end
         
   private

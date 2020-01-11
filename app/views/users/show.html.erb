@@ -184,28 +184,23 @@
           <td><%= day.outline %></td>
           
           <td>
-            <% binding.pry %>
-              <% if day.one_month_instructor.to_i == user.id && day.one_month_approval.nil? %>
-                <p>勤怠変更申請</p>
-                <p><%= User.where(id: day.instructor.to_i)[0][:name] %>に申請中 </p>
-              <% elsif day.one_month_approval.present? %>
-                <p>勤怠変更申請</p>
-                
-                <p><%= day.one_month_approval %></p>
+            <% if day.one_month_instructor.present? && day.one_month_approval.nil? %>
+              <p>勤怠変更申請</p>
+              <p><%= User.where(id: day.one_month_instructor.to_i)[0][:name] %>に申請中 </p>
+            <% elsif day.one_month_approval.present? %>
+              <p>勤怠変更申請</p>
+              <% binding.pry %>
+              <p><%= day.one_month_approval %></p>
             <% end %>
             
-            <% @users.each do |user| %>
-              <% if day.overtime_instructor.to_i == user.id && day.overtime_approval.nil? %>
-                <p>残業申請</p>
-                <p><%= user.name %>に申請中 </p>
-              <% elsif day.overtime_approval.present? %>
-                <p>残業申請</p>
-                <p><%= day.overtime_approval %></p>
-                <% break %>
-              <% end %>
+            <% if day.overtime_instructor.present? && day.overtime_approval.nil? %>
+              <p>残業申請</p>
+              <p><%= User.where(id: day.overtime_instructor.to_i)[0][:name] %>に申請中 </p>
+            <% elsif day.overtime_approval.present? %>
+              <p>残業申請</p>
+              <p><%= day.overtime_approval %></p>
             <% end %>
           </td>
-          
         </tr>
       <% end %>
     </tbody>
