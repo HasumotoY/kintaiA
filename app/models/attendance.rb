@@ -3,4 +3,5 @@ class Attendance < ApplicationRecord
   
   validates :worked_on, presence: true
   validates :note, length: {maximum: 50}
+  #validates :instructor, presence: true
 end

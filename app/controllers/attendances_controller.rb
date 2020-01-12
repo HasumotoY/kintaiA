@@ -49,7 +49,8 @@ include AttendancesHelper
       flash[:danger] = "無効なデータがあったため、更新をキャンセルしました。"
       redirect_to attendances_edit_one_month_user_url(date: params[:date])
   end
-        
+  
+  #残業申請機能      
   def edit_overtime
     @user = User.find(params[:user_id])
     @attendance = @user.attendances.find(params[:id]) 
@@ -71,11 +72,12 @@ include AttendancesHelper
     redirect_to @user
   end
   
+  #所属長申請
   def update_approval
     @user = User.find(params[:user_id])
     @attendance = @user.attendances.where(user_id: @user.id)
     @attendance.each do |attendance|
-      if attendance.approval.nil? || attendance.approval = "申請中" || @approval_numbers = 0
+      if attendance.approval.nil? || @approval_numbers.to_i == 0
         attendance.update_attributes(approval_params)
         flash[:success] = "所属長承認申請完了"
       else
@@ -85,6 +87,7 @@ include AttendancesHelper
     redirect_to user_url(date: params[:date])
   end
   
+  #所属長承認
   def notice_approval
     @user = User.find(params[:user_id])
     @attendance = @user.attendances.find(params[:id])
@@ -93,8 +96,8 @@ include AttendancesHelper
   def update_notice_approval
     @user = User.find(params[:user_id])
     @attendance = @user.attendances.find(params[:id])
-    @attendance.update_attributes(notice_approval_params)
       if @attendance.change == true || @attendance.approval != "申請中"
+        @attendance.update_attributes(notice_approval_params)
         flash[:success] = "申請"
       else
         flash[:danger] = "申請処理が失敗しました"
@@ -102,6 +105,7 @@ include AttendancesHelper
     redirect_to user_url(id: @attendance.instructor.to_i)
   end
   
+  #勤怠変更申請
   def update_one_month_approval
     @user = User.find(params[:user_id])
     @attendance = @user.attendances.find(params[:id])
@@ -118,6 +122,7 @@ include AttendancesHelper
     redirect_to @user
   end
   
+  #勤怠変更承認
   def notice_one_month
     @user = User.find(params[:user_id])
     @attendance = @user.attendances.find(params[:id])
@@ -134,7 +139,8 @@ include AttendancesHelper
       end
       redirect_to user_url(id: @attendance.one_month_instructor.to_i)
   end
-    
+  
+  #残業承認申請  
   def notice_overtime
     @user = User.find(params[:user_id])
     @attendance = @user.attendances.find(params[:id])
@@ -158,7 +164,7 @@ include AttendancesHelper
     end
     
     def one_month_params
-      params.require(:attendance).permit(:one_month_instructor,:overtime_approval)
+      params.require(:attendance).permit(:one_month_instructor)
     end
     
     def approval_params
@@ -170,7 +176,7 @@ include AttendancesHelper
     end
     
     def overtime_params
-      params.require(:attendance).permit(:end_estimated_time,:overtime_tomorrow,:outline,:overtime_instructor,:overtime_approval)
+      params.require(:attendance).permit(:end_estimated_time,:overtime_tomorrow,:outline,:overtime_instructor)
     end
     
     def one_month_notice_params
