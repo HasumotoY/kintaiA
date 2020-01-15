@@ -7,17 +7,31 @@
       <button type="button" class="btn btn-default" >
                   リセット
       </button>
-      <%= form_with(model: @user, url: attendances_search_work_log_user_path, method: :get, local: true) do |f| %>
+      <%= form_with(model: @attendances, url: attendances_work_log_user_path(@user,@attendances), method: :get, local: true) do |f| %>
         <tr>
+          
           <td>
-          年
-            <%= f.collection_select :worked_on, Attendance.group(:worked_on), :worked_on, :worked_on,{prompt: ""} %>
+            <div class = "input-group" id="year">
+            <span class="input-group-button open">
+              <button type="button" class="btn btn-default dropdown-toggle" data-toggle = "drop-down" aria-expanded = "true">
+                年
+                <span class="caret"></span>
+              </button>
+              <ul calss="dropdown-menu" role = "menu">
+                <li id = "<%= @first_day.year %>" class="dropdown-list">2020</li>
+              </ul>
+            </span>
+            <div class="col-xs-2 px-0">
+              <input type="text" class="form-control"placeholder="2020" readonly="true">
+            </div>
+            </div>
           </td>
+          
         </tr>
         <tr>
           <td>
-          月
-          <%= f.collection_select :worked_on, Attendance.group(:worked_on), :worked_on, :worked_on,{prompt: ""} %>
+          <span>月</span>
+          <span><%= f.collection_select :worked_on, Attendance.group(:worked_on), :worked_on, :worked_on,{prompt: ""} %></span>
           </td>
         </tr>
       <% end %>
@@ -33,7 +47,7 @@
         <td>指示者</td>
         <td>承認日</td>
       </tr>
-      <% @attendances.each do |attenadance| %>
+      <% @attendances.each do |attendance| %>
       <% if attendance.one_month_approval.present? %> 
       <tr>
         <td><%= l(attendance.worked_on, format: :short) %></td>
