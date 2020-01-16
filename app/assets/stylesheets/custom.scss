@@ -271,6 +271,32 @@ p{
     }   
 }
 
+/* input-group */
+.mb-2{
+    margin-bottom: .5rem !important
+}
+
+.input-group{
+    position: relative;
+    display: table;
+    border-collapse: separate;
+}
+
+.dropdown-menu{
+    li{
+        a{
+            display: block;
+            padding: 3px 20px;
+            clear: both;
+            font-weight: normal;
+            line-height: 1.428571429;
+            color: #333;
+            white-space: nowrap;
+        }
+    }
+    
+}
+
 /* error_explanation */
 #error_explanation{
     color: red;

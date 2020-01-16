@@ -1,4 +1,5 @@
 <% provide(:title,"勤怠ログ") %>
+
 <h1>勤怠ログ</h1>
 
 <div class="col-md-10 col-md-offset-1">  
@@ -11,22 +12,26 @@
         <tr>
           
           <td>
-            <div class = "input-group" id="year">
-            <span class="input-group-button open">
-              <button type="button" class="btn btn-default dropdown-toggle" data-toggle = "drop-down" aria-expanded = "true">
-                年
+            <div class="input-group mb-2">
+              <span class="input-group-prepend">
+                <button type="button" class="btn btn-default dropdown-toggle"
+                  data-toggle="dropdown">
+                    年
                 <span class="caret"></span>
-              </button>
-              <ul calss="dropdown-menu" role = "menu">
-                <li id = "<%= @first_day.year %>" class="dropdown-list">2020</li>
-              </ul>
-            </span>
-            <div class="col-xs-2 px-0">
-              <input type="text" class="form-control"placeholder="2020" readonly="true">
-            </div>
+                </button>
+                    
+                <div class="dropdown-menu">
+                  <ul>
+                    <li class="drop-list"><a href="#"><%= Date.current.prev_year(2).year %></a></li>
+                    <li class="drop-list"><a href="#"><%= Date.current.prev_year.year %></a></li>
+                    <li class="drop-list"><a href="#"><%= Date.current.year %></a>  </li>
+                  </ul>
+                  
+                </div>
+              </span>
+              <input type="text" placeholder="<%= Date.current.year %>" class="form-control" readonly >
             </div>
           </td>
-          
         </tr>
         <tr>
           <td>
