@@ -159,6 +159,9 @@ include AttendancesHelper
   end
   
   def work_log
+    @first_month = Date.current.change(month: 1)
+    @last_month = Date.current.change(month: 12)
+    @month = @first_month.month..@last_month.month
   end
         
   private

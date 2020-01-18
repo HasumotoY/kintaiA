@@ -12,31 +12,40 @@
         <tr>
           
           <td>
-            <div class="input-group mb-2">
-              <span class="input-group-prepend">
+            <div class="input-group" id="year">
+              <span class="input-group-btn">
                 <button type="button" class="btn btn-default dropdown-toggle"
                   data-toggle="dropdown">
                     年
                 <span class="caret"></span>
                 </button>
-                    
-                <div class="dropdown-menu">
-                  <ul>
-                    <li class="drop-list"><a href="#"><%= Date.current.prev_year(2).year %></a></li>
-                    <li class="drop-list"><a href="#"><%= Date.current.prev_year.year %></a></li>
-                    <li class="drop-list"><a href="#"><%= Date.current.year %></a>  </li>
-                  </ul>
-                  
-                </div>
+                <ul class="dropdown-menu">
+                    <li id = "<%= Date.current.prev_year(2).year %>"><a href="#"><%= Date.current.prev_year(2).year %></a></li>
+                    <li id = "<%= Date.current.prev_year.year %>"><a href="#"><%= Date.current.prev_year.year %></a></li>
+                    <li id = "<%= Date.current.year %>"><a href="#"><%= Date.current.year %></a>  </li>
+                </ul>
               </span>
-              <input type="text" placeholder="<%= Date.current.year %>" class="form-control" readonly >
+                <input type="text" placeholder="<%= Date.current.year %>" class="form-control" readonly >
             </div>
           </td>
         </tr>
         <tr>
           <td>
-          <span>月</span>
-          <span><%= f.collection_select :worked_on, Attendance.group(:worked_on), :worked_on, :worked_on,{prompt: ""} %></span>
+            <div class="input-group" id="month">
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default dropdown-toggle"
+                  data-toggle="dropdown">
+                    年
+                <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                  <% @month.each do |month| %>
+                    <li id = "<%= month %>"><a href="#"><%= month %></a></li>
+                  <% end %>
+                </ul>
+              </span>
+                <input type="text" placeholder="<%= Date.current.month %>" class="form-control" readonly >
+            </div>
           </td>
         </tr>
       <% end %>
