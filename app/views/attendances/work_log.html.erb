@@ -8,24 +8,16 @@
       <button type="button" class="btn btn-default" >
                   リセット
       </button>
-      <%= form_with(model: @attendances, url: attendances_work_log_user_path(@user,@attendances), method: :get, local: true) do |f| %>
+      <%= form_with(model: @attendance, url: attendances_work_log_user_path(@user,@attendances), method: :get, local: true) do |f| %>
         <tr>
           
           <td>
             <div class="input-group" id="year">
               <span class="input-group-btn">
-                <button type="button" class="btn btn-default dropdown-toggle"
-                  data-toggle="dropdown">
-                    年
-                <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                    <li id = "<%= Date.current.prev_year(2).year %>"><a href="#"><%= Date.current.prev_year(2).year %></a></li>
-                    <li id = "<%= Date.current.prev_year.year %>"><a href="#"><%= Date.current.prev_year.year %></a></li>
-                    <li id = "<%= Date.current.year %>"><a href="#"><%= Date.current.year %></a>  </li>
-                </ul>
+                  <%= f.select :search_work_log,[["#{Date.current.year}","#{Date.current.year}"],["#{Date.current.prev_year.year}","#{Date.current.prev_year.year}"],
+                    ["#{Date.current.prev_year(2).year}","#{Date.current.prev_year(2).year}"]],class: "btn btn-default" ,placeholder:"年"%>
               </span>
-                <input type="text" placeholder="<%= Date.current.year %>" class="form-control" readonly >
+                <%= f.text_field :search_work_log, placeholder: "#{Date.current.year}", class: "form-control",readonly: true %> 
             </div>
           </td>
         </tr>

@@ -159,11 +159,13 @@ include AttendancesHelper
   end
   
   def work_log
+    binding.pry
+    @attendance = @user.attendances.where(activated: true).search_work_log(params[:search_work_log])
     @first_month = Date.current.change(month: 1)
     @last_month = Date.current.change(month: 12)
     @month = @first_month.month..@last_month.month
   end
-        
+  
   private
     def attendances_params
       params.require(:user).permit(attendances: [:started_at,:finished_at,:note,:one_month_instructor,:tomorrow])[:attendances]
