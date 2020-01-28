@@ -32,7 +32,11 @@ require 'rounding'
   def next_day_over_times(estimated,designated)
     format("%.2f",24 + (((estimated.floor_to(15.minutes)-designated.floor_to(15.minutes)) / 60)) / 60.0)
   end
-
+  
+  def work_log_choices
+    @user.attendances.all.map{|work_log| [work_log.worked_on,work_log.id]}
+  end
+  
   def change(options)
     ::Date.new(
       options.fetch(:year, year),
@@ -40,4 +44,5 @@ require 'rounding'
       options.fetch(:day, date)
     )
   end
+  
 end

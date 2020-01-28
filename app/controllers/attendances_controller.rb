@@ -159,8 +159,9 @@ include AttendancesHelper
   end
   
   def work_log
-    binding.pry
-    @attendance = @user.attendances.where(activated: true).search_work_log(params[:search_work_log])
+    submit_name_ids = Attendance.where("submit_name = ?", params[:submit_name]) .pluck(:id)
+    problem_name_ids = Attendance.where("worked_on LIKE (?)", "#{params[:worked_on]}").pluck(:id)
+    @submit_searched = Attendance.where("submit_id IN (?) or submit_id IN (?)", submit_name_ids, problem_name_ids)
     @first_month = Date.current.change(month: 1)
     @last_month = Date.current.change(month: 12)
     @month = @first_month.month..@last_month.month

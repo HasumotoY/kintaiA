@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200111022312) do
+ActiveRecord::Schema.define(version: 20200124041625) do
 
   create_table "attendances", force: :cascade do |t|
     t.date "worked_on"
@@ -37,6 +37,7 @@ ActiveRecord::Schema.define(version: 20200111022312) do
     t.string "outline"
     t.datetime "designated_end_work_time", default: "2020-01-12 09:00:00"
     t.string "one_month_approval"
+    t.string "submit_name"
   end
 
   create_table "bases", force: :cascade do |t|

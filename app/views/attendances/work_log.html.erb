@@ -1,24 +1,39 @@
 <% provide(:title,"勤怠ログ") %>
-
 <h1>勤怠ログ</h1>
 
 <div class="col-md-10 col-md-offset-1">  
-  <table class="table table-condenced table-bordered table-striped" id="work-log-table">
+  <table class="table table-condenced table-bordered table-striped work-log-table">
     <thead>
-      <button type="button" class="btn btn-default" >
-                  リセット
-      </button>
-      <%= form_with(model: @attendance, url: attendances_work_log_user_path(@user,@attendances), method: :get, local: true) do |f| %>
+      <input class="btn btn-default" type="reset"  value="リセット" >
+        <%= form_tag attendances_work_log_user_path,method: :get do |f| %>
+          <%= select_tag 'work_log_id',options_for_select(work_log_choices,@work_log),id: 'work_log' %>
+            <% @attendances.each do |attenadance| %>
+              <%= attendance.worked_on %>
+            <% end %>
+              
         <tr>
-          
           <td>
             <div class="input-group" id="year">
               <span class="input-group-btn">
-                  <%= f.select :search_work_log,[["#{Date.current.year}","#{Date.current.year}"],["#{Date.current.prev_year.year}","#{Date.current.prev_year.year}"],
-                    ["#{Date.current.prev_year(2).year}","#{Date.current.prev_year(2).year}"]],class: "btn btn-default" ,placeholder:"年"%>
+                <button type="button" class="btn btn-default dropdown-toggle"
+                  data-toggle="dropdown">
+                    年
+                <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                  <a id = "<%= Date.current.year %>",class="dropdown-item", href="#"><%= Date.current.year %></a>
+                  <a id = "<%= Date.current.prev_year.year %>",class="dropdown-item",href="#"><%= Date.current.prev_year.year %></a>
+                  <a id = "<%= Date.current.prev_year(2).year %>",class="dropdown-item",href="#"><%= Date.current.prev_year(2).year %></a>
+                </ul>
               </span>
-                <%= f.text_field :search_work_log, placeholder: "#{Date.current.year}", class: "form-control",readonly: true %> 
+              <% @attendances.each do |attendance| %>
+                <input type="text" placeholder="<%= attendance.worked_on.year %>",selected = "<%= attendance.worked_on.year %>", class="form-control" readonly >
+                <% break %>
+              <% end %>
             </div>
+            <script>
+              
+            </script>
           </td>
         </tr>
         <tr>
@@ -27,22 +42,28 @@
               <span class="input-group-btn">
                 <button type="button" class="btn btn-default dropdown-toggle"
                   data-toggle="dropdown">
-                    年
+                    月
                 <span class="caret"></span>
                 </button>
-                <ul class="dropdown-menu">
+                <ul class="dropdown-menu" role="dropdown-menu">
                   <% @month.each do |month| %>
-                    <li id = "<%= month %>"><a href="#"><%= month %></a></li>
+                    <li id = "<%= month %>",value="<%= month %>"><a href="#"><%= month %></a></li>
                   <% end %>
                 </ul>
               </span>
-                <input type="text" placeholder="<%= Date.current.month %>" class="form-control" readonly >
+              <% @attendances.each do |attendance| %>
+                <input type="text" placeholder="<%= attendance.worked_on.month %>",selected = "<%= attendance.worked_on.month %>", class="form-control" readonly >
+              <% break %>
+              <% end %>
             </div>
           </td>
         </tr>
-      <% end %>
-    </thead>
-    
+    </theaed>
+  </table>
+</div>
+      
+<div class="col-md-10 col-md-offset-1 table-responsive">
+  <table class="table table-condenced table-bordered table-striped">
     <tbody>
       <tr>
         <td>日付</td>
@@ -52,19 +73,6 @@
         <td>変更後退社時間</td>
         <td>指示者</td>
         <td>承認日</td>
-      </tr>
-      <% @attendances.each do |attendance| %>
-      <% if attendance.one_month_approval.present? %> 
-      <tr>
-        <td><%= l(attendance.worked_on, format: :short) %></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <% end %>
-        <% end %>
       </tr>
     </tbody>
   </table>
