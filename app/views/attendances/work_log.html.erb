@@ -20,9 +20,9 @@
                   <a id = "<%= Date.current.prev_year(2).year %>",class="dropdown-item",href="#"><%= Date.current.prev_year(2).year %></a>
                 </ul>
               </span>
-              <%=  form_with(url: attendances_work_log_user_path(@user,@attendances),method: :get,local: true,class: "form-control") do |f| %>
-                <%= f.text_field :worked_on,id: "#{Date.current.year}",readonly: true%>
-                <% end %>
+              <%=  form_with(scope: :search, url: attendances_work_log_user_path(@user,@attendances),method: :get,local: true,class: "form-control") do |f| %>
+                <%= f.collection_select (:worked_on, @user.attendances.all, :id,:worked_on,selected: @search_params[:worked_on],include_blank: t('helpers.select.include_blank')) %>
+              <% end %>
             </div>
             <script>
               
