@@ -5,12 +5,6 @@
   <table class="table table-condenced table-bordered table-striped work-log-table">
     <thead>
       <input class="btn btn-default" type="reset"  value="リセット" >
-        <%= form_tag attendances_work_log_user_path,method: :get do |f| %>
-          <%= select_tag 'work_log_id',options_for_select(work_log_choices,@work_log),id: 'work_log' %>
-            <% @attendances.each do |attenadance| %>
-              <%= attendance.worked_on %>
-            <% end %>
-              
         <tr>
           <td>
             <div class="input-group" id="year">
@@ -26,10 +20,9 @@
                   <a id = "<%= Date.current.prev_year(2).year %>",class="dropdown-item",href="#"><%= Date.current.prev_year(2).year %></a>
                 </ul>
               </span>
-              <% @attendances.each do |attendance| %>
-                <input type="text" placeholder="<%= attendance.worked_on.year %>",selected = "<%= attendance.worked_on.year %>", class="form-control" readonly >
-                <% break %>
-              <% end %>
+              <%=  form_with(url: attendances_work_log_user_path(@user,@attendances),method: :get,local: true,class: "form-control") do |f| %>
+                <%= f.text_field :worked_on,id: "#{Date.current.year}",readonly: true%>
+                <% end %>
             </div>
             <script>
               

@@ -15,3 +15,9 @@
 //= require bootstrap
 //= require turbolinks
 //= require_tree .
+//=require select2
+//= require select2
+$('.js-searchable').select2({
+  width: 200,
+  allowClear: true
+});
