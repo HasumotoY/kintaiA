@@ -18,6 +18,7 @@ gem 'jquery-rails'
 gem 'rounding'
 gem 'roo'
 gem 'pry-rails'
+gem 'select2-rails' 
 gem 'better_errors'
 gem 'binding_of_caller'
 # Use sqlite3 as the database for Active Record

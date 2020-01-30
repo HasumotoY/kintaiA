@@ -1,7 +1,7 @@
 class AttendancesController < ApplicationController
 include AttendancesHelper
   
-  before_action :set_user,only: [:edit_one_month,:work_log]
+  before_action :set_user,only: [:edit_one_month,:work_log,:ajax]
   before_action :logged_in_user, only: [:update,:edit_one_month]
   before_action :set_one_month,only: [:edit_one_month,:work_log]
   before_action :admin_or_correct_user, only: [:update,:edit_one_month]
@@ -159,11 +159,12 @@ include AttendancesHelper
   end
   
   def work_log
-    submit_name_ids = Attendance.where("submit_name = ?", params[:worked_on]) .pluck(:id)
-    @submit_searched = Attendance.where("id IN (?)", submit_name_ids)
     @first_month = Date.current.change(month: 1)
     @last_month = Date.current.change(month: 12)
     @month = @first_month.month..@last_month.month
+    if params[:worked_on]
+      @attendance = @user.attendances.where("%#{params[:worked_on]}%")
+    end
   end
   
   private

@@ -8,21 +8,12 @@
         <tr>
           <td>
             <div class="input-group" id="year">
-              <span class="input-group-btn">
-                <button type="button" class="btn btn-default dropdown-toggle"
-                  data-toggle="dropdown">
-                    年
-                <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu">
-                  <a id = "<%= Date.current.year %>",class="dropdown-item", href="#"><%= Date.current.year %></a>
-                  <a id = "<%= Date.current.prev_year.year %>",class="dropdown-item",href="#"><%= Date.current.prev_year.year %></a>
-                  <a id = "<%= Date.current.prev_year(2).year %>",class="dropdown-item",href="#"><%= Date.current.prev_year(2).year %></a>
-                </ul>
-              </span>
-              <%=  form_with(scope: :search, url: attendances_work_log_user_path(@user,@attendances),method: :get,local: true,class: "form-control") do |f| %>
-                <%= f.collection_select (:worked_on, @user.attendances.all, :id,:worked_on,selected: @search_params[:worked_on],include_blank: t('helpers.select.include_blank')) %>
+              <%= form_with(url: attendances_work_log_user_path(@user,@attendances),method: :get,local: true) do |f| %>
+                <%= f.select :worked_on %>
+                <%= f.submit 'Search'%><%= link_to 'Clear', attendances_work_log_user_path(@user,@attendances)%>
               <% end %>
+            
+             
             </div>
             <script>
               

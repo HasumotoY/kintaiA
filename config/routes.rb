@@ -9,11 +9,14 @@ Rails.application.routes.draw do
   #勤務中社員一覧
   get 'working_users', to:'users#working_users' 
   
+  
+  
   #拠点一覧
   resources :bases 
   
   resources :users do
     member do
+      get 'ajax', to: 'users#ajax'
       get 'edit_basic_info'
       patch 'update_basic_info'
       get 'notice_approval'
