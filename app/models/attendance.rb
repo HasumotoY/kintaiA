@@ -4,11 +4,8 @@ class Attendance < ApplicationRecord
   validates :worked_on, presence: true
   validates :note, length: {maximum: 50}
   
-  def self_search(search)
-    if search_work_log
-      where([worked_on, "#%{search_work_log}%"])
-    else
-      all
+    def self.search(search)
+      return Attendance.all unless search
+      Attendance.where('worked_on LIKE(?)',"%#{search}%")
     end
-  end
 end

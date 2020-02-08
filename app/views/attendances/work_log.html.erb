@@ -8,12 +8,15 @@
         <tr>
           <td>
             <div class="input-group" id="year">
-              <%= form_with(url: attendances_work_log_user_path(@user,@attendances),method: :get,local: true) do |f| %>
-                <%= f.select :worked_on %>
-                <%= f.submit 'Search'%><%= link_to 'Clear', attendances_work_log_user_path(@user,@attendances)%>
+              <%= form_with(url: attendances_work_log_user_path(@attendance),local: true,method: :get,class: "form-control") do |f| %>
+                <%= f.select :keyword ,[["#{Date.current.year}","#{Date.current.year}"],
+                  ["#{Date.current.prev_year.year}","#{Date.current.prev_year.year}"],
+                  ["#{Date.current.prev_year(2).year}","#{Date.current.prev_year(2).year}"]],placeholder: "年",class: "search-input" %>
+                  <%= f.submit "検索",class: "search-btn"  %>
+                  
               <% end %>
-            
-             
+              
+              
             </div>
             <script>
               
@@ -35,7 +38,7 @@
                   <% end %>
                 </ul>
               </span>
-              <% @attendances.each do |attendance| %>
+              <% @attendance.each do |attendance| %>
                 <input type="text" placeholder="<%= attendance.worked_on.month %>",selected = "<%= attendance.worked_on.month %>", class="form-control" readonly >
               <% break %>
               <% end %>
@@ -45,7 +48,7 @@
     </theaed>
   </table>
 </div>
-      
+     
 <div class="col-md-10 col-md-offset-1 table-responsive">
   <table class="table table-condenced table-bordered table-striped">
     <tbody>
@@ -58,6 +61,19 @@
         <td>指示者</td>
         <td>承認日</td>
       </tr>
+    <% @attendance.each do |attendance| %>       
+      <% if attendance.one_month_approval.present? %>
+      <tr>
+        <td><%= l(attendance.worked_on, format: :short)%></td>
+        <td><%= l(attendance.started_at_was, format: :time) %></td>
+        <td><%= l(attendance.finished_at_was, format: :time) %></td>
+        <td><%= l(attendance.started_at, format: :time) %></td>
+        <td><%= l(attendance.finished_at_was, format: :time) %></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <% end %>
+      <% end %>
     </tbody>
   </table>
 </div>

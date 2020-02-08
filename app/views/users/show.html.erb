@@ -189,7 +189,6 @@
               <p><%= User.where(id: day.one_month_instructor.to_i)[0][:name] %>に申請中 </p>
             <% elsif day.one_month_approval.present? %>
               <p>勤怠変更申請</p>
-              <% binding.pry %>
               <p><%= day.one_month_approval %></p>
             <% end %>
             

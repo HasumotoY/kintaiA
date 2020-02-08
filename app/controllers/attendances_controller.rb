@@ -1,9 +1,9 @@
 class AttendancesController < ApplicationController
 include AttendancesHelper
   
-  before_action :set_user,only: [:edit_one_month,:work_log,:ajax]
+  before_action :set_user,only: [:edit_one_month]
   before_action :logged_in_user, only: [:update,:edit_one_month]
-  before_action :set_one_month,only: [:edit_one_month,:work_log]
+  before_action :set_one_month,only: [:edit_one_month]
   before_action :admin_or_correct_user, only: [:update,:edit_one_month]
   
   UPDATE_ERROR_MSG = "登録に失敗しました。やり直してください。"
@@ -45,7 +45,7 @@ include AttendancesHelper
       flash[:danger] = "無効なデータがあったため、更新をキャンセルしました。"
       redirect_to attendances_edit_one_month_user_url(date: params[:date])
     end
-    rescue ActiveRecord::RecordInvalid
+  rescue ActiveRecord::RecordInvalid
       flash[:danger] = "無効なデータがあったため、更新をキャンセルしました。"
       redirect_to attendances_edit_one_month_user_url(date: params[:date])
   end
@@ -159,12 +159,10 @@ include AttendancesHelper
   end
   
   def work_log
+    @attendance = Attendance.search(params[:keyword])
     @first_month = Date.current.change(month: 1)
     @last_month = Date.current.change(month: 12)
     @month = @first_month.month..@last_month.month
-    if params[:worked_on]
-      @attendance = @user.attendances.where("%#{params[:worked_on]}%")
-    end
   end
   
   private
