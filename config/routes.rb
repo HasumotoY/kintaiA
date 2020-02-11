@@ -16,17 +16,17 @@ Rails.application.routes.draw do
   
   resources :users do
     member do
-      get 'ajax', to: 'users#ajax'
       get 'edit_basic_info'
       patch 'update_basic_info'
       get 'notice_approval'
       patch 'update_notice_approval'
       get 'attendances/edit_one_month'
       patch 'attendances/update_one_month'
-      get 'attendances/work_log'
-      get 'attendances/search_work_log', to:'attendance#search'
-      
     end
+    collection do
+      match 'attendances/work_log' => 'attendances#work_log',via: [:get,:post]
+    end
+    
   
     resources :attendances, only: :update  do
       member do

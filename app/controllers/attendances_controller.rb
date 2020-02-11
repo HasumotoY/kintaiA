@@ -159,7 +159,14 @@ include AttendancesHelper
   end
   
   def work_log
-    @attendance = Attendance.search(params[:keyword])
+    if params[:q].present?
+      @attendance = Attendance.ransack(search_params)
+      @work_log = @attendacne.result
+    else
+      params[:q] = {sorts: 'id desc'}
+      @attendance = Attendance.ransack()
+      @work_log = Attendance.all
+    end
     @first_month = Date.current.change(month: 1)
     @last_month = Date.current.change(month: 12)
     @month = @first_month.month..@last_month.month
@@ -198,4 +205,7 @@ include AttendancesHelper
       params.require(:attendance).permit(:overtime_approval,:overtime_change)
     end
     
+    def search_params
+      params.require(:q).permit(:sorts)
+    end
 end

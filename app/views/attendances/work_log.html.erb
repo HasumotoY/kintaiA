@@ -8,11 +8,12 @@
         <tr>
           <td>
             <div class="input-group" id="year">
-              <%= form_with(url: attendances_work_log_user_path(@attendance),local: true,method: :get,class: "form-control") do |f| %>
-                <%= f.select :keyword ,[["#{Date.current.year}","#{Date.current.year}"],
+              
+              <%= search_form_for @month, url: attendances_work_log_users_path,method: :post do |f| %>
+                <%= f.select :sorts ,[["#{Date.current.year}","#{Date.current.year}"],
                   ["#{Date.current.prev_year.year}","#{Date.current.prev_year.year}"],
-                  ["#{Date.current.prev_year(2).year}","#{Date.current.prev_year(2).year}"]],placeholder: "年",class: "search-input" %>
-                  <%= f.submit "検索",class: "search-btn"  %>
+                  ["#{Date.current.prev_year(2).year}","#{Date.current.prev_year(2).year}"]],placeholder: "年",class: "form-control" %>
+                  
                   
               <% end %>
               
@@ -68,7 +69,7 @@
         <td><%= l(attendance.started_at_was, format: :time) %></td>
         <td><%= l(attendance.finished_at_was, format: :time) %></td>
         <td><%= l(attendance.started_at, format: :time) %></td>
-        <td><%= l(attendance.finished_at_was, format: :time) %></td>
+        <td><%= l(attendance.finished_at, format: :time) %></td>
         <td></td>
         <td></td>
       </tr>
