@@ -1,7 +1,0 @@
-<div class="">
-  <%= form_with(url: ajax_user_path,method: :get,remote: true) do |f| %>
-   <%= f.hidden_field :id, value: attendance.id %>
-   <%= f.select :worked_on, options_for_select(["#{ Date.current.year}","#{ Date.current.prev_year.year}",
-     "#{ Date.current.prev_year(2).year}"],selected_cal),placeholder:"年",class: "btn btn-selected-drop" %>
-  <% end %>
-</div>

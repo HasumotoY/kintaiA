@@ -1,0 +1,58 @@
+- provide(:title,"勤怠ログ")
+%h1 &#x52E4;&#x6020;&#x30ED;&#x30B0;
+.col-md-10.col-md-offset-1
+  %table.table.table-condenced.table-bordered.table-striped.work-log-table
+    %thead
+      %input.btn.btn-default{:type => "reset", :value => "リセット"}
+        %tr
+          %td
+            #year.input-group
+            .listing-form-box
+              .listing-product-detail__work_log
+                =f.label '年',class: 'listind-default__label'
+                %span.listing-default--require 必須
+                .listing-select-wrapper 
+                  .listing-select-wrapper__box
+                    =f.select :work_year,@work_log,{},{class: 'listing-select-wrapper__box--select',id: 'work_log'
+                      %i.fas.fa-chevron-down.listing-select-wrapper__box--arrow-down
+                    }
+              
+        %tr
+          %td
+            #month.input-group
+              %span.input-group-btn
+                %button.btn.btn-default.dropdown-toggle{"data-toggle" => "dropdown", :type => "button"}
+                  \&#x6708;
+                  %span.caret
+                %ul.dropdown-menu{:role => "dropdown-menu"}
+                  - @month.each do |month|
+                    %li{:id => ""}
+                    = month
+                    ",value="#{month}"&gt;
+                    %a{:href => "#"}= month
+            - @attendance.each do |attendance|
+              %input{:placeholder => "", :type => "text"}/
+              = attendance.worked_on.month
+              ",selected = "#{attendance.worked_on.month}", class="form-control" readonly &gt;
+              - break
+.col-md-10.col-md-offset-1.table-responsive
+  %table.table.table-condenced.table-bordered.table-striped
+    %tbody
+      %tr
+        %td &#x65E5;&#x4ED8;
+        %td &#x5909;&#x66F4;&#x524D;&#x51FA;&#x793E;&#x6642;&#x9593;
+        %td &#x5909;&#x66F4;&#x524D;&#x9000;&#x793E;&#x6642;&#x9593;
+        %td &#x5909;&#x66F4;&#x5F8C;&#x51FA;&#x793E;&#x6642;&#x9593;
+        %td &#x5909;&#x66F4;&#x5F8C;&#x9000;&#x793E;&#x6642;&#x9593;
+        %td &#x6307;&#x793A;&#x8005;
+        %td &#x627F;&#x8A8D;&#x65E5;
+      - @attendance.each do |attendance|
+        - if attendance.one_month_approval.present?
+          %tr
+            %td= l(attendance.worked_on, format: :short)
+            %td= l(attendance.started_at_was, format: :time)
+            %td= l(attendance.finished_at_was, format: :time)
+            %td= l(attendance.started_at, format: :time)
+            %td= l(attendance.finished_at, format: :time)
+            %td
+            %td

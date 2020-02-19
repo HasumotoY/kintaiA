@@ -23,10 +23,6 @@ Rails.application.routes.draw do
       get 'attendances/edit_one_month'
       patch 'attendances/update_one_month'
     end
-    collection do
-      match 'attendances/work_log' => 'attendances#work_log',via: [:get,:post]
-    end
-    
   
     resources :attendances, only: :update  do
       member do
@@ -40,9 +36,14 @@ Rails.application.routes.draw do
         patch 'update_notice_approval'
         patch 'update_notice_one_month'
         patch 'update_notice_overtime'
+        get 'work_log',to: 'attendances#work_log'
       end
     end  
       collection { post :import }
+      collection do 
+          get 'get_worked_year',defaults: {format: 'json'}
+          get 'get_worked_month',defaults: {format: 'json'}
+        end
   end
   
   if defined? Rails::Console

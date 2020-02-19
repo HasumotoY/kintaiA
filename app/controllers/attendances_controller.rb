@@ -158,18 +158,35 @@ include AttendancesHelper
       redirect_to user_url(id: @attendance.overtime_instructor.to_i)
   end
   
+  #勤怠申請ログ
   def work_log
-    if params[:q].present?
-      @attendance = Attendance.ransack(search_params)
-      @work_log = @attendacne.result
-    else
-      params[:q] = {sorts: 'id desc'}
-      @attendance = Attendance.ransack()
-      @work_log = Attendance.all
-    end
+    @first_year = Date.current.prev_year(5)
+    @last_year = Date.current
+    @year = @first_year.year..@last_year.year
     @first_month = Date.current.change(month: 1)
     @last_month = Date.current.change(month: 12)
     @month = @first_month.month..@last_month.month
+    
+    @work_log = ["---"]
+　　
+    Attendance.where(approval: nil).each do |attendance|
+       @work_log << attendance.name
+    end
+  end
+  
+  def get_worked_year
+    @worked_year = Attendance.fird_by(name: "#{params[:attendance.name]}",approval: nil).children
+  end
+  
+  def get_worked_month
+    @worked_month = Attendance.fird_by(name: "#{params[:attendance.name]}",approval: nil).children
+  end
+  
+  def ajax
+    @selected_year = params[:id]
+    @selected_month = params[:id]
+    @work_log = Attendance.find(params[:id])
+    @variation = @work_log.variatoins.firstby(year: @selected_year,month: @selected_month)
   end
   
   private
