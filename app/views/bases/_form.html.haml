@@ -1,9 +1,0 @@
-= form_with(model: @base, local: true) do |f|
-  .col-md-6.col-md-offset-3
-    = f.label :base_number,class: "label-#{yield(:class_text)}"
-    = f.number_field :base_number,class:"form-control"
-    = f.label :name,class: "label-#{yield(:class_text)}"
-    = f.text_field :name,class:"form-control"
-    = f.label :bases_status,class: "label-#{yield(:class_text)}"
-    = f.text_field :bases_status,class:"form-control"
-    = f.submit yield(:button_text),class:"btn btn-primary btn-block btn-#{yield(:class_text)}"

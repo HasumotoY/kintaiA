@@ -1,8 +1,0 @@
-- provide(:title,"ホーム")
-.text-center.jumbotron
-  .container
-    %h1 勤怠管理システム
-    - unless logged_in?
-      %p= link_to "ログイン",login_path,class: "btn btn-primary btn-lg"
-      %p
-        ユーザー登録がまだの方は#{link_to "こちら",new_user_path}

@@ -1,7 +1,0 @@
-- if @user.errors.any?
-  #error_explanation
-    .alert.alert-danger
-      入力エラーが#{@user.errors.count}件あります。
-    %ul
-      - @user.errors.full_messages.each do |msg|
-        %li= msg
