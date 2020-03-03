@@ -3,38 +3,26 @@
 <div>
   <button class="btn btn-default" type="button" id="reset">リセット</button>
 </div>
+
 <div class="input-group" id="year">
-  <span class="input-group-btn">
-    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-      年
-      <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu" role="menu">
-      <% @year.each do |year| %>
-        <li id="<%= year %>" class="drop-list"><%= year %></li>
-      <% end %>
-    </ul>
-  </span>
-  <div class="col-xs-2 px-0">
-    <input type="text" class="form-control" placeholder="<%=@last_year.year%>" readonly >
-  </div>
+  <select name="year" class="year-form form-control">
+    <% @year.reverse_each do |year| %>
+      <option id=<%= year %>>
+        <%= year %>  
+      </option>
+    <% end %>  
+  </select>
 </div>
 <div class="input-group" id="month">
-  <span class="input-group-btn">
-    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-      月
-      <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu" role="menu">
-      <% @month.each do |month| %>
-        <li id="<%= month %>" class="drop-list"><%= month %></li>
-      <% end %>
-    </ul>
-  </span>
-  <div class="col-xs-2 px-0">
-    <input type="text" class="form-control" placeholder="<%=Date.current.month%>" readonly >
-  </div>
+  <select name="month" class="month-form form-control">
+    <% @month.each do |month| %>
+      <option id=<%= month %>>
+        <%= month %>  
+      </option>
+    <% end %>  
+  </select>
 </div>
+
 <div class="table-resposible">
   <table class= "table table-bordered table-striped">
     <thead>

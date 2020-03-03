@@ -166,12 +166,7 @@ include AttendancesHelper
     @first_month = Date.current.change(month: 1)
     @last_month = Date.current.change(month: 12)
     @month = @first_month.month..@last_month.month
-   # @attendance = Attendance.ransack(params[:q])
-    #@work_log = @attendance.result_by_worked_on_desc
-    #if params[:q].present?
-     # render json: @attendance.select("worked_on").map{|at| at.worked_on}.to_json
-  #  end
-    
+   
   end
   
  
