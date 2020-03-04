@@ -41,8 +41,7 @@ Rails.application.routes.draw do
     end  
       collection { post :import }
       collection do 
-          get 'get_worked_year',defaults: {format: 'json'}
-          get 'get_worked_month',defaults: {format: 'json'}
+          get 'search'
         end
   end
   

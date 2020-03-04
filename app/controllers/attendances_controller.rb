@@ -160,6 +160,7 @@ include AttendancesHelper
   
   #勤怠申請ログ
   def work_log
+    @attendance = Attendance.search(params[:work_log])
     @first_year = Date.current.prev_year(5)
     @last_year = Date.current
     @year = @first_year.year..@last_year.year
@@ -167,15 +168,6 @@ include AttendancesHelper
     @last_month = Date.current.change(month: 12)
     @month = @first_month.month..@last_month.month
    
-  end
-  
- 
-  
-  def ajax
-    @selected_year = params[:id]
-    @selected_month = params[:id]
-    @work_log = Attendance.find(params[:id])
-    @variation = @work_log.variatoins.firstby(year: @selected_year,month: @selected_month)
   end
   
   private

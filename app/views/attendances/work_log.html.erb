@@ -3,27 +3,25 @@
 <div>
   <button class="btn btn-default" type="button" id="reset">リセット</button>
 </div>
+<%= form_with(model: @attendances,url: work_log_user_attendance_path,method: :get,local: true) do |f| %>
 
 <div class="input-group" id="year">
-  <select name="year" class="year-form form-control">
-    <% @year.reverse_each do |year| %>
-      <option id=<%= year %>>
-        <%= year %>  
-      </option>
-    <% end %>  
-  </select>
+  <%= f.select :worked_on,options_for_select([[Date.current.year,Date.current.year],[Date.current.prev_year.year,Date.current.prev_year.year],
+  [Date.current.prev_year(2).year,Date.current.prev_year(2).year]]),placeholder: "年",class: "form-control search-year"%>
 </div>
+
 <div class="input-group" id="month">
-  <select name="month" class="month-form form-control">
+  <select name="month" class="month-form form-control" placeholder="月">
     <% @month.each do |month| %>
       <option id=<%= month %>>
         <%= month %>  
       </option>
     <% end %>  
   </select>
-</div>
-
-<div class="table-resposible">
+  <input class="form-control" >
+  </div>
+<% end %>
+<div class="table-resposible col-md-12">
   <table class= "table table-bordered table-striped">
     <thead>
       <tr>
@@ -36,8 +34,41 @@
         <th>承認日</th>
       </tr>
     </thead>
+    <% @attendance.each do |attendance| %>
     <tbody>
-      
+      <td><%= l(attendance.worked_on,format: :short) %></td>
+      <% if attendance.started_at_previous_change.present? && attendance.finished_at_previous_change.present? %>
+        <td><%= l(attendance.started_at_previous_change,format: :time) %></td>
+        <td><%= l(attendance.finished_at_previous_change,format: :time) %></td>
+      <% else %>
+        <td></td>
+        <td></td>
+      <% end %>
+      <% if attendance.approval.present? %>
+        <td><%= l(attendance.started_at,format: :time) %></td>
+        <td><%= l(attendance.finished_at,format: :time) %></td>
+      <% else %>
+        <td></td>
+        <td></td>
+      <% end %>
+      <td><%= attendance.approval %></td>
+      <td><%= attendance.approval %></td>
     </tbody>
+    <% end %>
   </table>
 </div>
+<script>
+  $(function(){
+  $('select').change(function(){
+    var val = $(this).val();
+    $('input').text(val);
+  
+  });
+  $('select').submit(function(){
+    
+    
+  
+    return false;
+  });
+});
+</script>
