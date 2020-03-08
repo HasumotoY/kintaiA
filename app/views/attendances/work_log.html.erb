@@ -4,11 +4,26 @@
   <button class="btn btn-default" type="button" id="reset">リセット</button>
 </div>
 <%= form_with(model: @attendances,url: work_log_user_attendance_path,method: :get,local: true) do |f| %>
-
 <div class="input-group" id="year">
-  <%= f.select :worked_on,options_for_select([[Date.current.year,Date.current.year],[Date.current.prev_year.year,Date.current.prev_year.year],
-  [Date.current.prev_year(2).year,Date.current.prev_year(2).year]]),placeholder: "年",class: "form-control search-year"%>
+  <span class="input-group-btn">
+    <button type="button" class="btn btn-default dropdown-toggle"
+      data-toggle="dropdown">
+      年
+      <span class="caret"></span>
+    </button> 
+    <ul class="dropdown-menu" role="menu">
+      <% @year.reverse_each do |year| %>
+        <li value="<%= year %>">
+          <a href="#"><%= year %></a>
+        </li>
+      <% end %>
+    </ul>
+  </span>
+  <div class="search-year">
+    <input type="text" class="form-control" placeholder="<%= Date.current.year %>" readonly>
+  </div>
 </div>
+<p></p>
 
 <div class="input-group" id="month">
   <select name="month" class="month-form form-control" placeholder="月">
@@ -21,8 +36,8 @@
   <input class="form-control" >
   </div>
 <% end %>
-<div class="table-resposible col-md-12">
-  <table class= "table table-bordered table-striped">
+<div class="col-md-12">
+  <table class= "table table-resposible table-condenced table-bordered table-hover table-striped">
     <thead>
       <tr>
         <th>日付</th>
@@ -34,8 +49,10 @@
         <th>承認日</th>
       </tr>
     </thead>
-    <% @attendance.each do |attendance| %>
     <tbody>
+    <tr>
+      <% @attendance.each do |attendance| %>
+    <% if attendance.approval.present? %>
       <td><%= l(attendance.worked_on,format: :short) %></td>
       <% if attendance.started_at_previous_change.present? && attendance.finished_at_previous_change.present? %>
         <td><%= l(attendance.started_at_previous_change,format: :time) %></td>
@@ -50,25 +67,34 @@
       <% else %>
         <td></td>
         <td></td>
-      <% end %>
+      </tr>
+        <% end %>
       <td><%= attendance.approval %></td>
       <td><%= attendance.approval %></td>
     </tbody>
+    <% else %>
+    <tbody>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <% end %>
     <% end %>
+    </tbody>
+    
   </table>
 </div>
 <script>
   $(function(){
-  $('select').change(function(){
+  $('#year').change(function(){
     var val = $(this).val();
-    $('input').text(val);
-  
+    $('p').text(val);
   });
-  $('select').submit(function(){
-    
-    
   
-    return false;
-  });
 });
 </script>
