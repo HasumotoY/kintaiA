@@ -205,7 +205,6 @@
     </tbody>
      
     <tfooter>
-      <%= form_with(model: @attendances, url: update_approval_user_attendance_path(user_id: @user.id, date: @first_day), local: true, method: :patch) do |f| %>
         <tr>
           <td colspan="3">在社時間合計</td>
           <td colspan="8">
@@ -215,26 +214,14 @@
           <td colspan="3"><%= format_basic_info(@user.basic_work_time).to_f*@worked_sum %></td>
           <td rowspan="2">
             <% if current_user?(@user) %>
-              <% @attendances.each do |at| %>
-                <% if at.instructor.nil? %>
-                  <p>所属長承認　未</p>
-                  <% break %>
-                <% elsif at.approval.present? && at.approval != "申請中" %>
-                    <p>所属長承認　<%= at.approval %></p>
-                    <% break %>
-                  <% elsif (at.instructor.present?  && at.approval.nil?) ||  at.approval == "申請中" %>
-                    <p>所属長承認</p>
-                    <p><%=User.where(id: at.instructor.to_i)[0][:name] %>に申請中</p>
-                    <% break %>
-                  <% end %>
-                <% end %>
-              <br><%= f.collection_select :instructor ,User.where(superior: true), :id, :name, {include_blank: true}, required: true, prompt: true, class: "form-control" %>
+            <%= form_with(model: @attendance, url: update_approval_user_attendance_path(user_id:@user.id,date:@first_day.month), local: true, method: :patch) do |f| %>
+              <br><%= f.collection_select :instructor, User.where(superior: true), :id, :name, {include_blank: true}, required: true, prompt: true, class: "form-control" %>
               <br><%= f.submit "申請",class: "btn btn-primary btn-block btn-attendance" %>
             <% end %>
-            
+          <% end %>
           </td>
         </tr>
-      <% end %>
+      
     </tfooter>
   </table>
 </div>
