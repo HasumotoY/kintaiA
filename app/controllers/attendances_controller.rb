@@ -84,7 +84,7 @@ include AttendancesHelper
         flash[:danger] = "申請処理が失敗しました"
       end
     end
-    redirect_to user_url(date: params[:date])
+    redirect_to @user
   end
   
   #所属長承認
