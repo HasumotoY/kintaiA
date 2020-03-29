@@ -161,14 +161,17 @@ include AttendancesHelper
   #勤怠申請ログ
   def work_log
     @user = User.find(params[:user_id])
-    @attendance = Attendance.search(params[:work_log])
+    if params[:work_log]
+      @attendance = @user.attendances.where('worked_on LIKE(?)',"%#{params[:work_log]}%")
+    else
+      @attendance = @user.attendances.where(one_month_approval: presence)
+    end
     @first_year = Date.current.prev_year(5)
     @last_year = Date.current
     @year = @first_year.year..@last_year.year
     @first_month = Date.current.change(month: 1)
     @last_month = Date.current.change(month: 12)
     @month = @first_month.month..@last_month.month
-   
   end
   
   private
