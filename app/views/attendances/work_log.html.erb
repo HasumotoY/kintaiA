@@ -3,7 +3,7 @@
 <div>
   <%= link_to "リセット",work_log_user_attendance_path(user_id: @user, date: @first_day), class: "btn btn-default" %>
 </div>
-<%= form_with(model: @attendances, url: work_log_user_attendance_path,local: true,method: :get) do |f| %>
+<%= form_with(url: work_log_user_attendance_path,local: true,method: :get) do |f| %>
   <%= f.select :work_year,@year.reverse_each.map{|year|[year,year]},prompt: true,class: "form-control form-work-log",placeholder:"年" %>
   <br><%= f.select :work_month,@month.each.map{|month|[month,month]},prompt: true,class: "form-control form-work-log",placeholder:"月" %>
   <br><%= f.submit "検索" %>
@@ -24,7 +24,6 @@
     <tbody>
       <% unless @attendance.nil? %>
         <% @attendance.each do |attendance| %>
-          <% if attendance.one_month_approval.present? %>
             <tr>
               <td><%= l(attendance.worked_on,format: :short) %></td>
                 <% if attendance.started_at_previous_change.present? && attendance.finished_at_previous_change.present? %>
@@ -45,20 +44,17 @@
                   <td></td>
                 <% end %>
                 <td><%= attendance.approval %></td>
-          <% elsif params[:work_year].nil? || params[:work_month].nil?  %>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <% break %>
-          <% end %>
         <% end %>
       <% end %>
+      <tr>  
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>      
     </tbody>
   </table>
 </div>
