@@ -6,8 +6,8 @@ class Attendance < ApplicationRecord
   
   def self.search(search1,search2)
     if search1 && search2
-      where(['worked_on',"#{search1}"])
-      where(['worked_on.month'"#{search2}"])
+      where(['worked_on LIKE ? AND worked_on LIKE ?',"%#{search1}%","%#{search2}%"])
+      binding.pry
     else
       all
     end
