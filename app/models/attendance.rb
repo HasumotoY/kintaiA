@@ -4,9 +4,19 @@ class Attendance < ApplicationRecord
   validates :worked_on, presence: true
   validates :note, length: {maximum: 50}
   
-  def self.search(year,month)
-  binding.pry
-      Attendance.where(worked_on: month.in_time_zone.all_month)
+  def self.search(year)
+    if search
+      Attendance.where(worked_on: year)
+    else
+      nil
+    end
+  end
   
+  def self.search(month)
+    if search
+        Attendance.search(params[:work_year]).where(worked_on: month)
+     else
+        nil
+    end    
   end
 end 
