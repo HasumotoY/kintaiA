@@ -161,7 +161,11 @@ include AttendancesHelper
   #勤怠申請ログ
   def work_log
     @user = User.find(params[:user_id])
-    @attendance = @user.attendances.search(params[:work_year],params[:work_month])
+    year = params[:work_year]
+    month = params[:work_month]
+    @attendance = @user.attendances.search(year, month)
+    year = params[:work_year]
+    binding.pry
     @first_year = Date.current.prev_year(5)
     @last_year = Date.current
     @year = @first_year.year..@last_year.year
