@@ -162,7 +162,7 @@ include AttendancesHelper
   def work_log
     @user = User.find(params[:user_id])
     if params[:work_year] && params[:work_month]
-      @attendance = @user.attendances.where(worked_on: params[:work_year]).where(worked_on: params[:work_year])
+      @attendance = @user.attendances.where(worked_on: "#{params[:work_year]}-#{params[:work_month]}".in_time_zone.all_day)
     elsif params[:work_year]
       @attendance = @user.attendances.where(worked_on: params[:work_year])
     elsif params[:work_month]
@@ -170,7 +170,6 @@ include AttendancesHelper
     else
       @attendance = nil
     end
-    binding.pry
     @year = (Date.current.year - 5)..Date.current.year
     @month = Date.current.change(month: 1).month..Date.current.change(month: 12).month
   end
