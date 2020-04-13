@@ -1,0 +1,5 @@
+current directory: /home/vagrant/app/rails/kintaiA/vendor/bundler/ruby/2.6.0/gems/childprocess-2.0.0/ext
+/home/vagrant/.rbenv/versions/2.6.5/bin/ruby mkrf_conf.rb
+
+current directory: /home/vagrant/app/rails/kintaiA/vendor/bundler/ruby/2.6.0/gems/childprocess-2.0.0/ext
+/home/vagrant/.rbenv/versions/2.6.5/bin/ruby -rrubygems /home/vagrant/app/rails/kintaiA/vendor/bundler/ruby/2.6.0/gems/rake-13.0.1/exe/rake RUBYARCHDIR\=/home/vagrant/app/rails/kintaiA/vendor/bundler/ruby/2.6.0/extensions/x86_64-linux/2.6.0/childprocess-2.0.0 RUBYLIBDIR\=/home/vagrant/app/rails/kintaiA/vendor/bundler/ruby/2.6.0/extensions/x86_64-linux/2.6.0/childprocess-2.0.0

@@ -1,0 +1,27 @@
+current directory: /home/vagrant/app/rails/kintaiA/vendor/bundler/ruby/2.6.0/gems/byebug-11.1.1/ext/byebug
+/home/vagrant/.rbenv/versions/2.6.5/bin/ruby -I /home/vagrant/.rbenv/versions/2.6.5/lib/ruby/2.6.0 -r ./siteconf20200413-20813-1u6crwa.rb extconf.rb
+creating Makefile
+
+current directory: /home/vagrant/app/rails/kintaiA/vendor/bundler/ruby/2.6.0/gems/byebug-11.1.1/ext/byebug
+make "DESTDIR=" clean
+
+current directory: /home/vagrant/app/rails/kintaiA/vendor/bundler/ruby/2.6.0/gems/byebug-11.1.1/ext/byebug
+make "DESTDIR="
+compiling breakpoint.c
+compiling byebug.c
+compiling context.c
+context.c: In function ‘dt_inherited’:
+context.c:641: 警告: function might be possible candidate for attribute ‘noreturn’
+トップレベル:
+cc1: 警告: unrecognized command line option "-Wno-tautological-compare"
+cc1: 警告: unrecognized command line option "-Wno-self-assign"
+cc1: 警告: unrecognized command line option "-Wno-parentheses-equality"
+cc1: 警告: unrecognized command line option "-Wno-constant-logical-operand"
+cc1: 警告: unrecognized command line option "-Wno-cast-function-type"
+compiling locker.c
+compiling threads.c
+linking shared-object byebug/byebug.so
+
+current directory: /home/vagrant/app/rails/kintaiA/vendor/bundler/ruby/2.6.0/gems/byebug-11.1.1/ext/byebug
+make "DESTDIR=" install
+/usr/bin/install -c -m 0755 byebug.so ./.gem.20200413-20813-jlab3r/byebug
