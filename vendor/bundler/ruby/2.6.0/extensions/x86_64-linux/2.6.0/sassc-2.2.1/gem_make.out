@@ -1,5 +1,5 @@
 current directory: /home/vagrant/app/rails/kintaiA/vendor/bundler/ruby/2.6.0/gems/sassc-2.2.1/ext
-/home/vagrant/.rbenv/versions/2.6.5/bin/ruby -I /home/vagrant/.rbenv/versions/2.6.5/lib/ruby/2.6.0 -r ./siteconf20200414-21409-j833kx.rb extconf.rb
+/home/vagrant/.rbenv/versions/2.6.5/bin/ruby -I /home/vagrant/.rbenv/versions/2.6.5/lib/ruby/2.6.0 -r ./siteconf20200415-8905-1an9gdo.rb extconf.rb
 creating Makefile
 
 current directory: /home/vagrant/app/rails/kintaiA/vendor/bundler/ruby/2.6.0/gems/sassc-2.2.1/ext
