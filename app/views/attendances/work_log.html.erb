@@ -34,7 +34,7 @@
                   <td></td>
                   <td></td>
                 <% end %>
-                
+
                 <% if attendance.one_month_approval.present? %>
                   <td><%= l(attendance.started_at,format: :time) %></td>
                   <td><%= l(attendance.finished_at,format: :time) %></td>
@@ -48,7 +48,7 @@
         <% end %>
       <% end %>
       <% else %>
-      <tr>  
+      <tr>
         <td></td>
         <td></td>
         <td></td>
@@ -56,7 +56,7 @@
         <td></td>
         <td></td>
         <td></td>
-      </tr>      
+      </tr>
       <% end %>
     </tbody>
   </table>

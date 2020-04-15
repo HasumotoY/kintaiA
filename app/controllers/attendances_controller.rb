@@ -161,12 +161,16 @@ include AttendancesHelper
   #勤怠申請ログ
   def work_log
     @user = User.find(params[:user_id])
+    @at = @user.attendances.where(params[:user_id])
     if params[:work_year] && params[:work_month]
-      @attendance = @user.attendances.where(worked_on: "#{params[:work_year]}",worked_on: "#{params[:work_month]}")
-    elsif params[:work_year]
-      @attendance = @user.attendances.where(worked_on: params[:work_year])
-    elsif params[:work_month]
-      @attendance = @user.attendances.where(worked_on: params[:work_month])
+      @at.each do |at_year|
+      @at_year = @user.attendances.where(at_year.worked_on.year == params[:work_year])
+      @at_year.each do |at_month|
+      unless at_month.nil?
+        @attendance = @user.attendances.where(at_year.worked_on.month == params[:work_month])
+      end
+    end
+  end
     else
       @attendance = nil
     end
