@@ -162,18 +162,18 @@ include AttendancesHelper
   def work_log
     @user = User.find(params[:user_id])
     @at = @user.attendances.where(params[:user_id])
-    if params[:work_year] && params[:work_month]
-      @at.each do |at_year|
-      @at_year = @user.attendances.where(at_year.worked_on.year == params[:work_year])
+    @at.each do |at_year|
+    if at_year.worked_on.year == params[:work_year].to_i
+      @at_year = @user.attendances.where(params[:user_id])
       @at_year.each do |at_month|
-      unless at_month.nil?
-        @attendance = @user.attendances.where(at_year.worked_on.month == params[:work_month])
+        if at_year.worked_on.month == params[:work_month].to_i
+          @work_log = @user.attendances.where(params[:user_id])
+        end
       end
+    else
+      @work_log = nil
     end
   end
-    else
-      @attendance = nil
-    end
     @year = (Date.current.year - 5)..Date.current.year
     @month = Date.current.change(month: 1).month..Date.current.change(month: 12).month
   end

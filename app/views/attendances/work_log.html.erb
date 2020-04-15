@@ -22,8 +22,9 @@
       </tr>
     </thead>
     <tbody>
-      <% unless @attendance.nil? %>
-        <% @attendance.each do |attendance| %>
+      <% unless @work_log.nil? %>
+      <% binding.pry %>
+        <% @work_log.each do |attendance| %>
           <% if attendance.one_month_approval.present? %>
             <tr>
               <td><%= l(attendance.worked_on,format: :short) %></td>
