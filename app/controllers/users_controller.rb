@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   include AttendancesHelper
-  
+
   before_action :set_user, only: [:show,:edit,:update, :destroy, :edit_basic_info, :update_basic_info]
   before_action :logged_in?, only: [:index,:show,:edit,:update]
   before_action :logged_in_user, only: [:show,:edit,:update,:destroy, :edit_basic_info, :update_basic_info]
@@ -8,14 +8,14 @@ class UsersController < ApplicationController
   before_action :admin_or_correct_user, only: [:edit,:update]
   before_action :set_one_month, only: :show
   before_action :superior_or_correct_user, only: :show
-  
+
   EDIT_ERROR_MESSAGE = "入力内容に問題があります。"
-  
-  
+
+
   def new
     @user = User.new
   end
-  
+
   def create
     @user = User.new(user_params)
     if @user.save
@@ -26,7 +26,7 @@ class UsersController < ApplicationController
       render new_user_path
     end
   end
-  
+
   def show
     @users = User.all
     @users.each do |user|
@@ -34,27 +34,27 @@ class UsersController < ApplicationController
     end
     @approval_numbers = Attendance.where(instructor: @user,approval: nil,worked_on: @first_day).count
     @one_month_numbers = Attendance.where(one_month_instructor: @user,one_month_approval: nil).count
-    @overtime_numbers = Attendance.where(overtime_instructor: @user, overtime_approval: nil).count
+    @overtime_numbers = Attendance.where(overtime_instructor: @user,overtime_change: false).count
     @worked_sum = @attendances.where.not(started_at: nil).count
   end
-  
+
   def index
     @users = User.all
   end
-  
+
   def search
     if params[:search] == ""
       render users_url
         flash[:danger] = "検索結果がありません"
-    else    
+    else
        @users = User.paginate(page: params[:page]).search(params[:search])
        render users_url
-    end 
+    end
   end
-  
+
   def edit
   end
-  
+
   def update
     if @user.update_attributes(user_params)
       flash[:success]  ="#{@user.name}さんの情報を更新しました。"
@@ -70,7 +70,7 @@ class UsersController < ApplicationController
     flash[:success]  ="#{@user.name}さんの情報を削除しました。"
     redirect_to users_path
   end
-  
+
   def import
     if User.import(params[:file])
       flash[:success] = "ユーザー情報を追加しました。"
@@ -79,10 +79,10 @@ class UsersController < ApplicationController
     end
     redirect_to users_url
   end
-  
+
   def working_users
   end
-  
+
   def update_overtime
     overtime_params.each do |id,item|
     attendance = Attendance.find(params[:id])
@@ -94,9 +94,9 @@ class UsersController < ApplicationController
     redirect_to current_user
     end
   end
-  
+
   private
-  
+
     def user_params
       params.require(:user).permit(:name,:email,:password,:password_confirmation,:affiliation,
                                     :employee_number,:uid, :basic_work_time,:id,
