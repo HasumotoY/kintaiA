@@ -15,14 +15,14 @@
         <td>在社時間</td>
         <td>備考</td>
         <td>指示者確認㊞</td>
-      </tr> 
+      </tr>
     </thead>
       <% @attendances.each do |day| %>
         <%=f.fields_for "attendances[]", day do |attendance| %>
           <tbody>
             <tr>
               <td><%= l(day.worked_on, format: :short) %></td>
-      
+
               <td>
                 <% if day.worked_on.wday == 6 %>
                   <font color="blue">土</font>
@@ -41,7 +41,7 @@
                 <td><%= attendance.time_field :finished_at, class: "form-control" %></td>
                 <td><%= attendance.check_box :tomorrow,class: "check-box" %></td>
               <% end %>
-              
+
               <td>
                 <% if day.started_at.present? && day.finished_at.present? %>
                   <%= working_times(day.started_at,day.finished_at) %>
@@ -49,19 +49,19 @@
               </td>
               <% if Date.current <= day.worked_on %>
                 <td><%= attendance.text_field :note ,class: "form-control",readonly: true %></td>
-                <td><%= attendance.collection_select :one_month_instructor, User.where(superior: true), :id,:name,{include_blank: true}, class: "form-control",readonly: true %></td>
+                <td><%= attendance.collection_select :one_month_instructor, User.where(superior: true).where.not(id: @user.id), :id,:name,{include_blank: true}, class: "form-control",readonly: true %></td>
               <% else %>
                   <td><%= attendance.text_field :note ,class: "form-control" %></td>
-                <td><%= attendance.collection_select :one_month_instructor ,User.where(superior: true), :id, :name, {include_blank: true},prompt: true, class: "form-control" %></td>
+                <td><%= attendance.collection_select :one_month_instructor ,User.where(superior: true).where.not(id: @user.id), :id, :name, {include_blank: true},prompt: true, class: "form-control" %></td>
               <% end %>
               <% end %>
             </tr>
           </tbody>
-        
-      <% end %>  
-    </div>  
+
+      <% end %>
+    </div>
   </table>
-  
+
   <div class="center">
     <%= link_to "キャンセル",user_path(date: @first_day), class: "btn btn-primary btn-edit-attendances" %>
     <%= f.submit "編集を保存する", class: "btn btn-primary btn-edit-attendances" %>

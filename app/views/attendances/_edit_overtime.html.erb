@@ -30,20 +30,20 @@
                 <% else %>
                   <%= $days_of_the_week[@attendance.worked_on.wday] %>
                 <% end %>
-              </td>  
-              
+              </td>
+
               <td><%= f.time_field  :end_estimated_time,required: true,class: "form-control" %></td>
               <td><%= f.check_box :overtime_tomorrow %></td>
               <td><%= f.text_field :outline, class: "form-control" %></td>
-              
-                <td><%= f.collection_select :overtime_instructor,User.where(superior: true), :id, :name, {include_blank: true}, prompt: true,required: true, class: "form-control"  %></td>
-              
-              
+
+                <td><%= f.collection_select :overtime_instructor,User.where(superior: true).where.not(id: @user.id), :id, :name, {include_blank: true}, prompt: true,required: true, class: "form-control"  %></td>
+
+
             </tr>
         </tbody>
         </table>
         <div class="center">
-          <%= f.submit "変更を送信する",class:"btn btn-primary btn-overtime" %>    
+          <%= f.submit "変更を送信する",class:"btn btn-primary btn-overtime" %>
           <button type="button" class="btn btn-default btn-overtime" data-dismiss="modal">
             キャンセル
           </button>
@@ -52,4 +52,3 @@
     </div>
   </div>
 </div>
-  
