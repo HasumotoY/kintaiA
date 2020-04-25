@@ -30,7 +30,7 @@ class UsersController < ApplicationController
   def show
     @users = User.all
     @users.each do |user|
-    @attendance = @user.attendances.where(user_id: @user.id)
+    @attendance = @user.attendances.where(approval: presence)
     end
     @approval_numbers = Attendance.where(instructor: @user,approval: nil,worked_on: @first_day).count
     @one_month_numbers = Attendance.where(one_month_instructor: @user,one_month_change: false).count

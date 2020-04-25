@@ -75,10 +75,11 @@ include AttendancesHelper
   #所属長申請
   def update_approval
     @user = User.find(params[:user_id])
-    @attendance = @user.attendances.where(user_id: @user.id)
+    @attendance = @user.attendances.where(approval: true)
     @attendance.each do |attendance|
-      if attendance.approval.nil? || @approval_numbers.to_i == 0
+      if @approval_numbers.to_i == 0
         attendance.update_attributes(approval_params)
+        binding.pry
         flash[:success] = "所属長承認申請完了"
       else
         flash[:danger] = "申請処理が失敗しました"
@@ -102,7 +103,7 @@ include AttendancesHelper
       elsif @attendance.approval == "承認" || @attendance.approval == "否認"
         flash[:success] = "申請完了"
       end
-    redirect_to user_url(id: @attendance.instructor.to_i)
+    redirect_to user_url(id: @user.id)
   end
 
   #勤怠変更申請
@@ -149,10 +150,10 @@ include AttendancesHelper
   def update_notice_overtime
     @user = User.find(params[:user_id])
     @attendance = @user.attendances.find(params[:id])
-    @attendance.update_attributes(notice_overtime_params)
     if @attendance.overtime_change == false
       flash[:danger] = "申請処理が失敗しました"
     elsif @attendance.overtime_approval == "承認" || @attendance.overtime_approval == "否認"
+      @attendance.update_attributes(notice_overtime_params)
       flash[:success] = "申請処理が完了しました"
       end
       redirect_to user_url(id: @attendance.overtime_instructor.to_i)
