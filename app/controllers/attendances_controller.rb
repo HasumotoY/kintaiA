@@ -1,9 +1,9 @@
 class AttendancesController < ApplicationController
 include AttendancesHelper
 
-  before_action :set_user,only: [:edit_one_month,:update_approval,:update_notice_approval]
+  before_action :set_user,only: [:edit_one_month,:update_approval,:notice_approval,:update_notice_approval]
   before_action :logged_in_user, only: [:update,:edit_one_month]
-  before_action :set_one_month,only: [:edit_one_month,:update_approval,:update_notice_approval]
+  before_action :set_one_month,only: [:edit_one_month,:update_approval,:notice_approval,:update_notice_approval]
   before_action :admin_or_correct_user, only: [:update,:edit_one_month]
 
   UPDATE_ERROR_MSG = "登録に失敗しました。やり直してください。"
@@ -52,13 +52,14 @@ include AttendancesHelper
 
   #残業申請機能
   def edit_overtime
-    @user = User.find(params[:user_id])
-    @attendance = @user.attendances.find(params[:id])
+    @approval_user = User.find(params[:user_id])
+    @attendance = @approval_user.attendances.find(params[:id])
   end
 
   def update_overtime
-    @user = User.find(params[:user_id])
-    @attendance = @user.attendances.find(params[:id])
+    binding.pry
+    @approval_user = User.find(params[:user_id])
+    @attendance = @approval_user.attendances.find(params[:id])
       if @attendance.overtime_approval.nil?
           @attendance.update_attributes(overtime_params)
           User.all.each do |user|
@@ -89,21 +90,21 @@ include AttendancesHelper
   #所属長承認
   def notice_approval
     @user = User.find(params[:user_id])
-    @attendance = @user.attendances.where(worked_on: Date.current.beginning_of_month)
-    binding.pry
+    @attendance = @user.attendances.where(worked_on: @first_day)
   end
 
   def update_notice_approval
-
-    @attendance = @user.attendances.find(params[:id])
-    binding.pry
-      if @attendance.change == false
+    @user = User.find(params[:user_id])
+    @user.attendances.where(worked_on: @first_day).each do |attendance|
+binding.pry
+  attendance.update_attributes(notice_approval_params)
+      if attendance.change == false
         flash[:danger] = "申請処理が失敗しました"
-      elsif @attendance.approval == "承認" || @attendance.approval == "否認"
-        @attendance.update_attributes(notice_approval_params)
+      elsif attendance.approval == "承認" || attendance.approval == "否認"
         flash[:success] = "申請完了"
       end
-    redirect_to @user
+    redirect_to user_url(id: attendance.instructor.to_i,date: @first_day)
+    end
   end
 
   #勤怠変更申請

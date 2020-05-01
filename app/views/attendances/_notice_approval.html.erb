@@ -7,6 +7,7 @@
       <h1 class="modal-title">【 <%= @user.name %>からの一か月分の勤怠申請】</h1>
     </div>
     <div class=modal-body>
+      <% binding.pry %>
       <%= form_with(model: @attendance, url: update_notice_approval_user_attendance_path(date: @first_day),local: true,method: :patch) do |f| %>
       <table class="table table-condenced table-bordered table-striped" id="modal-teble">
         <thead>
@@ -19,7 +20,7 @@
         </thead>
         <tbody>
           <tr>
-            <td><%= l(@attendance.worked_on,format: :month) %>月</td>
+              <td><%= l(@attendance.worked_on,format: :month) %>月</td>
             <td><%= f.select :approval, ["なし","申請中","承認","否認"], {include_blank: true}, prompt: true, class: "form-control"%></td>
             <td><%= f.check_box :change %></td>
             <td><%= link_to "確認", user_path(@user), class: "btn btn-primary" %></td>

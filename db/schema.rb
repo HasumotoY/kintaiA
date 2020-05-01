@@ -35,7 +35,7 @@ ActiveRecord::Schema.define(version: 20200124041625) do
     t.boolean "overtime_tomorrow", default: false
     t.datetime "end_estimated_time"
     t.string "outline"
-    t.datetime "designated_end_work_time", default: "2020-04-25 09:00:00"
+    t.datetime "designated_end_work_time", default: "2020-05-02 09:00:00"
     t.string "one_month_approval"
     t.string "submit_name"
   end
@@ -54,9 +54,9 @@ ActiveRecord::Schema.define(version: 20200124041625) do
     t.string "email"
     t.string "affiliation"
     t.string "uid"
-    t.datetime "basic_work_time", default: "2020-04-24 23:00:00"
-    t.datetime "designated_work_start_time", default: "2020-04-25 00:00:00"
-    t.datetime "designated_work_end_time", default: "2020-04-25 09:00:00"
+    t.datetime "basic_work_time", default: "2020-05-01 23:00:00"
+    t.datetime "designated_work_start_time", default: "2020-05-02 00:00:00"
+    t.datetime "designated_work_end_time", default: "2020-05-02 09:00:00"
     t.boolean "superior", default: false
     t.boolean "admin", default: false
     t.string "password_digest"
