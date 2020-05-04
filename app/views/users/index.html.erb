@@ -4,23 +4,24 @@
 
 <h1>ユーザー一覧</h1>
 
-    
+
   <div class="col-md-10 col-md-offset-1">
     <div class="csv_zone">
       <%= form_tag import_users_path, multipart: true do %>
         <%= file_field_tag :file , class: "form-csv"%>
         <%= submit_tag "CSVファイルをインポート",class: "btn btn-primary btn-csv" %>
-      <% end %>  
+      <% end %>
     </div>
 
     <% @users.each do |user| %>
       <div class="row">
         <ul id="users-table">
-          <% unless user.admin? %>
             <li>
               <%= user.name %>
-              <br>|<%= link_to "削除",user, method: :delete, 
+              <% unless user.admin? %>
+              <br>|<%= link_to "削除",user, method: :delete,
                 data:{confirm: "削除してもよろしいですか？"}, class: "btn btn-primary" %>
+                <% end %>
             </li>
             <div class="panel-group">
               <div class="panel panel-default">
@@ -33,14 +34,13 @@
                   <div class="panel-body">
                     <div class="row">
                       <div class="col-md-12">
-                        <%= render 'form',{user: user} %>  
+                        <%= render 'form',{user: user} %>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          <% end %>
         </ul>
       </div>
     <% end %>
