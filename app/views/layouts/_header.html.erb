@@ -1,6 +1,6 @@
 <header class="nav navbar-fixed-top navbar-inverse">
   <div class="container">
-    
+
     <%= link_to "勤怠管理システム" ,root_path ,id: "logo" %>
       <% if logged_in? %>
         <% if current_user.admin? %>
@@ -9,9 +9,9 @@
           <div class="superior-font">上長画面</div>
         <% else %>
           <div class="users-font">一般ユーザー画面</div>
-        <% end %> 
-      <% end %>   
-    
+        <% end %>
+      <% end %>
+
     <div class="navbar-header">
       <button tyoe="button" class="navbar-toggle" data-toggle="collapse" data-target="#gnavi">
         <span class="sr-only">メニュー</span>
@@ -20,18 +20,18 @@
         <span class="icon-bar"></span>
       </button>
     </div>
-    
+
     <nav id="gnavi" class="collapse navbar-collapse">
       <ul class="nav navbar-nav navbar-right">
-        
+
         <% if logged_in? %>
           <li><%= link_to "トップへ", root_path %></li>
           <% if  current_user.admin? %>
             <li><%= link_to "ユーザー一覧",users_path %></li>
             <li><%= link_to "出勤社員一覧", working_users_path %></li>
             <li><%= link_to "拠点情報の修正",bases_path %></li>
-            <li><%= link_to "基本情報の修正", edit_basic_info_user_path(current_user) %></li>
-            
+            <li><%= link_to "基本情報の更新", edit_basic_info_user_path(current_user) %></li>
+
           <% end %>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">

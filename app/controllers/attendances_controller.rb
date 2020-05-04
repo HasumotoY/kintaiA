@@ -28,6 +28,10 @@ include AttendancesHelper
   end
 
   def  edit_one_month
+    if @user.admin?
+      redirect_to root_path
+      flash[:danger]="ページがありません"
+    end
   end
 
   def update_one_month
@@ -40,9 +44,8 @@ include AttendancesHelper
       end
       flash[:success] = "勤怠を更新しました。"
       redirect_to user_url(date: params[:date])
-
     else
-      flash[:danger] = "無効なデータがあったため、更新をキャンセルしました。"
+      flash[:danger] = "無効なデータがあったため,更新をキャンセルしました。"
       redirect_to attendances_edit_one_month_user_url(date: params[:date])
     end
   rescue ActiveRecord::RecordInvalid
@@ -95,16 +98,28 @@ include AttendancesHelper
 
   def update_notice_approval
     @user = User.find(params[:user_id])
+<<<<<<< HEAD
     @user.attendances.where(worked_on: @first_day).each do |attendance|
 binding.pry
   attendance.update_attributes(notice_approval_params)
+=======
+    @attendance = @user.attendances.where(user_id: @user.id,worked_on: Date.current.beginning_of_month)
+    @attendance.each do |attendance|
+      attendance.update_attributes(notice_approval_params)
+>>>>>>> superior
       if attendance.change == false
         flash[:danger] = "申請処理が失敗しました"
       elsif attendance.approval == "承認" || attendance.approval == "否認"
         flash[:success] = "申請完了"
       end
+<<<<<<< HEAD
     redirect_to user_url(id: attendance.instructor.to_i,date: @first_day)
     end
+=======
+    redirect_to user_url(id: attendance.instructor.to_i)
+    break
+  end
+>>>>>>> superior
   end
 
   #勤怠変更申請
