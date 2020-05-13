@@ -28,11 +28,6 @@ class UsersController < ApplicationController
   end
 
   def show
-<<<<<<< HEAD
-    @users = User.all
-    @users.each do |user|
-    @attendance = @user.attendances.where(approval: presence)
-=======
     unless @user.admin?
       @users = User.all
       @users.each do |user|
@@ -45,7 +40,6 @@ class UsersController < ApplicationController
     else
       redirect_to root_path
       flash[:danger]="ページがありません"
->>>>>>> superior
     end
   end
 
