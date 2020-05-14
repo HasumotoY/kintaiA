@@ -4,8 +4,8 @@
   <%#= link_to "リセット",work_log_user_attendance_path(user_id: @user, date: @first_day), class: "btn btn-default" %>
 </div>
 <%= form_with(url: work_log_user_attendance_path,local: true,method: :get) do |f| %>
-  <%= f.select :work_year,@year.reverse_each.map{|year|[year,year]},prompt: true,class: "form-control form-work-log",placeholder:"年" %>
-  <br><%= f.select :work_month,@month.each.map{|month|[month,month]},prompt: true,class: "form-control form-work-log",placeholder:"月" %>
+  <%= f.select :work_year,@year.reverse_each.map{|year|[year,year]},prompt: true,class: "form-control",placeholder:"年" %>
+  <br><%= f.select :work_month,@month.each.map{|month|[month,month]},prompt: true,class: "form-control",placeholder:"月" %>
   <br><%= f.submit "検索", :worked_on  => nil %>
 <% end %>
 <div class="col-md-12">
