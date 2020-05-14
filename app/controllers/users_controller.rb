@@ -79,10 +79,11 @@ class UsersController < ApplicationController
   def import
     if User.import(params[:file])
       flash[:success] = "ユーザー情報を追加しました。"
+      render users_url
     else
       flash[:danger] = "情報の更新に失敗しました。<br>" + @user.errors.full_messages.join('<br>')
+      render users_url
     end
-    render users_url
   end
 
   def working_users
