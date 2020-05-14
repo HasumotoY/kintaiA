@@ -1,5 +1,5 @@
 current directory: /home/vagrant/app/rails/kintaiA/vendor/bundler/ruby/2.6.0/gems/pg-0.20.0/ext
-/home/vagrant/.rbenv/versions/2.6.5/bin/ruby -I /home/vagrant/.rbenv/versions/2.6.5/lib/ruby/2.6.0 -r ./siteconf20200413-20986-1kpuuvn.rb extconf.rb
+/home/vagrant/.rbenv/versions/2.6.5/bin/ruby -I /home/vagrant/.rbenv/versions/2.6.5/lib/ruby/2.6.0 -r ./siteconf20200515-10242-139im9q.rb extconf.rb
 checking for pg_config... no
 No pg_config... trying anyway. If building fails, please try again with
  --with-pg-config=/path/to/pg_config

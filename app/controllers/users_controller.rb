@@ -49,11 +49,11 @@ class UsersController < ApplicationController
 
   def search
     if params[:search] == ""
-      render users_url
+      render users_path
         flash[:danger] = "検索結果がありません"
     else
        @users = User.paginate(page: params[:page]).search(params[:search])
-       render users_url
+       render users_path
     end
   end
 
@@ -63,7 +63,7 @@ class UsersController < ApplicationController
   def update
     if @user.update_attributes(user_params)
       flash[:success]  ="#{@user.name}さんの情報を更新しました。"
-      redirect_to users_path
+      redirect_to users_url
     else
       flash[:danger]="情報の更新が失敗しました。<br>" + @user.errors.full_messages.join('<br>')
       redirect_to users_url
@@ -73,13 +73,14 @@ class UsersController < ApplicationController
   def destroy
     @user.destroy
     flash[:success]  ="#{@user.name}さんの情報を削除しました。"
-    redirect_to users_path
+    redirect_to users_url
   end
 
   def import
     if User.import(params[:file])
       flash[:success] = "ユーザー情報を追加しました。"
     else
+      binding.pry
       flash[:danger] = "情報の更新に失敗しました。"
     end
     redirect_to users_url

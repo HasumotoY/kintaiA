@@ -180,8 +180,8 @@ include AttendancesHelper
 
   #勤怠申請ログ
   def work_log
-    @user = User.find(params[:user_id])
-    @at = @user.attendances.where(params[:user_id])
+    @user = User.find(params[:id])
+    @at = @user.attendances.where(id: @user.id)
     @at.each do |at_year|
     if at_year.worked_on.year == params[:work_year].to_i
       @at_year = @user.attendances.where(params[:user_id])
