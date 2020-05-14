@@ -1,9 +1,9 @@
 class AttendancesController < ApplicationController
 include AttendancesHelper
 
-  before_action :set_user,only: [:edit_one_month,:update_approval,:notice_approval,:update_notice_approval]
+  before_action :set_user,only: [:edit_one_month,:update_approval,:update_notice_one_month]
   before_action :logged_in_user, only: [:update,:edit_one_month]
-  before_action :set_one_month,only: [:edit_one_month,:update_approval,:notice_approval,:update_notice_approval]
+  before_action :set_one_month,only: [:edit_one_month,:update_approval]
   before_action :admin_or_correct_user, only: [:update,:edit_one_month]
 
   UPDATE_ERROR_MSG = "登録に失敗しました。やり直してください。"
@@ -92,7 +92,7 @@ include AttendancesHelper
   #所属長承認
   def notice_approval
     @user = User.find(params[:user_id])
-    @attendance = @user.attendances.where(worked_on: @first_day)
+    @attendance = @user.attendances.where(worked_on: Date.current.beginning_of_month)
   end
 
   def update_notice_approval
@@ -131,18 +131,24 @@ include AttendancesHelper
   #勤怠変更承認
   def notice_one_month
     @user = User.find(params[:user_id])
-    @attendance = @user.attendances.find(params[:id])
+    binding.pry
+    @attendances.each do |attendance|
+      @at = attendance
+    end
+    binding.pry
   end
 
   def update_notice_one_month
     @user = User.find(params[:user_id])
     @attendance = @user.attendances.find(params[:id])
-    @attendance.update_attributes(notice_one_month_params)
-    if @attendance.one_month_change == false
+    @attendance.each do |attendance|
+    attendance.update_attributes(notice_one_month_params)
+    if attendance.one_month_change == false
       flash[:danger] = "申請処理が失敗しました"
-    elsif @attendance.one_month_approval == "承認" || @attendance.one_month_approval == "否認"
+    elsif attendance.one_month_approval == "承認" || attendance.one_month_approval == "否認"
       flash[:success] = "申請処理が完了しました"
       end
+    end
       redirect_to user_url(id: @attendance.one_month_instructor.to_i)
   end
 
