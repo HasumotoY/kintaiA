@@ -82,7 +82,7 @@ class UsersController < ApplicationController
     else
       flash[:danger] = "情報の更新に失敗しました。<br>" + @user.errors.full_messages.join('<br>')
     end
-    redirect_to users_url
+    render users_url
   end
 
   def working_users
