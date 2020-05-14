@@ -44,7 +44,7 @@ class UsersController < ApplicationController
   end
 
   def index
-    @users = User.all.order(id: "ACS")
+    @users = User.all.order(id: "ASC")
   end
 
   def search
