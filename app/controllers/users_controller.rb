@@ -80,7 +80,7 @@ class UsersController < ApplicationController
     if User.import(params[:file])
       flash[:success] = "ユーザー情報を追加しました。"
     else
-      flash[:danger] = "情報の更新に失敗しました。<br>" + @user.errors.full_messages.join('<br>')
+      flash[:danger] = "情報の更新に失敗しました。"
     end
     redirect_to users_url
   end
