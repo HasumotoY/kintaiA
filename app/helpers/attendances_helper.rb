@@ -1,9 +1,14 @@
 module AttendancesHelper
 require 'rounding'
 
-  def working_times(start,finish)
-    format("%.2f",(((finish.floor_to(15.minutes)-start.floor_to(15.minutes)) / 60)) / 60.0)
+  def working_times(attendance)
+    if attendance.tomorrow == false
+      format("%.2f",(((attendance.finished_at.floor_to(15.minutes)-attendance.started_at.floor_to(15.minutes)) / 60)) / 60.0)
+    else
+      format("%.2f",(((attendance.finished_at.floor_to(15.minutes)-attendance.started_at.floor_to(15.minutes)) / 60)) / 60.0 + 24)
+    end
   end
+
 
   def attendances_invalid?
     attendances = true

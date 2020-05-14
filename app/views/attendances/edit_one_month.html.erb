@@ -44,21 +44,19 @@
 
               <td>
                 <% if day.started_at.present? && day.finished_at.present? %>
-                  <%= working_times(day.started_at,day.finished_at) %>
+                  <%= working_times(day) %>
                 <% end %>
               </td>
               <% if Date.current < day.worked_on %>
-              <%# binding.pry %>
                 <td><%= attendance.text_field :note ,class: "form-control",readonly: true %></td>
                 <td><%= attendance.collection_select :one_month_instructor, User.where(superior: true).where.not(id: @user.id), :id,:name,{include_blank: true}, class: "form-control",readonly: true %></td>
               <% else %>
-                  <td><%= attendance.text_field :note ,class: "form-control" %></td>
+                <td><%= attendance.text_field :note ,class: "form-control" %></td>
                 <td><%= attendance.collection_select :one_month_instructor ,User.where(superior: true).where.not(id: @user.id), :id, :name, {include_blank: true},prompt: true, class: "form-control" %></td>
               <% end %>
               <% end %>
             </tr>
           </tbody>
-
       <% end %>
     </div>
   </table>
