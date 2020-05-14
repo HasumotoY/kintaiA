@@ -32,7 +32,7 @@
                   <%= $days_of_the_week[day.worked_on.wday] %>
                 <% end %>
               </td>
-              <% if Date.current <= day.worked_on %>
+              <% if Date.current < day.worked_on %>
                 <td><%= attendance.time_field :started_at, readonly: true, class: "form-control" %></td>
                 <td><%= attendance.time_field :finished_at,readonly: true, class: "form-control" %></td>
                 <td><%= attendance.check_box :tomorrow,class: "check-box",readonly: true %></td>
@@ -47,7 +47,8 @@
                   <%= working_times(day.started_at,day.finished_at) %>
                 <% end %>
               </td>
-              <% if Date.current <= day.worked_on %>
+              <% if Date.current < day.worked_on %>
+              <%# binding.pry %>
                 <td><%= attendance.text_field :note ,class: "form-control",readonly: true %></td>
                 <td><%= attendance.collection_select :one_month_instructor, User.where(superior: true).where.not(id: @user.id), :id,:name,{include_blank: true}, class: "form-control",readonly: true %></td>
               <% else %>

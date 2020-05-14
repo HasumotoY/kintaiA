@@ -55,14 +55,13 @@ include AttendancesHelper
 
   #残業申請機能
   def edit_overtime
-    @approval_user = User.find(params[:user_id])
-    @attendance = @approval_user.attendances.find(params[:id])
+    @user = User.find(params[:user_id])
+    @attendance = @user.attendances.find(params[:id])
   end
 
   def update_overtime
-    binding.pry
-    @approval_user = User.find(params[:user_id])
-    @attendance = @approval_user.attendances.find(params[:id])
+    @user = User.find(params[:user_id])
+    @attendance = @user.attendances.find(params[:id])
       if @attendance.overtime_approval.nil?
           @attendance.update_attributes(overtime_params)
           User.all.each do |user|
