@@ -1,13 +1,6 @@
 <% provide(:title,"勤怠修正ログ(承認済み)") %>
 <h1>勤怠修正ログ(承認済み)</h1>
-<div>
-  <%#= link_to "リセット",work_log_user_attendance_path(user_id: @user, date: @first_day), class: "btn btn-default" %>
-</div>
-<%= form_with(url: work_log_user_attendance_path,local: true,method: :get) do |f| %>
-  <%= f.select :work_year,@year.reverse_each.map{|year|[year,year]},prompt: true,class: "form-control",placeholder:"年" %>
-  <br><%= f.select :work_month,@month.each.map{|month|[month,month]},prompt: true,class: "form-control",placeholder:"月" %>
-  <br><%= f.submit "検索", :worked_on  => nil %>
-<% end %>
+
 <div class="col-md-12">
   <table class= "table table-resposible table-condenced table-bordered table-hover table-striped">
     <thead>
@@ -22,42 +15,7 @@
       </tr>
     </thead>
     <tbody>
-      <% unless @work_log.nil? %>
-        <% @work_log.each do |attendance| %>
-          <% if attendance.one_month_approval.present? %>
-            <tr>
-              <td><%= l(attendance.worked_on,format: :short) %></td>
-                <% if attendance.started_at_previous_change.present? && attendance.finished_at_previous_change.present? %>
-                  <td><%= l(attendance.started_at_previous_change,format: :time) %></td>
-                  <td><%= l(attendance.finished_at_previous_change,format: :time) %></td>
-                <% else %>
-                  <td></td>
-                  <td></td>
-                <% end %>
 
-                <% if attendance.one_month_approval.present? %>
-                  <td><%= l(attendance.started_at,format: :time) %></td>
-                  <td><%= l(attendance.finished_at,format: :time) %></td>
-                  <td><%= User.find_by(id: attendance.one_month_instructor).name %></td>
-                <% else %>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                <% end %>
-                <td><%= attendance.approval %></td>
-        <% end %>
-      <% end %>
-      <% else %>
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
-      <% end %>
     </tbody>
   </table>
 </div>
