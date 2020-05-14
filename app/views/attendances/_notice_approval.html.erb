@@ -4,29 +4,29 @@
       <button type="button" class="close" data-dismiss="modal" aria-hidden="Close">
         <span aria-hidden="true">&times;</span>
       </button>
-      <h1 class="modal-title">【 <%= @user.name %>からの一か月分の勤怠申請】</h1>
-    </div>
-    <div class=modal-body>
+          <h1 class="modal-title">【 <%= @user.name %>からの一か月分の勤怠申請】</h1>
+      </div>
       <% @attendance.each do |attendance| %>
-      <%= form_with(model: attendance, url: update_notice_approval_user_attendance_path(date: @first_day),local: true,method: :patch) do |f| %>
-      <table class="table table-condenced table-bordered table-striped" id="modal-teble">
-        <thead>
-          <tr>
-            <td>月</td>
-            <td>指示者確認㊞</td>
-            <td>変更</td>
-            <td>勤怠を確認する</td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-              <td><%= l(attendance.worked_on,format: :month) %>月</td>
-            <td><%= f.select :approval, ["なし","申請中","承認","否認"], {include_blank: true}, prompt: true, class: "form-control"%></td>
-            <td><%= f.check_box :change %></td>
-            <td><%= link_to "確認", user_path(@user), class: "btn btn-primary" %></td>
-          </tr>
-        </tbody>
-      </table>
+      <div class=modal-body>
+        <%= form_with(model: attendance, url: update_notice_approval_user_attendance_path(date: @first_day),local: true,method: :patch) do |f| %>
+        <table class="table table-condenced table-bordered table-striped" id="modal-teble">
+          <thead>
+            <tr>
+              <td>月</td>
+              <td>指示者確認㊞</td>
+              <td>変更</td>
+              <td>勤怠を確認する</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+                <td><%= l(attendance.worked_on,format: :month) %>月</td>
+              <td><%= f.select :approval, ["なし","申請中","承認","否認"], {include_blank: true}, prompt: true, class: "form-control"%></td>
+              <td><%= f.check_box :change %></td>
+              <td><%= link_to "確認", user_path(@user), class: "btn btn-primary" %></td>
+            </tr>
+          </tbody>
+        </table>
       <div class="center">
         <%= f.submit "変更を送信する",class: "btn btn-primary" %>
       </div>

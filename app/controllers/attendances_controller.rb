@@ -91,8 +91,16 @@ include AttendancesHelper
 
   #所属長承認
   def notice_approval
-    @user = User.find(params[:user_id])
-    @attendance = @user.attendances.where(worked_on: Date.current.beginning_of_month)
+    User.all.each do |user|
+      if user.attendances.where(instructor: presence)
+        @user = user
+        @attendance = user.attendances.where(worked_on: Date.current.beginning_of_month)
+        binding.pry
+      else
+        @user == nil
+        @attendnace== nil
+      end
+    end
   end
 
   def update_notice_approval
