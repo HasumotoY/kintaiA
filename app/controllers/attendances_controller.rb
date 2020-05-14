@@ -95,7 +95,6 @@ include AttendancesHelper
       if user.attendances.where(instructor: presence)
         @user = user
         @attendance = user.attendances.where(worked_on: Date.current.beginning_of_month)
-        binding.pry
       else
         @user == nil
         @attendnace== nil
@@ -139,11 +138,7 @@ include AttendancesHelper
   #勤怠変更承認
   def notice_one_month
     @user = User.find(params[:user_id])
-    binding.pry
-    @attendances.each do |attendance|
-      @at = attendance
-    end
-    binding.pry
+    @at = @user.attendances.where(one_month_instructor: presence)
   end
 
   def update_notice_one_month
