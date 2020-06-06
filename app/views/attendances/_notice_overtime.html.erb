@@ -1,13 +1,15 @@
+<%= form_with(model: @attendances, url: update_notice_overtime_user_attendance_path(date: @first_day), local: true, method: :patch) do |f| %>
 <div class="modal-dialog modal-lg modal-dialog-center">
   <div class="modal-content">
     <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-hidden="Close">
         <span aria-hidden="true">&times;</span>
       </button>
-      <h1 class="modal-title">【<%= @user.name %>からの残業申請】</h1>
+      <% Attendance.where(overtime_instructor: @user.id.to_i).each do |attendance| %>
+      <h1 class="modal-title">【<%= User.find(attendance.user_id).name %>からの残業申請】</h1>
     </div>
     <div class=modal-body>
-      <%= form_with(model: @attendance, url: update_notice_overtime_user_attendance_path(date: @first_day), local: true, method: :patch) do |f| %>
+
       <table class="table table-condenced table-bordered table-striped" id="modal-teble">
         <thead>
           <tr>
@@ -24,35 +26,36 @@
           </thead>
           <tbody>
           <tr>
-            <td><%= l(@attendance.worked_on,format: :short) %></td>
+            <td><%= l(attendance.worked_on,format: :short) %></td>
             <td>
-               <% if @attendance.worked_on.wday == 6 %>
+               <% if attendance.worked_on.wday == 6 %>
                   <font color="blue">土</font>
-                <% elsif @attendance.worked_on.wday == 0 %>
+                <% elsif attendance.worked_on.wday == 0 %>
                   <font color="red">日</font>
                 <% else %>
-                  <%= $days_of_the_week[@attendance.worked_on.wday] %>
+                  <%= $days_of_the_week[attendance.worked_on.wday] %>
                 <% end %>
             </td>
-            
-            <td><%= l(@attendance.end_estimated_time,format: :time) %></td>
-            <td><%= l(@attendance.designated_end_work_time,format: :time) %></td>
-            
+
+            <td><%= l(attendance.end_estimated_time,format: :time) %></td>
+            <td><%= l(attendance.designated_end_work_time,format: :time) %></td>
+
             <td>
-               <% if @attendance.overtime_tomorrow == false %> 
-                <%= over_times(@attendance.end_estimated_time, @attendance.designated_end_work_time) %>
+               <% if attendance.overtime_tomorrow == false %>
+                <%= over_times(attendance.end_estimated_time, attendance.designated_end_work_time) %>
               <% else %>
-                <%= next_day_over_times(@attendance.end_estimated_time, @attendance.designated_end_work_time) %>
+                <%= next_day_over_times(attendance.end_estimated_time, attendance.designated_end_work_time) %>
               <% end %>
             </td>
-            <td><%= @attendance.outline %></td>
+            <td><%= attendance.outline %></td>
             <td><%= f.select :overtime_approval, ["なし","申請中","承認","否認"], {include_blank: true}, prompt: true, class: "form-control"%></td>
             <td><%= f.check_box :overtime_change %></td>
-            <td><%= link_to "確認", user_path(@user), class: "btn btn-primary" %></td>
+            <td><%= link_to "確認", user_path(User.find(attendance.user_id)), class: "btn btn-primary" %></td>
             </td>
           </tr>
         </tbody>
       </table>
+      <% end %>
         <div class="center">
           <%= f.submit "変更を送信する",class:"btn btn-primary"  %>
         </div>

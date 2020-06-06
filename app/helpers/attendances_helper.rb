@@ -9,7 +9,6 @@ require 'rounding'
     end
   end
 
-
   def attendances_invalid?
     attendances = true
     attendances_params.each do |id,item|
