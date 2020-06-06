@@ -96,13 +96,16 @@ include AttendancesHelper
   end
 
   def update_notice_approval
+    #active_recordで処理すればよい
     @user = User.find(params[:user_id])
     @attendance = @user.attendances.where(user_id: @user.id,worked_on: Date.current.beginning_of_month)
     @attendance.each do |attendance|
-      if attendance.update_attributes(notice_approval_params) && (attendance.change == true && (attendance.approval == "承認" || attendance.approval == "否認"))
-        flash[:danger] = "申請処理が失敗しました"
-      elsif attendance.approval == "承認" || attendance.approval == "否認"
+      attendance.update_attributes(notice_approval_params)
+      if attendance.change == true && (attendance.approval == "承認" || attendance.approval == "否認")
         flash[:success] = "申請完了"
+      else
+        flash[:danger] = "申請失敗"
+        notice_approval_params.delete
       end
     redirect_to user_url(id: attendance.instructor.to_i)
     break
