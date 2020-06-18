@@ -97,18 +97,20 @@ include AttendancesHelper
   end
 
   def update_notice_approval
-    ActiveRecord::Base.transaction do
-      @user = User.find(params[:user_id])
-      notice_approval_params.each do |id,item|
-        attendance = Attendance.find(id)
-        attendance.update_attributes(item)
+    @user = User.find(params[:user_id])
+    if approval_invalid?
+      ActiveRecord::Base.transaction do
+        notice_approval_params.each do |id,item|
+          attendance = Attendance.find(id)
+          attendance.update_attributes(item)
+        end
       end
-    end
-    flash[:success] = "承認完了"
-    redirect_to user_url(@user)
-  rescue ActiveRecord::RecordInvalid
-    flash[:danger]="承認失敗"
-    redirect_to user_url(@user)
+      flash[:success] = "承認完了"
+      end
+      redirect_to user_url(@user)
+    rescue ActiveRecord::RecordInvalid
+      flash[:danger]="承認失敗"
+      redirect_to user_url(@user)
   end
 
   #勤怠変更申請
@@ -138,15 +140,17 @@ include AttendancesHelper
   end
 
   def update_notice_one_month
-    ActiveRecord::Base.transaction do
-      @user = User.find(params[:user_id])
-      notice_one_month_params.each do |id,item|
-        attendance = Attendance.find(id)
-        attendance.update_attributes(item)
+    @user = User.find(params[:user_id])
+    if one_month_approval_invalid?
+      ActiveRecord::Base.transaction do
+        notice_one_month_params.each do |id,item|
+          attendance = Attendance.find(id)
+          attendance.update_attributes(item)
+        end
       end
+      flash[:success] = "承認完了"
     end
-    flash[:success] = "承認完了"
-    redirect_to user_url(@user)
+      redirect_to user_url(@user)
   rescue ActiveRecord::RecordInvalid
     flash[:danger]="承認失敗"
     redirect_to user_url(@user)
@@ -162,15 +166,17 @@ include AttendancesHelper
   end
 
   def update_notice_overtime
-    ActiveRecord::Base.transaction do
-      @user = User.find(params[:user_id])
-      notice_overtime_params.each do |id,item|
-        attendance = Attendance.find(id)
-        attendance.update_attributes(item)
+    @user = User.find(params[:user_id])
+    if overtime_approval_invalid?
+      ActiveRecord::Base.transaction do
+        notice_overtime_params.each do |id,item|
+          attendance = Attendance.find(id)
+          attendance.update_attributes(item)
+        end
       end
+      flash[:success] = "承認完了"
     end
-    flash[:success] = "承認完了"
-    redirect_to user_url(@user)
+      redirect_to user_url(@user)
   rescue ActiveRecord::RecordInvalid
     flash[:danger]="承認失敗"
     redirect_to user_url(@user)
@@ -206,7 +212,7 @@ include AttendancesHelper
     end
 
     def approval_params
-      params.require(:user).permit(attendances: [:instructor])[:attendances]
+      params.require(:attendance).permit(:instructor)
     end
 
     def notice_approval_params

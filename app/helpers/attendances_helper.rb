@@ -30,6 +30,48 @@ require 'rounding'
         return attendances
   end
 
+  def approval_invalid?
+    approval = true
+    notice_approval_params.each do |id,item|
+      if item[:approval] == "承認" || item[:approval] == "否認"
+        next
+      elsif item[:change] = false
+        approval = false
+      else
+        approval = false
+      end
+    end
+      return approval
+  end
+
+  def one_month_approval_invalid?
+    approval = true
+    notice_one_month_approval_params.each do |id,item|
+      if item[:one_month_approval] == "承認" || item[:one_month_approval] == "否認"
+        next
+      elsif item[:one_month_change] = false
+        approval = false
+      else
+        approval = false
+      end
+    end
+      return approval
+  end
+
+  def overtime_invalid?
+    approval = true
+    notice_overtime_approval_params.each do |id,item|
+      if item[:overtime_approval] == "承認" || item[:overtime_approval] == "否認"
+        next
+      elsif item[:overtime_change] = false
+        approval = false
+      else
+        approval = false
+      end
+    end
+      return approval
+  end
+
   def over_times(estimated,designated)
     format("%.2f",(((estimated.floor_to(15.minutes)-designated.floor_to(15.minutes)) / 60)) / 60.0 )
   end
