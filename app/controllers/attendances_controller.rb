@@ -130,42 +130,50 @@ include AttendancesHelper
 
   #勤怠変更承認
   def notice_one_month
-    @user = User.find(params[:user_id])
-    @attendance = @user.attendances.where(one_month_instructor: presence)
+    @superior = User.find(params[:user_id])
+    @attendance = Attendance.where(one_month_instructor: @superior,one_month_change: false)
+    @attendance.each do |attendance|
+      @users = User.find(attendance.user_id)
+    end
   end
 
   def update_notice_one_month
-    @user = User.find(params[:user_id])
-    @attendance = @user.attendances.find(params[:id])
-    @attendance.each do |attendance|
-
-    if attendance.update_attributes(notice_one_month_params)
-      if attendance.one_month_change == false
-        flash[:danger] = "申請処理が失敗しました"
-      elsif attendance.one_month_approval == "承認" || attendance.one_month_approval == "否認"
-      flash[:success] = "申請処理が完了しました"
-    end
+    ActiveRecord::Base.transaction do
+      @user = User.find(params[:user_id])
+      notice_one_month_params.each do |id,item|
+        attendance = Attendance.find(id)
+        attendance.update_attributes(item)
       end
     end
-      redirect_to user_url(id: @attendance.one_month_instructor.to_i)
+    flash[:success] = "承認完了"
+    redirect_to user_url(@user)
+  rescue ActiveRecord::RecordInvalid
+    flash[:danger]="承認失敗"
+    redirect_to user_url(@user)
   end
 
   #残業承認申請
   def notice_overtime
-    @user = User.find(params[:user_id])
-    @attendance = @user.attendances.where(overtime_instructor: presence)
+    @superior = User.find(params[:user_id])
+    @attendance = Attendance.where(overtime_instructor: @superior,overtime_change: false)
+    @attendance.each do |attendance|
+      @users = User.find(attendance.user_id)
+    end
   end
 
   def update_notice_overtime
-    @user = User.find(params[:user_id])
-    @attendance = @user.attendances.find(params[:id])
-    if @attendance.overtime_change == false
-      flash[:danger] = "申請処理が失敗しました"
-    elsif @attendance.overtime_approval == "承認" || @attendance.overtime_approval == "否認"
-      @attendance.update_attributes(notice_overtime_params)
-      flash[:success] = "申請処理が完了しました"
+    ActiveRecord::Base.transaction do
+      @user = User.find(params[:user_id])
+      notice_overtime_params.each do |id,item|
+        attendance = Attendance.find(id)
+        attendance.update_attributes(item)
       end
-      redirect_to user_url(id: @attendance.overtime_instructor.to_i)
+    end
+    flash[:success] = "承認完了"
+    redirect_to user_url(@user)
+  rescue ActiveRecord::RecordInvalid
+    flash[:danger]="承認失敗"
+    redirect_to user_url(@user)
   end
 
   #勤怠申請ログ
@@ -209,16 +217,12 @@ include AttendancesHelper
       params.require(:attendance).permit(:end_estimated_time,:overtime_tomorrow,:outline,:overtime_instructor)
     end
 
-    def one_month_notice_params
-      params.require(:attendance).permit(:one_month_approval,:one_month_change)
-    end
-
     def notice_one_month_params
-      params.require(:attendance).permit(:one_month_approval,:one_month_change)
+      params.require(:user).permit(attendances: [:one_month_approval,:one_month_change])[:attendances]
     end
 
     def notice_overtime_params
-      params.require(:attendance).permit(:overtime_approval,:overtime_change)
+      params.require(:user).permit(attendances: [:overtime_approval,:overtime_change])[:attendances]
     end
 
     def search_params
