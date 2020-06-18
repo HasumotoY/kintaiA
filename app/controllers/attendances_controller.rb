@@ -1,7 +1,7 @@
 class AttendancesController < ApplicationController
 include AttendancesHelper
 
-  before_action :set_user,only: [:edit_one_month,:update_approval,:update_notice_one_month]
+  before_action :set_user,only: [:edit_one_month,:update_approval]
   before_action :logged_in_user, only: [:update,:edit_one_month]
   before_action :set_one_month,only: [:edit_one_month,:update_approval]
   before_action :admin_or_correct_user, only: [:update,:edit_one_month]
@@ -77,39 +77,38 @@ include AttendancesHelper
 
   #所属長申請
   def update_approval
-    @user = User.find(params[:user_id])
-    @user.attendances.where(worked_on: @first_day).each do |attendance|
-      if @approval_numbers.to_i == 0
-        attendance.update_attributes(approval_params)
-        flash[:success] = "所属長承認申請完了"
-      else
-        flash[:danger] = "申請処理が失敗しました"
-      end
+    if @approval_numbers.to_i == 0
+      attendance = @attendances.where(worked_on: @first_day)
+      attendance.update(approval_params)
+      flash[:success] = "所属長承認申請完了"
+    else
+      flash[:danger] = "申請処理が失敗しました"
     end
     redirect_to user_url(date: @first_day)
   end
 
   #所属長承認
   def notice_approval
-    @user = User.find(params[:user_id])
-    @attendance = @user.attendances.where(instructor: presence)
+    @superior = User.find(params[:user_id])
+    @attendance = Attendance.where(instructor: @superior,change: false)
+    @attendance.each do |attendance|
+      @users = User.find(attendance.user_id)
+    end
   end
 
   def update_notice_approval
-    #active_recordで処理すればよい
-    @user = User.find(params[:user_id])
-    @attendance = @user.attendances.where(user_id: @user.id,worked_on: Date.current.beginning_of_month)
-    @attendance.each do |attendance|
-      attendance.update_attributes(notice_approval_params)
-      if attendance.change == true && (attendance.approval == "承認" || attendance.approval == "否認")
-        flash[:success] = "申請完了"
-      else
-        flash[:danger] = "申請失敗"
-        notice_approval_params.delete
+    ActiveRecord::Base.transaction do
+      @user = User.find(params[:user_id])
+      notice_approval_params.each do |id,item|
+        attendance = Attendance.find(id)
+        attendance.update_attributes(item)
       end
-    redirect_to user_url(id: attendance.instructor.to_i)
-    break
-  end
+    end
+    flash[:success] = "承認完了"
+    redirect_to user_url(@user)
+  rescue ActiveRecord::RecordInvalid
+    flash[:danger]="承認失敗"
+    redirect_to user_url(@user)
   end
 
   #勤怠変更申請
@@ -199,11 +198,11 @@ include AttendancesHelper
     end
 
     def approval_params
-      params.require(:attendance).permit(:instructor)
+      params.require(:user).permit(attendances: [:instructor])[:attendances]
     end
 
     def notice_approval_params
-      params.require(:attendance).permit(:approval,:change)
+      params.require(:user).permit(attendances: [:approval,:change])[:attendances]
     end
 
     def overtime_params

@@ -5,7 +5,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-          <% Attendance.where(one_month_instructor: @user.id.to_i).each do |attendance| %>
+          <% Attendance.where(one_month_instructor: @user.id.to_i).order(:user_id).each do |attendance| %>
             <h1 class="modal-title">【<%= User.find(attendance.user_id).name %>からの勤怠変更申請】</h1>
         </div>
       <div class=modal-body>

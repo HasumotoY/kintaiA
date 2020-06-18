@@ -33,7 +33,7 @@ class UsersController < ApplicationController
       @users.each do |user|
       @attendance = @user.attendances.where(user_id: @user.id)
       end
-      @approval_numbers = Attendance.where(instructor: @user,worked_on: @first_day,change: false).count
+      @approval_numbers = Attendance.where(instructor: @user,change: false).count
       @one_month_numbers = Attendance.where(one_month_instructor: @user,one_month_change: false).count
       @overtime_numbers = Attendance.where(overtime_instructor: @user,overtime_change: false).count
       @worked_sum = @attendances.where.not(started_at: nil).count
