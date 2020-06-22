@@ -42,7 +42,6 @@ For other issues, [submit a support ticket](https://help.heroku.com/).
 * [`heroku auth`](docs/auth.md) - check 2fa status
 * [`heroku authorizations`](docs/authorizations.md) - OAuth authorizations
 * [`heroku autocomplete`](docs/autocomplete.md) - display autocomplete installation instructions
-* [`heroku base`](docs/base.md)
 * [`heroku buildpacks`](docs/buildpacks.md) - scripts used to compile apps
 * [`heroku certs`](docs/certs.md) - a topic for the ssl plugin
 * [`heroku ci`](docs/ci.md) - run an application test suite on Heroku
@@ -86,14 +85,10 @@ Developing
 
 This project is built with [lerna](https://lerna.js.org/). The core plugins are located in [./packages](./packages). Run `lerna bootstrap` after cloning the repository to set it up.
 
+The standard `oclif` `./bin/run` script serves as your entry point to the CLI in your local development environment.
+
 Releasing
 =========
-1. Checkout the master branch and double-check you're on latest commit that you would like to release from.
-2. Ensure your current working directory is clean.
-3. Run `lerna bootstrap` to ensure that all dependencies and are installed and linked.
-4. Make sure you are logged in with the correct user by running: `npm whoami`.
-5. Run `npm org ls heroku-cli YOUR_ACCOUNT_NAME` and ensure that your npm account has appropriate access for publishing.
-6. Run `lerna publish`. It will create a CHANGELOG from the pending commits using [Conventional Commits](http://conventionalcommits.org), and also take care of bumping packages, tagging and pushing the commit. Upon the git tag being pushed a series of CI release jobs will start.
-7. Monitor CircleCI, Appveyor and Snapcraft jobs to ensure that all the builds are successful.
+See the [Heroku CLI Release Steps](https://salesforce.quip.com/aPLDA1ZwjNlW).
 
 Review our [PR guidelines](./.github/PULL_REQUEST_TEMPLATE.md).

@@ -77,10 +77,10 @@ class UsersController < ApplicationController
   end
 
   def import
-    if !User.import(params[:file])
-      flash[:danger] = "情報の更新に失敗しました。"
-    else
+    if User.import(params[:file])
       flash[:success] = "ユーザー情報を追加しました。"
+    else
+      flash[:danger] = "情報の更新に失敗しました。"
     end
     redirect_to users_url
   end
