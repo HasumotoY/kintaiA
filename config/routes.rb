@@ -39,11 +39,7 @@ Rails.application.routes.draw do
         patch 'update_notice_overtime'
       end
     end
-    Rails.application.routes.draw do
-      resources :users do
-        collection { post :import }
-      end
-    end
+      collection { post :import }
       collection do
           get 'search'
         end

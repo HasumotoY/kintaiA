@@ -1,13 +1,12 @@
-<%= form_with(model: @users, url: update_notice_overtime_user_attendance_path(date: @first_day), local: true, method: :patch) do |f| %>
+<%= form_with(model: @attendances, url: update_notice_overtime_user_attendance_path(date: @first_day), local: true, method: :patch) do |f| %>
 <div class="modal-dialog modal-lg modal-dialog-center">
   <div class="modal-content">
     <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-hidden="Close">
         <span aria-hidden="true">&times;</span>
       </button>
-      <% @attendance.order(:user_id).each do |attendance| %>
-      <% @user = User.find(attendance.user_id) %>
-      <h1 class="modal-title">【<%= @user.name %>からの残業申請】</h1>
+      <% Attendance.where(overtime_instructor: @user.id.to_i).each do |attendance| %>
+      <h1 class="modal-title">【<%= User.find(attendance.user_id).name %>からの残業申請】</h1>
     </div>
     <div class=modal-body>
 
@@ -25,7 +24,6 @@
             <td>勤怠を確認</td>
           </tr>
           </thead>
-          <%= f.fields_for "attendances[]",attendance do |form| %>
           <tbody>
           <tr>
             <td><%= l(attendance.worked_on,format: :short) %></td>
@@ -50,14 +48,13 @@
               <% end %>
             </td>
             <td><%= attendance.outline %></td>
-            <td><%= form.select :overtime_approval, ["なし","申請中","承認","否認"], {include_blank: true}, prompt: true, class: "form-control"%></td>
-            <td><%= form.check_box :overtime_change %></td>
+            <td><%= f.select :overtime_approval, ["なし","申請中","承認","否認"], {include_blank: true}, prompt: true, class: "form-control"%></td>
+            <td><%= f.check_box :overtime_change %></td>
             <td><%= link_to "確認", user_path(User.find(attendance.user_id)), class: "btn btn-primary" %></td>
             </td>
           </tr>
         </tbody>
       </table>
-      <% end %>
       <% end %>
         <div class="center">
           <%= f.submit "変更を送信する",class:"btn btn-primary"  %>

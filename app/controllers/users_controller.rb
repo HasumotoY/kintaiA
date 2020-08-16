@@ -33,7 +33,7 @@ class UsersController < ApplicationController
       @users.each do |user|
       @attendance = @user.attendances.where(user_id: @user.id)
       end
-      @approval_numbers = Attendance.where(instructor: @user,change: false).count
+      @approval_numbers = Attendance.where(instructor: @user,worked_on: @first_day,change: false).count
       @one_month_numbers = Attendance.where(one_month_instructor: @user,one_month_change: false).count
       @overtime_numbers = Attendance.where(overtime_instructor: @user,overtime_change: false).count
       @worked_sum = @attendances.where.not(started_at: nil).count
@@ -77,10 +77,10 @@ class UsersController < ApplicationController
   end
 
   def import
-    if User.import(params[:file])
-      flash[:success] = "ユーザー情報を追加しました。"
-    else
+    if !User.import(params[:file])
       flash[:danger] = "情報の更新に失敗しました。"
+    else
+      flash[:success] = "ユーザー情報を追加しました。"
     end
     redirect_to users_url
   end
